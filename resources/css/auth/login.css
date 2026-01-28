@@ -1,0 +1,39 @@
+.gradient-bg {
+    background: linear-gradient(135deg, #ff6b35 0%, #9333ea 50%, #3b82f6 100%);
+}
+.glass-effect {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.login-card {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+.floating-animation {
+    animation: float 6s ease-in-out infinite;
+}
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+.slide-in {
+    animation: slideInUp 0.8s ease-out;
+}
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.input-focus:focus {
+    transform: scale(1.02);
+    transition: all 0.3s ease;
+}
+.btn-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}

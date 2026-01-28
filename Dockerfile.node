@@ -1,0 +1,10 @@
+
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Install dependency tambahan (opsional, kadang dibutuhkan)
+RUN apk add --no-cache bash git
+
+# Default command (supaya container tetap jalan)
+CMD ["tail", "-f", "/dev/null", "npm", "run", "dev"]

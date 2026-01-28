@@ -1,0 +1,28 @@
+{
+  "name": "sensasi",
+  "version": "1.0.0",
+  "description": "<p align=\"center\"><a href=\"https://laravel.com\" target=\"_blank\"><img src=\"https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg\" width=\"400\" alt=\"Laravel Logo\"></a></p>",
+  "main": "vite.config.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "npm:clean-install": "rm -rf node_modules package-lock.json && npm cache clean --force && npm install -g npm@latest && npm install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "laravel-vite-plugin": "^2.0.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.12",
+    "vite": "^7.1.2"
+  },
+  "dependencies": {
+    "axios": "^1.11.0",
+    "jquery": "^3.7.1"
+  }
+}

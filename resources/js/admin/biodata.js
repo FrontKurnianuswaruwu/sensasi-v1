@@ -1,0 +1,424 @@
+import $ from 'jquery';
+
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
+$(function() {
+    loadData();
+});
+
+function loadTahunAkademik(selectedType = '') {
+    $.get('/admin/biodata/gettahunakademik', function(response) {
+        const tahunakademiks = Array.isArray(response.data) ? response.data : [];
+        $('#tahun_akademik').empty();
+        $('#tahun_akademik').append('<option value="">Pilih Tahun Akademik</option>');
+
+        tahunakademiks.forEach(function(tahunakademik) {
+            var selected = tahunakademik.id == selectedType ? 'selected' : '';
+            $('#tahun_akademik').append(`<option value="${tahunakademik.id}" ${selected}>${tahunakademik.tahun_akademik}</option>`);
+        });
+    }).fail(function() {
+        alert('Gagal mengambil data tahun akademik. Pastikan API berjalan dengan benar.');
+    });
+}
+
+function loadMitra(selectedType = '') {
+    $.get('/admin/biodata/getmitra', function(response) {
+        const mitras = Array.isArray(response.data) ? response.data : [];
+        $('#universitas').empty();
+        $('#universitas').append('<option value="">Pilih Universitas</option>');
+
+        mitras.forEach(function(mitra) {
+            var selected = mitra.id == selectedType ? 'selected' : '';
+            $('#universitas').append(`<option value="${mitra.id}" ${selected}>${mitra.nama_mitra}</option>`);
+        });
+    }).fail(function() {
+        alert('Gagal mengambil data tahun akademik. Pastikan API berjalan dengan benar.');
+    });
+}
+
+function loadData() {
+    $.ajax({
+        url: "/admin/getbiodatamahasiswa",
+        type: "GET",
+        dataType: "json",
+        success: function(res) {
+            const user = res.data;
+            console.log("Data biodata mahasiswa diterima:", user);
+
+            if (!user || !user.biodata_mahasiswa) {
+                console.warn("Data biodata mahasiswa tidak ditemukan:", user);
+                return;
+            }
+
+            const biodata = user.biodata_mahasiswa;
+
+            // 🧩 Isi otomatis semua input form
+            $('#user_id').val(biodata.user_id);
+            $('#nama').val(user.name);
+            $('#nim').val(biodata.nim);
+            $('#tempat_lahir').val(biodata.tempat_lahir);
+            $('#tanggal_lahir').val(biodata.tanggal_lahir);
+            $('#jenis_kelamin').val(biodata.jenis_kelamin);
+            $('#alamat_ktp').val(biodata.alamat_ktp);
+            $('#nik').val(biodata.nik);
+            $('#no_wa').val(biodata.no_wa);
+            $('#agama').val(biodata.agama);
+            $('#status_pernikahan').val(biodata.status_pernikahan);
+            $('#jumlah_saudara').val(biodata.jumlah_saudara);
+            $('#anak_ke').val(biodata.anak_ke);
+
+            if (biodata.foto) {
+                $('#fotoPreview').attr('src', '/' + biodata.foto);
+            } else {
+                $('#fotoPreview').attr('src', '/img/default-avatar.jpg');
+            }
+
+            // Tambahan (kalau kamu punya data akademik/orangtua/dokumen)
+            if (user.akademik) fillAkademik(user.akademik);
+            if (user.orangtua) fillOrangtua(user.orangtua);
+            if (user.dokumen) fillDokumen(user.dokumen);
+        },
+        error: function(xhr, status, error) {
+            console.error("Gagal ambil data:", error, xhr.responseText);
+        }
+    });
+}
+
+const rupiahInputs = ['#penghasilan_ibu', '#penghasilan_ayah'];
+
+rupiahInputs.forEach(selector => {
+    $(document).on('input', selector, function () {
+        let cursorPos = this.selectionStart;
+        let value = $(this).val();
+
+        // ambil angka saja
+        let number = value.replace(/[^0-9]/g, '');
+
+        // format rupiah
+        let formatted = formatRupiah(number);
+
+        $(this).val(formatted);
+
+        // kembalikan posisi kursor
+        let diff = formatted.length - value.length;
+        this.setSelectionRange(cursorPos + diff, cursorPos + diff);
+    });
+});
+
+function formatRupiah(angka) {
+    if (!angka) return '';
+
+    let sisa = angka.length % 3;
+    let rupiah = angka.substr(0, sisa);
+    let ribuan = angka.substr(sisa).match(/\d{3}/g);
+
+    if (ribuan) {
+        let separator = sisa ? '.' : '';
+        rupiah += separator + ribuan.join('.');
+    }
+
+    return 'Rp ' + rupiah;
+}
+
+
+// Fungsi isi form akademik
+function fillAkademik(a) {
+    $('#fakultas').val(a.fakultas);
+    $('#program_studi').val(a.program_studi);
+    $('#semester').val(a.semester);
+    $('#ip_terakhir').val(a.ip_terakhir);
+    $('#tahun_akademik_id').val(a.tahun_akademik_id);
+    loadTahunAkademik(a.tahun_akademik_id);
+    loadMitra(a.mitra_id);
+}
+
+// Fungsi isi form orangtua
+function fillOrangtua(o) {
+    $('#nama_ayah').val(o.nama_ayah);
+    $('#pekerjaan_ayah').val(o.pekerjaan_ayah);
+    $('#pendidikan_ayah').val(o.pendidikan_ayah);
+    $('#penghasilan_ayah').val(formatRupiah(o.penghasilan_ayah));
+    $('#nama_ibu').val(o.nama_ibu);
+    $('#pekerjaan_ibu').val(o.pekerjaan_ibu);
+    $('#pendidikan_ibu').val(o.pendidikan_ibu);
+    $('#penghasilan_ibu').val(formatRupiah(o.penghasilan_ibu));
+    $('#jumlah_tanggungan').val(o.jumlah_tanggungan);
+    $('#no_wa_ortu').val(o.no_wa_ortu);
+}
+
+function fillDokumen(d) {
+    toggleDokumenPreview('#scan_ktp', d.scan_ktp);
+    toggleDokumenPreview('#scan_kartu_mahasiswa', d.scan_kartu_mahasiswa);
+    toggleDokumenPreview('#scan_kk', d.scan_kk);
+    toggleDokumenPreview('#transkrip_nilai', d.transkrip_nilai);
+    toggleDokumenPreview('#surat_keterangan_aktif', d.surat_keterangan_aktif);
+    toggleDokumenPreview('#foto_profil', d.foto_profil);
+    toggleDokumenPreview('#essay_motivasi', d.essay_motivasi);
+    toggleDokumenPreview('#sertifikat_prestasi', d.sertifikat_prestasi);
+}
+
+
+// Fungsi bantu untuk tampilkan tombol preview dokumen
+function toggleDokumenPreview(selector, filePath) {
+    const input = $(selector);
+    const container = input.parent(); // ambil elemen <div class="space-y-2">
+
+    // hapus dulu tombol "Lihat File" lama biar gak dobel
+    container.find(".lihat-file-btn").remove();
+
+    if (filePath && filePath.trim() !== "") {
+        // Sesuaikan URL sesuai lokasi file sebenarnya
+        const fileUrl = "/" + filePath; // karena file ada di public/pdf/dokumen
+        const link = `
+            <a href="${fileUrl}" target="_blank"
+                class="lihat-file-btn inline-flex items-center px-2 py-1 mt-2 text-xs text-white bg-blue-primary rounded-lg hover:bg-blue-600">
+                <i class="fas fa-eye mr-1"></i>Lihat File
+            </a>
+        `;
+        container.append(link);
+    }
+}
+
+
+function showNotification(message, type = 'info') {
+    const bgColor = type === 'success' 
+        ? 'bg-green-500' 
+        : type === 'error' 
+        ? 'bg-red-500' 
+        : 'bg-blue-500';
+
+    const icon = type === 'success' 
+        ? 'fa-check-circle' 
+        : type === 'error' 
+        ? 'fa-exclamation-circle' 
+        : 'fa-info-circle';
+
+        const notification = $(`
+            <div class="notification flex items-center space-x-3 ${bgColor} text-white px-6 py-4 rounded-xl shadow-lg transform translate-x-full opacity-0 transition-all duration-300 cursor-pointer">
+            <i class="fas ${icon} text-lg"></i>
+            <span class="font-medium">${message}</span>
+            </div>
+            `);
+
+            // Append ke wrapper
+    $('#notificationWrapper').append(notification);
+    
+    // Show notification dengan animasi
+    setTimeout(() => {
+        notification.removeClass('translate-x-full opacity-0');
+    }, 100);
+
+    // Hide otomatis setelah 4 detik
+    const hideTimeout = setTimeout(() => {
+        notification.addClass('translate-x-full opacity-0');
+        setTimeout(() => notification.remove(), 300);
+    }, 4000);
+    
+    // Klik untuk langsung menutup
+    notification.on('click', function() {
+        clearTimeout(hideTimeout); // stop hide otomatis
+        $(this).addClass('translate-x-full opacity-0');
+        setTimeout(() => $(this).remove(), 300);
+    });
+}
+
+$("#biodataForm").on("submit", function (e) {
+    e.preventDefault();
+
+    const submit = $('#submit');
+    const originalText = submit.html();
+    submit.html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...').prop('disabled', true);
+
+    let formData = new FormData(this);
+
+    $.ajax({
+        url: "/admin/biodatamahasiswa",
+        type: "POST",       
+        data: formData,
+        processData: false,
+        contentType: false,
+        headers: {
+            'X-HTTP-Method-Override': 'PUT'
+        },
+        dataType: "json",
+        success: function (response) {
+            showNotification(response.message, response.status);
+            submit.html(originalText).prop('disabled', false);
+            loadData();
+        },
+        error: function(xhr) {
+            submit.html(originalText).prop('disabled', false);
+
+            if (xhr.status === 422 && xhr.responseJSON.errors) {
+                let errors = xhr.responseJSON.errors;
+                let messages = [];
+
+                for (let field in errors) {
+                    if (errors.hasOwnProperty(field)) {
+                        messages.push(errors[field].join(', '));
+                    }
+                }
+
+                showNotification(messages.join(' | '), 'error');
+            } else {
+                let msg = (xhr.responseJSON && xhr.responseJSON.message) 
+                            ? xhr.responseJSON.message 
+                            : 'Terjadi kesalahan saat menyimpan data!';
+                showNotification(msg, 'error');
+            }
+        }
+    });
+});
+
+$("#akademikForm").on("submit", function (e) {
+    e.preventDefault();
+
+    const submit = $('#submitakademik');
+    const originalText = submit.html();
+    submit.html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...').prop('disabled', true);
+
+    const formData = $(this).serialize();
+
+    $.ajax({
+        url: "/admin/akademikmahasiswa",
+        type: "PUT",
+        data: formData,
+        dataType: "json",
+        success: function (response) {
+            showNotification(response.message, response.status);
+            submit.html(originalText).prop('disabled', false);
+            loadData();
+        },
+        error: function(xhr) {
+            submit.html(originalText).prop('disabled', false);
+
+            if (xhr.status === 422 && xhr.responseJSON.errors) {
+                let errors = xhr.responseJSON.errors;
+                let messages = [];
+
+                for (let field in errors) {
+                    if (errors.hasOwnProperty(field)) {
+                        messages.push(errors[field].join(', '));
+                    }
+                }
+
+                showNotification(messages.join(' | '), 'error');
+            } else {
+                let msg = (xhr.responseJSON && xhr.responseJSON.message) 
+                            ? xhr.responseJSON.message 
+                            : 'Terjadi kesalahan saat menyimpan data!';
+                showNotification(msg, 'error');
+            }
+        }
+    });
+});
+
+$("#orangtuaForm").on("submit", function (e) {
+    e.preventDefault();
+
+    const submit = $('#submitorangtua');
+    const originalText = submit.html();
+    submit.html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...').prop('disabled', true);
+    const backupValues = {};
+    $('.rupiah-input').each(function () {
+        const cleanValue = $(this).val().replace(/[^0-9]/g, '');
+        $(this).val(cleanValue || 0); // pastikan tidak kosong
+    });
+    const formData = $(this).serialize();
+
+    $('.rupiah-input').each(function () {
+        $(this).val(backupValues[this.id]);
+    });
+
+    $.ajax({
+        url: "/admin/orangtuamahasiswa",
+        type: "PUT",
+        data: formData,
+        dataType: "json",
+        success: function (response) {
+            showNotification(response.message, response.status);
+            submit.html(originalText).prop('disabled', false);
+            loadData();
+        },
+        error: function(xhr) {
+            submit.html(originalText).prop('disabled', false);
+
+            if (xhr.status === 422 && xhr.responseJSON.errors) {
+                let errors = xhr.responseJSON.errors;
+                let messages = [];
+
+                for (let field in errors) {
+                    if (errors.hasOwnProperty(field)) {
+                        messages.push(errors[field].join(', '));
+                    }
+                }
+
+                showNotification(messages.join(' | '), 'error');
+            } else {
+                let msg = (xhr.responseJSON && xhr.responseJSON.message) 
+                            ? xhr.responseJSON.message 
+                            : 'Terjadi kesalahan saat menyimpan data!';
+                showNotification(msg, 'error');
+            }
+        }
+    });
+});
+
+$("#dokumenForm").on("submit", function (e) {
+    e.preventDefault();
+
+    const submit = $('#submitdokumen');
+    const originalText = submit.html();
+    submit.html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...').prop('disabled', true);
+
+    const formData = new FormData(this);
+
+    $.ajax({
+        url: "/admin/dokumenmahasiswa",
+        type: "POST", 
+        data: formData,
+        processData: false, 
+        contentType: false, 
+        success: function (response) {
+            showNotification(response.message, response.status);
+            submit.html(originalText).prop('disabled', false);
+            loadData();
+        },
+        error: function(xhr) {
+            submit.html(originalText).prop('disabled', false);
+
+            if (xhr.status === 422 && xhr.responseJSON.errors) {
+                let errors = xhr.responseJSON.errors;
+                let messages = [];
+
+                for (let field in errors) {
+                    if (errors.hasOwnProperty(field)) {
+                        messages.push(errors[field].join(', '));
+                    }
+                }
+
+                showNotification(messages.join(' | '), 'error');
+            } else {
+                let msg = (xhr.responseJSON && xhr.responseJSON.message) 
+                            ? xhr.responseJSON.message 
+                            : 'Terjadi kesalahan saat menyimpan data!';
+                showNotification(msg, 'error');
+            }
+        }
+    });
+});
+
+$('#foto').on('change', function () {
+    const file = this.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        $('#fotoPreview').attr('src', e.target.result);
+    };
+    reader.readAsDataURL(file);
+});
