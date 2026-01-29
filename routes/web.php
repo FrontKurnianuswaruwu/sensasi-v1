@@ -257,9 +257,9 @@ Route::middleware(['check.expired', 'check.permission'])->group(function() {
     Route::get('/admin/get-semester-sebelumnya', [NilaisemesterController::class, 'getSemesterSebelumnya'])->name('admin.nilaisemester.getSemesterSebelumnya');
 
     Route::post('/pendaftaran/toggle', [DashboardController::class, 'toggle'])->name('admin.pendaftaran.toggle');
+    
+    Route::get('/admin/permission', [PermissionController::class, 'index'])->name('admin.permissions.index');
+    Route::get('/admin/getpermission', [PermissionController::class, 'getdata'])->name('admin.permission.getdata');
+    Route::post('/permission-role/store', [PermissionController::class, 'store']);
 });
 
-
-Route::get('/admin/permission', [PermissionController::class, 'index'])->name('admin.permissions.index');
-Route::get('/admin/getpermission', [PermissionController::class, 'getdata'])->name('admin.permission.getdata');
-Route::post('/permission-role/store', [PermissionController::class, 'store']);
