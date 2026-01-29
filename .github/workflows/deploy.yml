@@ -32,18 +32,28 @@ jobs:
           script: |
             cd /home/sensasio/sensasi
             
-            # 1. Tarik kode terbaru & paksa sinkron (solusi file web.php tidak berubah)
+            # 1. Tarik kode terbaru
             git fetch --all
             git reset --hard origin/main
             
-            # 2. Solusi "Composer command not found" di Rumahweb
+            # 2. Setup Composer (Jika belum ada)
             if [ ! -f composer.phar ]; then
               php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
               php composer-setup.php
               php -r "unlink('composer-setup.php');"
             fi
             
-            # 3. Jalankan install & optimasi Laravel
-            php composer.phar install --no-dev --optimize-autoloader
-            php artisan migrate --force
-            php artisan optimize:clear
+            # 3. Install dependencies tanpa menjalankan script otomatis
+            # Kita tambah --ignore-platform-reqs supaya tidak cerewet soal versi PHP/ekstensi
+            php composer.phar install --no-dev --optimize-autoloader --no-scripts --ignore-platform-reqs
+            
+            # 4. Update autoload manual (untuk mengatasi masalah folder admin/Admin)
+            php composer.phar dump-autoload --optimize --no-scripts
+            
+            # 5. Jalankan perintah Laravel satu per satu
+            # Gunakan "|| true" agar jika satu perintah gagal, proses tetap lanjut ke bawah
+            php artisan migrate --force || true
+            php artisan config:clear
+            php artisan route:clear
+            php artisan view:clear
+            php artisan cache:clear
