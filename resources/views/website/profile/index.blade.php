@@ -5,7 +5,7 @@
 <!-- Profile Section -->
 <section id="profile" class="py-20 px-4 bg-white">
     <div class="max-w-7xl mx-auto mt-5">
-        <div class="text-center mb-16">
+        <div class="text-center mb-12">
             <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Profile Sensasi</h2>
             <div class="mt-8 flex items-center justify-center gap-2">
                 <div class="w-16 h-0.5 bg-gradient-to-r from-transparent to-blue-500 rounded-full"></div>

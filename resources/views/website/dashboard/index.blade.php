@@ -3,7 +3,7 @@
 @section('content')
 
 <!-- Hero Section -->
-<section id="home" class="bg-white pt-20 pb-32 px-4">
+<section id="home" class="bg-white pt-20 pb-10 px-4">
     <div class="max-w-7xl mx-auto mt-12">
         <div class="grid md:grid-cols-2 gap-12 items-center">
             @php
@@ -82,7 +82,7 @@
 <!-- Profile Section -->
 <section id="profile" class="py-20 px-4 bg-white">
     <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-16">
+        <div class="text-center mb-12">
             <h2 class="section-title text-4xl md:text-5xl font-bold text-gray-800 mb-4">Profile Sensasi</h2>
         </div>
 
