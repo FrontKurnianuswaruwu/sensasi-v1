@@ -117,7 +117,7 @@
                 </div>
             </div>
             <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
-                <p>&copy; 2025 Sensasi. All rights reserved. Made with <i class="fas fa-heart text-red-500"></i> by Sensasi Team</p>
+                <p>&copy; 2026 Sensasi. All rights reserved. Made with <i class="fas fa-heart text-red-500"></i> by Sensasi Team</p>
             </div>
         </div>
     </footer>
