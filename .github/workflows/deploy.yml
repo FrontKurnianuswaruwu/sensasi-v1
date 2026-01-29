@@ -32,28 +32,26 @@ jobs:
           script: |
             cd /home/sensasio/sensasi
             
-            # 1. Tarik kode terbaru
+            # 1. Sinkronisasi file
             git fetch --all
             git reset --hard origin/main
             
-            # 2. Setup Composer (Jika belum ada)
+            # 2. Setup Composer
             if [ ! -f composer.phar ]; then
               php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
               php composer-setup.php
               php -r "unlink('composer-setup.php');"
             fi
             
-            # 3. Install dependencies tanpa menjalankan script otomatis
-            # Kita tambah --ignore-platform-reqs supaya tidak cerewet soal versi PHP/ekstensi
+            # 3. Install tanpa script (hindari proc_open)
             php composer.phar install --no-dev --optimize-autoloader --no-scripts --ignore-platform-reqs
             
-            # 4. Update autoload manual (untuk mengatasi masalah folder admin/Admin)
-            php composer.phar dump-autoload --optimize --no-scripts
+            # 4. HAPUS CACHE MANUAL (Agar PailServiceProvider tidak dipanggil)
+            rm -f bootstrap/cache/config.php
+            rm -f bootstrap/cache/routes.php
+            rm -f bootstrap/cache/services.php
+            rm -f bootstrap/cache/packages.php
             
-            # 5. Jalankan perintah Laravel satu per satu
-            # Gunakan "|| true" agar jika satu perintah gagal, proses tetap lanjut ke bawah
+            # 5. Jalankan perintah Laravel
             php artisan migrate --force || true
-            php artisan config:clear
-            php artisan route:clear
-            php artisan view:clear
-            php artisan cache:clear
+            php artisan optimize:clear
