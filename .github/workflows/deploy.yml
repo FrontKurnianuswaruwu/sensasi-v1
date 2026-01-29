@@ -28,11 +28,22 @@ jobs:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 2223 
+          port: 2223
           script: |
             cd /home/sensasio/sensasi
-            git pull origin main
-            composer install --no-dev --optimize-autoloader
+            
+            # 1. Tarik kode terbaru & paksa sinkron (solusi file web.php tidak berubah)
+            git fetch --all
+            git reset --hard origin/main
+            
+            # 2. Solusi "Composer command not found" di Rumahweb
+            if [ ! -f composer.phar ]; then
+              php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+              php composer-setup.php
+              php -r "unlink('composer-setup.php');"
+            fi
+            
+            # 3. Jalankan install & optimasi Laravel
+            php composer.phar install --no-dev --optimize-autoloader
             php artisan migrate --force
-            php artisan view:clear
-            php artisan config:cache
+            php artisan optimize:clear
