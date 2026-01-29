@@ -25,7 +25,7 @@
                         <p class="text-gray-600 mb-4 text-sm">{{ Str::limit(strip_tags($mitra->deskripsi), 80, '...') }}</p>
                         <div class="flex items-center justify-between text-sm text-gray-500">
                             <span><i class="fas fa-calendar mr-2"></i>Sejak {{ $mitra->tahun_kerjasama }}</span>
-                            <a href="{{ $mitra->link_website }}" class="text-sky-600 hover:text-sky-700 font-medium">
+                            <a href="{{ $mitra->link_website }}" target="_blank" class="text-sky-600 hover:text-sky-700 font-medium">
                                 <i class="fas fa-external-link-alt mr-1"></i>Website
                             </a>
                         </div>
