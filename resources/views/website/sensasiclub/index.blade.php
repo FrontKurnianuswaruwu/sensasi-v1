@@ -32,8 +32,8 @@
                            <img src="{{ $sensasiclub->mahasiswa->foto }}" alt="" class="w-full h-full object-cover">
                         </div>
                         <div class="p-6">
-                            <h4 class="font-bold text-lg text-gray-800 mb-1">{{ $sensasiclub->mahasiswa->user->name }}</h4>
-                            <p class="text-sky-600 text-sm font-medium mb-3">{{ $sensasiclub->mahasiswa->mitra->nama_mitra }}</p>
+                            <h4 class="font-bold text-lg text-gray-800 mb-1">{{ $sensasiclub->mahasiswa->user->name ?? '-' }}</h4>
+                            <p class="text-sky-600 text-sm font-medium mb-3">{{ $sensasiclub->mahasiswa->mitra->nama_mitra ?? '-'}}</p>
                             {{-- <p class="text-gray-600 text-sm mb-4">Biodata singkat anggota dan keahlian yang dimiliki</p> --}}
                             <a href="#" class="text-sky-600 hover:text-sky-700">
                                 <i class="fab fa-instagram text-xl"></i>
@@ -107,8 +107,8 @@
                                 @endif
                             </div>
                             <div class="p-6">
-                                <h4 class="font-bold text-lg text-gray-800 mb-2">{{ $sensasiclubkarya->judul }}</h4>
-                                <p class="text-sm text-gray-600 mb-1">{{ $sensasiclubkarya->mahasiswa->user->name }} - {{ $sensasiclubkarya->mahasiswa->mitra->nama_mitra }}</p>
+                                <h4 class="font-bold text-lg text-gray-800 mb-2">{{ $sensasiclubkarya->judul ?? '-' }}</h4>
+                                <p class="text-sm text-gray-600 mb-1">{{ $sensasiclubkarya->mahasiswa->user->name ?? '-' }} - {{ $sensasiclubkarya->mahasiswa->mitra->nama_mitra ?? '-' }}</p>
                                 <a href="{{ $sensasiclubkarya->link_youtube }}" class="inline-block mt-4 text-sky-800 hover:text-sky-700 font-medium text-sm" target="_blank">
                                     <i class="fab fa-youtube mr-2"></i>Tonton di YouTube
                                 </a>
@@ -129,8 +129,8 @@
                                     <img src="{{ $sensasiclubartikel->foto }}" alt="foto " class="object-cover w-full h-full rounded-md">
                                 </div>
                                 <div class="flex-1">
-                                    <h4 class="font-bold text-lg text-gray-800 mb-2">{{ $sensasiclubartikel->judul }}</h4>
-                                    <p class="text-sm text-gray-600 mb-2">Oleh: {{ $sensasiclubartikel->mahasiswa->user->name }} - {{ $sensasiclubartikel->mahasiswa->mitra->nama_mitra }}</p>
+                                    <h4 class="font-bold text-lg text-gray-800 mb-2">{{ $sensasiclubartikel->judul ?? '-' }}</h4>
+                                    <p class="text-sm text-gray-600 mb-2">Oleh: {{ $sensasiclubartikel->mahasiswa->user->name ?? '-' }} - {{ $sensasiclubartikel->mahasiswa->mitra->nama_mitra ?? '-' }}</p>
                                     <p class="text-xs text-gray-500 mb-3"><i class="fas fa-calendar mr-1"></i>{{ $sensasiclubartikel->created_at->format('d M Y') }} - {{ $sensasiclubartikel->created_at->format('H:i') }}</p>
                                     <p class="text-sm text-gray-600 mb-4">
                                         {{ \Illuminate\Support\Str::limit(strip_tags($sensasiclubartikel->deskripsi), 120) }}
