@@ -81,7 +81,7 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 9,
-            'status_user' => 'Verifikasi',
+            'status_user' => 'Biodata',
         ]);
 
         BiodataMahasiswa::create([
