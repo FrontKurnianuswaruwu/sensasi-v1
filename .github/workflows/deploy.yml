@@ -20,7 +20,7 @@ jobs:
       - name: Install & Build Vite
         run: |
           npm install
-          npm run build  # Ini akan membuat folder public/build
+          npm run build
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.10
@@ -28,6 +28,7 @@ jobs:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 2223 
           script: |
             cd /home/sensasio/sensasi
             git pull origin main
