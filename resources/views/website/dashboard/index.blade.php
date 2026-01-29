@@ -418,7 +418,7 @@
                                     $youtubeId = $matches[1] ?? null;
                                 @endphp
                                 @if($youtubeId)
-                                    <img src="https://img.youtube.com/vi/{{ $youtubeId }}/hqdefault.jpg" alt="Thumbnail YouTube" class="w-full h-full object-cover">
+                                    <img src="https://img.youtube.com/vi/{{ $youtubeId }}" alt="Thumbnail YouTube" class="w-full h-full object-cover">
                                     <a href="{{ $sensasiclubkarya->link_youtube }}" target="_blank" class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 hover:bg-opacity-60 transition">
                                         <i class="fab fa-youtube text-5xl text-red-600"></i>
                                     </a>
@@ -487,7 +487,6 @@
                 <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden">
                     <a href="{{ route('user.kreatif.detail', $kreative->id) }}">
                         <div class="bg-gradient-to-br from-sky-100 via-yellow-200 to-sky-100 h-64 flex items-center justify-center relative overflow-hidden">
-                            <div class="absolute inset-0 opacity-30 bg-[url('/images/pattern.svg')] bg-repeat"></div>
                             @if($kreative->foto)
                                 <img src="{{ asset($kreative->foto) }}" alt="{{ $kreative->nama }}" class="w-full h-full object-cover relative z-10">
                             @else

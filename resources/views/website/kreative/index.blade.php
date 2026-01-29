@@ -19,7 +19,6 @@
             <div class="card-hover-page bg-white rounded-xl shadow-lg overflow-hidden">
                 <a href="{{ route('user.kreatif.detail', $kreative->id) }}">
                     <div class="bg-gradient-to-br from-sky-100 via-yellow-200 to-sky-100 h-64 flex items-center justify-center relative overflow-hidden">
-                        <div class="absolute inset-0 opacity-30 bg-[url('/images/pattern.svg')] bg-repeat"></div>
                         @if($kreative->foto)
                             <img src="{{ asset($kreative->foto) }}" alt="{{ $kreative->nama }}" class="w-full h-full object-cover relative z-10">
                         @else

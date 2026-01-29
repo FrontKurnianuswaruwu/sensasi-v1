@@ -37,11 +37,11 @@ $(document).ready(function() {
     }
     // Mobile Menu Toggle
     $('#mobile-menu-btn').click(function() {
-        $('#mobile-menu').addClass('active');
+        $('#mobile-menu').removeClass('hidden').addClass('active');
     });
 
-    $('#close-menu').click(function() {
-        $('#mobile-menu').removeClass('active');
+    $('#close-menu, #mobile-menu a').click(function() {
+        $('#mobile-menu').removeClass('active').addClass('hidden');
     });
 
     // Close mobile menu when clicking a link

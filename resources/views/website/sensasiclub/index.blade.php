@@ -98,7 +98,7 @@
                                     $youtubeId = $matches[1] ?? null;
                                 @endphp
                                 @if($youtubeId)
-                                    <img src="https://img.youtube.com/vi/{{ $youtubeId }}/hqdefault.jpg" alt="Thumbnail YouTube" class="w-full h-full object-cover">
+                                    <img src="https://img.youtube.com/vi/{{ $youtubeId }}" alt="Thumbnail YouTube" class="w-full h-full object-cover">
                                     <a href="{{ $sensasiclubkarya->link_youtube }}" target="_blank" class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 hover:bg-opacity-60 transition">
                                         <i class="fab fa-youtube text-5xl text-red-600"></i>
                                     </a>

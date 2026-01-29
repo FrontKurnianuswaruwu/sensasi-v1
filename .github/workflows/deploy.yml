@@ -35,6 +35,12 @@ jobs:
             # 1. Sinkronisasi file
             git fetch --all
             git reset --hard origin/main
+
+            # --- TAMBAHKAN DI SINI ---
+            # Copy folder build ke public_html agar bisa diakses browser
+            echo "Menyingkronkan folder build ke public_html..."
+            cp -rf /home/sensasio/sensasi/public/build /home/sensasio/public_html/
+            # -------------------------
             
             # 2. Setup Composer
             if [ ! -f composer.phar ]; then

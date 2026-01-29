@@ -65,7 +65,7 @@
         </div>
 
         <!-- Mobile Menu -->
-        <div class="mobile-menu fixed top-0 right-0 w-64 h-full bg-white shadow-2xl md:hidden z-50" id="mobile-menu">
+        <div class="mobile-menu fixed top-0 right-0 w-64 h-full bg-white shadow-2xl md:hidden z-50 transform translate-x-full opacity-0 pointer-events-none" id="mobile-menu">
             <div class="p-6">
                 <button class="absolute top-4 right-4 text-gray-700" id="close-menu">
                     <i class="fas fa-times text-2xl"></i>
