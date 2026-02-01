@@ -45,7 +45,7 @@
                             @foreach($dataherosection->herophotos as $photo)
                                 <img 
                                     src="{{ asset('uploads/herosection/' . $photo->foto) }}"
-                                    class="slide w-full h-full object-cover"
+                                    class="slide w-full h-full object-cover" loading="lazy"
                                 >
                             @endforeach
                         </div>
@@ -102,7 +102,7 @@
                     @if($fotoPertama)
                         <img 
                             src="{{ asset($fotoPertama->foto) }}" 
-                            class="w-full h-full object-cover"
+                            class="w-full h-full object-cover" loading="lazy"
                         >
                     @endif
                 </div>
@@ -113,6 +113,7 @@
                         <img 
                             src="{{ asset($foto->foto) }}" 
                             class="w-full h-full object-cover"
+                            loading="lazy"
                         >
                     </div>
                     
@@ -145,7 +146,7 @@
                 @foreach ($datapengurus->take(4) as $pengurus)
                     <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden">
                         <div class="bg-gray-200 h-64 flex items-center justify-center">
-                            <img src="{{ $pengurus->foto }}" alt="" class="w-full h-full object-cover">
+                            <img src="{{ $pengurus->foto }}" loading="lazy" alt="Pengurus" class="w-full h-full object-cover">
                         </div>
                         <div class="p-6">
                             <h4 class="font-bold text-xl text-gray-800 mb-1">{{  $pengurus->nama }}</h4>
@@ -176,7 +177,7 @@
             @foreach ($datamitra as $mitra )
                 <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden">
                     <div class="bg-gray-200 h-48 flex items-center justify-center">
-                        <img src="{{ $mitra->logo_url }}" alt="">
+                        <img src="{{ $mitra->logo_url }}" loading="lazy" alt="Logo" class="w-full h-full object-cover">
                     </div>
                     <div class="p-6">
                         <h4 class="font-bold text-xl text-gray-800 mb-2">{{ $mitra->nama_mitra }}</h4>
@@ -262,7 +263,7 @@
             @foreach ($databerita->take(1) as $berita )
                 <div class="card-hover bg-white rounded-2xl shadow-xl overflow-hidden grid md:grid-cols-2 gap-0">
                     <div class="bg-gray-200 aspect-video w-full overflow-hidden">
-                        <img src="{{ $berita->foto }}" alt="" class="w-full h-full object-cover">
+                        <img src="{{ $berita->foto }}" loading="lazy" alt="Foto" class="w-full h-full object-cover">
                     </div>
                     <div class="p-8 flex flex-col h-full">
                         <span class="inline-block w-fit self-start bg-sky-100 text-sky-800 text-xs font-semibold px-3 py-1 rounded-full mb-4">
@@ -289,7 +290,7 @@
             @foreach ($databerita->slice(1) as $berita )
                 <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden">
                     <div class="bg-gray-200 h-48 flex items-center justify-center">
-                        <img src="{{ $berita->foto }}" alt="" class="w-full h-full object-cover">
+                        <img src="{{ $berita->foto }}" alt="Foto" loading="lazy" class="w-full h-full object-cover">
                     </div>
                     <div class="p-6">
                         <span class="inline-block bg-sky-100 text-sky-800 text-xs font-semibold px-3 py-1 rounded-full mb-3">{{ $berita->ketegori }}</span>
@@ -341,7 +342,7 @@
                 @foreach ($datasensasiclub as $sensasiclub )
                     <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden text-center">
                         <div class="bg-gray-200 h-48 flex items-center justify-center">
-                           <img src="{{ $sensasiclub->mahasiswa->foto }}" alt="" class="w-full h-full object-cover">
+                           <img src="{{ $sensasiclub->mahasiswa->foto }}" loading="lazy" alt="Foto" class="w-full h-full object-cover">
                         </div>
                         <div class="p-6">
                             <h4 class="font-bold text-lg text-gray-800 mb-1">{{ $sensasiclub->mahasiswa->user->name ?? '-' }}</h4>
@@ -418,7 +419,7 @@
                                     $youtubeId = $matches[1] ?? null;
                                 @endphp
                                 @if($youtubeId)
-                                    <img src="https://img.youtube.com/vi/{{ $youtubeId }}" alt="Thumbnail YouTube" class="w-full h-full object-cover">
+                                    <img src="https://img.youtube.com/vi/{{ $youtubeId }}" loading="lazy" alt="Thumbnail YouTube" class="w-full h-full object-cover">
                                     <a href="{{ $sensasiclubkarya->link_youtube }}" target="_blank" class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 hover:bg-opacity-60 transition">
                                         <i class="fab fa-youtube text-5xl text-red-600"></i>
                                     </a>
@@ -446,7 +447,7 @@
                         <div class="card-hover bg-white rounded-xl shadow-lg p-6">
                             <div class="flex items-start space-x-4">
                                 <div class="bg-sky-100 rounded-lg p-1 flex-shrink-0 w-24 h-24 flex items-center justify-center">
-                                    <img src="{{ $sensasiclubartikel->foto }}" alt="foto " class="object-cover w-full h-full rounded-md">
+                                    <img src="{{ $sensasiclubartikel->foto }}" loading="lazy" alt="foto" class="object-cover w-full h-full rounded-md">
                                 </div>
                                 <div class="flex-1">
                                     <h4 class="font-bold text-lg text-gray-800 mb-2">{{ $sensasiclubartikel->judul ?? '-' }}</h4>
@@ -488,7 +489,7 @@
                     <a href="{{ route('user.kreatif.detail', $kreative->id) }}">
                         <div class="bg-gradient-to-br from-sky-100 via-yellow-200 to-sky-100 h-64 flex items-center justify-center relative overflow-hidden">
                             @if($kreative->foto)
-                                <img src="{{ asset($kreative->foto) }}" alt="{{ $kreative->nama }}" class="w-full h-full object-cover relative z-10">
+                                <img src="{{ asset($kreative->foto) }}" alt="{{ $kreative->nama }}" loading="lazy" class="w-full h-full object-cover relative z-10">
                             @else
                                 <i class="fas fa-file-alt text-6xl text-sky-800 relative z-10"></i>
                             @endif

@@ -101,6 +101,13 @@ function renderCards(data) {
     }
 
     data.forEach((nilai) => {
+        const getSemesterLabel = (semester) => {
+            const semesterNum = parseInt(semester);
+            if (semesterNum >= 1 && semesterNum <= 8) {
+            return `Semester ${semesterNum}`;
+            }
+            return semester || '-';
+        };
         const card = `
             <div class="p-4 border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
                 <div class="flex items-start space-x-3">
@@ -109,7 +116,7 @@ function renderCards(data) {
                     </div>
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center justify-between mb-2">
-                            <h3 class="text-lg font-semibold text-gray-900 truncate">${nilai.semester}</h3>
+                            <h3 class="text-lg font-semibold text-gray-900 truncate">${getSemesterLabel(nilai.semester)}</h3>
                             <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full">
                                 ${nilai.ip_semester || '-'}
                             </span>

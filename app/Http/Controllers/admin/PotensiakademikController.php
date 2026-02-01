@@ -34,24 +34,47 @@ class PotensiakademikController extends Controller
 
     public function soal(Request $request)
     {
-        $userid = auth()->id();
-        $kategoriId = $request->kategori_id;
-        $mahasiswaId = BiodataMahasiswa::where('user_id', $userid)->first()->id;
+        $user = auth()->user();
+        $kategoriId = $request->query('kategori_id');
+
+        if (!$kategoriId) {
+            abort(404, 'Kategori tidak ditemukan');
+        }
+
         $kategori = KategoriSoal::findOrFail($kategoriId);
-        $nameuser = $this->nameuser;
-        
-        if (!$kategori->is_active) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Kategori soal ini tidak aktif.'
-            ], 403);
+
+        if ($kategori->is_active != 1) {
+            abort(403, 'Kategori soal tidak aktif');
+        }
+
+        $mahasiswaId = null;
+
+        if ($user->role == 9) {
+            $biodata = BiodataMahasiswa::where('user_id', $user->id)->first();
+
+            if (!$biodata) {
+                abort(403, 'Biodata mahasiswa tidak ditemukan');
+            }
+
+            $mahasiswaId = $biodata->id;
         }
 
         $soals = Soal::with('pilihan')
             ->where('kategori_id', $kategoriId)
+            ->orderBy('id')
             ->get();
 
-        return view('admin.potensiakademik.soal', compact('soals', 'kategoriId', 'nameuser'));
+        $nameuser   = $this->nameuser ?? $user->name;
+        $userstatus = $this->userstatus ?? null;
+
+        return view('admin.potensiakademik.soal', compact(
+            'soals',
+            'kategori',
+            'kategoriId',
+            'mahasiswaId',
+            'nameuser',
+            'userstatus'
+        ));
     }
 
     public function getkategori(Request $request)
@@ -63,10 +86,8 @@ class PotensiakademikController extends Controller
         $user = auth()->user();
         $loginRole = $user->role;
 
-        // ambil mahasiswa login jika ada
         $mahasiswa = BiodataMahasiswa::where('user_id', $user->id)->first();
 
-        // base query
         $query = KategoriSoal::select('id', 'name', 'waktu_pengerjaan','is_active')
             ->with(['hasilUjians' => function ($q) use ($loginRole, $mahasiswa) {
                 if ($loginRole == 9 && $mahasiswa) {
@@ -75,12 +96,10 @@ class PotensiakademikController extends Controller
             }])
             ->where('is_active', 1);
 
-        // filter search
         if (!empty($search)) {
             $query->where('name', 'like', "%{$search}%");
         }
 
-        // pagination
         $kategorisoal = $query->paginate($limit, ['*'], 'page', $page);
 
         return response()->json([

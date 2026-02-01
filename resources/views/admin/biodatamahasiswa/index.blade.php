@@ -4,7 +4,7 @@
 <!-- Main Content -->
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <div id="notificationWrapper" class="fixed top-4 right-4 flex flex-col gap-2 z-[9999]"></div>
-<main class="flex-1 lg:ml-0 overflow-x-hidden">
+<main class="flex-1 lg:ml-0 w-full">
     <div class="p-4 lg:p-8">
         <div class="mb-8 fade-in flex items-center justify-between">
             <!-- Judul -->
@@ -35,17 +35,20 @@
             <!-- Desktop Table -->
             
 
-            <div class="flex justify-start border-b border-gray-200">
-                <button class="tab-btn py-3 px-4 text-blue-primary font-medium border-b-4 border-blue-light flex items-center gap-2" data-tab="biodata">
+            <div class="flex flex-wrap border-b border-gray-200">
+                <button class="tab-btn w-1/2 sm:w-auto py-3 px-4 text-blue-primary font-medium border-b-4 border-blue-light flex items-center gap-2" data-tab="biodata">
                     <i class="fas fa-user"></i> Data Pribadi
                 </button>
-                <button class="tab-btn py-3 px-4 text-gray-600 hover:text-blue-primary flex items-center gap-2" data-tab="akademik">
+
+                <button class="tab-btn w-1/2 sm:w-auto py-3 px-4 text-gray-600 hover:text-blue-primary flex items-center gap-2" data-tab="akademik">
                     <i class="fas fa-graduation-cap"></i> Akademik
                 </button>
-                <button class="tab-btn py-3 px-4 text-gray-600 hover:text-blue-primary flex items-center gap-2" data-tab="orangtua">
+
+                <button class="tab-btn w-1/2 sm:w-auto py-3 px-4 text-gray-600 hover:text-blue-primary flex items-center gap-2" data-tab="orangtua">
                     <i class="fas fa-users"></i> Orang Tua
                 </button>
-                <button class="tab-btn py-3 px-4 text-gray-600 hover:text-blue-primary flex items-center gap-2" data-tab="dokumen">
+
+                <button class="tab-btn w-1/2 sm:w-auto py-3 px-4 text-gray-600 hover:text-blue-primary flex items-center gap-2" data-tab="dokumen">
                     <i class="fas fa-file-alt"></i> Dokumen
                 </button>
             </div>

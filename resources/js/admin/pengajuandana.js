@@ -164,8 +164,7 @@ function renderTable(data, isMahasiswa) {
     });
 }
 
-// Render mobile cards khusus role (hanya name + aksi edit/hapus)
-function renderCards(data) {
+function renderCards(data, isMahasiswa) {
     const cardContainer = $('#cardContainer');
     cardContainer.empty();
 
@@ -180,50 +179,106 @@ function renderCards(data) {
     }
 
     data.forEach((pengajuandana) => {
-        // Tentukan ikon berdasarkan jabatan
-        let jabatanIcon = 'fa-user-tie'; // default
-        if (pengajuandana.jabatan) {
-            const jabatan = pengajuandana.jabatan.toLowerCase();
-            if (jabatan.includes('ketua')) jabatanIcon = 'fa-crown';
-            else if (jabatan.includes('wakil')) jabatanIcon = 'fa-user-friends';
-            else if (jabatan.includes('sekretaris')) jabatanIcon = 'fa-file-signature';
-            else if (jabatan.includes('bendahara')) jabatanIcon = 'fa-wallet';
-            else if (jabatan.includes('anggota')) jabatanIcon = 'fa-users';
+        const semesterText = pengajuandana.semester 
+            ? `Semester ${pengajuandana.semester}`
+            : '-';
+
+        let actionButtons = '';
+
+        if (isMahasiswa) {
+            if (pengajuandana.status === 'approved') {
+                actionButtons = `
+                    <div class="text-center text-gray-400 text-xl">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                `;
+            } 
+            else if (pengajuandana.status === 'pending') {
+                actionButtons = `
+                    <button class="delete-btn flex-1 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all" 
+                        data-id="${pengajuandana.id}" data-name="${semesterText}">
+                        <i class="fas fa-trash mr-1"></i> Hapus
+                    </button>
+                `;
+            } 
+            else {
+                actionButtons = `
+                    <button class="edit-btn flex-1 px-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all" 
+                        data-id="${pengajuandana.id}">
+                        <i class="fas fa-edit mr-1"></i> Edit
+                    </button>
+                    <button class="delete-btn flex-1 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all" 
+                        data-id="${pengajuandana.id}" data-name="${semesterText}">
+                        <i class="fas fa-trash mr-1"></i> Hapus
+                    </button>
+                `;
+            }
+        } 
+        else { 
+            if (pengajuandana.status === 'approved' || pengajuandana.status === 'rejected') {
+                actionButtons = `
+                    <div class="text-center text-gray-400 text-xl">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                `;
+            } else {
+                actionButtons = `
+                    <button class="approve-btn flex-1 px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all" 
+                        data-id="${pengajuandana.id}">
+                        <i class="fas fa-check mr-1"></i> Approve
+                    </button>
+                    <button class="reject-btn flex-1 px-3 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-all" 
+                        data-id="${pengajuandana.id}">
+                        <i class="fas fa-times mr-1"></i> Reject
+                    </button>
+                `;
+            }
+        }
+
+        let statusBadge = '';
+        switch (pengajuandana.status) {
+            case 1:
+            case 'pending':
+                statusBadge = `<span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-700 border border-yellow-300">Pending</span>`;
+                break;
+            case 2:
+            case 'approved':
+                statusBadge = `<span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700 border border-green-300">Approved</span>`;
+                break;
+            case 3:
+            case 'rejected':
+                statusBadge = `<span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-700 border border-red-300">Rejected</span>`;
+                break;
+            default:
+                statusBadge = `<span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-700 border border-gray-300">Unknown</span>`;
         }
 
         const card = `
-            <div class="p-4 border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
-            <div class="flex items-start space-x-3">
-                <div class="flex-shrink-0 h-12 w-12 rounded-full bg-gradient-to-r gradient-bg to-blue-light flex items-center justify-center text-white font-semibold text-lg">
-                ${pengajuandana.nama.charAt(0)}
+            <div class="bg-white rounded-xl shadow-md p-4 mb-4 border border-gray-200">
+                
+                <!-- Header -->
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="text-lg font-bold text-gray-800">${semesterText}</h3>
+                    ${statusBadge}
                 </div>
-                <div class="flex-1 min-w-0">
-                <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-lg font-semibold text-gray-900 truncate">${pengajuandana.nama}</h3>
+
+                <!-- Total Dana -->
+                <div class="flex items-center text-sm text-gray-600 mb-4">
+                    <i class="fas fa-money-bill-wave w-5 mr-2 text-green-500"></i>
+                    <span>Total: <span class="font-semibold text-gray-800">${formatRupiah(pengajuandana.total)}</span></span>
                 </div>
-                <div class="space-y-1 text-sm text-gray-600">
-                    <div class="flex items-center">
-                    <i class="fas ${jabatanIcon} w-4 mr-2 text-orange-primary"></i>
-                    <span class="truncate">${pengajuandana.jabatan || '-'}</span>
-                    </div>
-                    <div class="flex mt-4 space-x-2">
-                    <button class="edit-btn flex-1 px-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all" data-id="${pengajuandana.id}">
-                        <i class="fas fa-edit"></i> Edit
-                    </button>
-                    <button class="delete-btn flex-1 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all" data-id="${pengajuandana.id}" data-name="${pengajuandana.nama}">
-                        <i class="fas fa-trash"></i> Hapus
-                    </button>
-                    </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-2">
+                    ${actionButtons}
                 </div>
-                </div>
-            </div>
             </div>
         `;
+
         cardContainer.append(card);
     });
 }
 
-// render pagination berdasarkan totalPages dari server
 function renderPagination(totalPages, query) {
     const paginationContainer = $('#pagination');
     paginationContainer.empty();
@@ -256,7 +311,6 @@ function renderPaginationMobile(totalPages, query) {
     }
 }
 
-// Ambil data dari server dengan pagination & search
 function loadData(query = '', page = 1) {
     $.ajax({
         url: "/admin/getpengajuandana",
@@ -272,9 +326,9 @@ function loadData(query = '', page = 1) {
             }
 
             renderTable(data, isMahasiswa);
-            // renderCards(data);
+            renderCards(data, isMahasiswa);
             renderPagination(res.last_page, query);
-            // renderPaginationMobile(res.last_page, query);
+            renderPaginationMobile(res.last_page, query);
 
             let start = (res.current_page - 1) * rowsPerPage + 1;
             let end = start + data.length - 1;
