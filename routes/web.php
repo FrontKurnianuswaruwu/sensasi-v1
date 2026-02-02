@@ -40,7 +40,7 @@ Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 Route::post('/resend-otp', [AuthController::class, 'resendOtp'])->name('resend.otp');
 Route::get('login', [AuthController::class, 'login'])->name('auth.login');
 Route::post('/login/post', [AuthController::class, 'loginpost'])->name('post.login');
-Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout'); 
+Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 Route::get('/', [DashboardController::class, 'indexuser'])->name('user.dashboard.index');
 Route::get('/profile', [DashboardController::class, 'profile'])->name('user.profile.index');
 Route::get('/mitra', [DashboardController::class, 'mitra'])->name('user.mitra.index');

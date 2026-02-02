@@ -591,14 +591,8 @@
                         <a href="{{ $datakontak->facebook }}" class="bg-sky-100 hover:bg-sky-800 text-sky-800 hover:text-white w-12 h-12 rounded-full flex items-center justify-center transition">
                             <i class="fab fa-facebook text-xl"></i>
                         </a>
-                        <a href="{{ $datakontak->twitter }}" class="bg-sky-100 hover:bg-sky-800 text-sky-800 hover:text-white w-12 h-12 rounded-full flex items-center justify-center transition">
-                            <i class="fab fa-twitter text-xl"></i>
-                        </a>
                         <a href="{{ $datakontak->youtube }}" class="bg-sky-100 hover:bg-sky-800 text-sky-800 hover:text-white w-12 h-12 rounded-full flex items-center justify-center transition">
                             <i class="fab fa-youtube text-xl"></i>
-                        </a>
-                        <a href="{{ $datakontak->linkedin }}" class="bg-sky-100 hover:bg-sky-800 text-sky-800 hover:text-white w-12 h-12 rounded-full flex items-center justify-center transition">
-                            <i class="fab fa-linkedin text-xl"></i>
                         </a>
                         <a href="{{ $datakontak->tiktok }}" class="bg-sky-100 hover:bg-sky-800 text-sky-800 hover:text-white w-12 h-12 rounded-full flex items-center justify-center transition">
                             <i class="fab fa-tiktok text-xl"></i>
