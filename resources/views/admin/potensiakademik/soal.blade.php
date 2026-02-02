@@ -55,6 +55,47 @@
 
     <!-- Timer JS -->
 </main>
+<!-- Modal Konfirmasi Selesai -->
+<div id="confirmModal"
+     class="fixed inset-0 bg-black/50 hidden items-center justify-center z-[99999]">
+    <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 animate-scaleIn">
+        <div class="flex items-center gap-3 mb-4">
+            <i class="fas fa-check-circle text-green-500 text-2xl"></i>
+            <h3 class="text-lg font-bold text-gray-800">
+                Konfirmasi Selesai Test
+            </h3>
+        </div>
+
+        <p class="text-gray-600 mb-6">
+            Apakah Anda yakin ingin mengakhiri <b>Test Potensi Akademik</b>?
+            <br>
+            Jawaban akan langsung disimpan dan tidak dapat diubah.
+        </p>
+
+        <div class="flex justify-end gap-3">
+            <button id="cancelSubmit"
+                    class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300">
+                Batal
+            </button>
+            <button id="confirmSubmit"
+                    class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">
+                Ya, Selesai
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes scaleIn {
+    from { transform: scale(.9); opacity: 0 }
+    to { transform: scale(1); opacity: 1 }
+}
+.animate-scaleIn {
+    animation: scaleIn .2s ease-out;
+}
+</style>
+
+
 <script>
     window.submitRoute = "{{ route('admin.potensiakademik.submit') }}";
 </script>

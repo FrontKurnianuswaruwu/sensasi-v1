@@ -22,29 +22,38 @@ $(document).ready(function () {
     const timerInterval = setInterval(updateTimer, 1000);
     updateTimer();
 
+    const modal = $('#confirmModal');
+    const confirmBtn = $('#confirmSubmit');
+    const cancelBtn = $('#cancelSubmit');
+
+
     function submitForm() {
+
         submitted = true;
 
         const submitBtn = $('#submit');
         const originalText = submitBtn.html();
-        submitBtn.html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...').prop('disabled', true);
 
+        submitBtn
+            .html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...')
+            .prop('disabled', true);
 
         $.ajax({
             url: window.submitRoute,
             type: 'POST',
             data: form.serialize(),
             success: function (res) {
-                if(res.status === 'success'){
-                    showNotification(res.message, res.status);
+                if (res.status === 'success') {
+                    showNotification(res.message, 'success');
                     setTimeout(() => {
                         window.location.href = res.redirect_url;
                     }, 2000);
-                    submitBtn.html(originalText).prop('disabled', false);
                 }
             },
             error: function () {
                 alert('Gagal submit jawaban');
+            },
+            complete: function () {
                 submitBtn.html(originalText).prop('disabled', false);
             }
         });
@@ -52,11 +61,23 @@ $(document).ready(function () {
 
     form.on('submit', function(e){
         e.preventDefault();
-        if(!submitted){
-            clearInterval(timerInterval);
-            submitForm();
+
+        if (!submitted) {
+            modal.removeClass('hidden').addClass('flex');
         }
     });
+    cancelBtn.on('click', function () {
+        modal.addClass('hidden').removeClass('flex');
+    });
+    
+    confirmBtn.on('click', function () {
+        modal.addClass('hidden').removeClass('flex');
+        clearInterval(timerInterval);
+        submitForm();
+    });
+
+
+
 });
 
 // Notifikasi
