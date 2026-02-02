@@ -1,4 +1,4 @@
-@section('title', 'Dashboard Sensasi')
+@section('title', 'Sensasi')
 @extends('layouts.website')
 @section('content')
 
