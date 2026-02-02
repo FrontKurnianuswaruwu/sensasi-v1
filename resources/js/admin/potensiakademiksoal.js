@@ -1,21 +1,22 @@
 import $ from 'jquery';
 $(document).ready(function () {
-    let timeLeft = 1 * 10; // 10 menit, bisa disesuaikan
+    let waktuPengerjaan = parseInt($('#waktuPengerjaan').val(), 10) * 60; 
     const countdown = document.getElementById('countdown');
     const form = $('#testForm');
-    let submitted = false; // untuk mencegah double submit
+    let submitted = false; 
 
     function updateTimer() {
-        let minutes = Math.floor(timeLeft / 60);
-        let seconds = timeLeft % 60;
+        let minutes = Math.floor(waktuPengerjaan / 60);
+        let seconds = waktuPengerjaan % 60;
         countdown.textContent = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
 
-        if(timeLeft <= 0 && !submitted){
+
+        if(waktuPengerjaan <= 0 && !submitted){
             clearInterval(timerInterval);
             alert("Waktu Habis! Jawaban akan otomatis disubmit.");
             submitForm();
         }
-        timeLeft--;
+        waktuPengerjaan--;
     }
 
     const timerInterval = setInterval(updateTimer, 1000);
@@ -24,8 +25,13 @@ $(document).ready(function () {
     function submitForm() {
         submitted = true;
 
+        const submitBtn = $('#submit');
+        const originalText = submitBtn.html();
+        submitBtn.html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...').prop('disabled', true);
+
+
         $.ajax({
-            url: window.submitRoute, // ambil dari Blade
+            url: window.submitRoute,
             type: 'POST',
             data: form.serialize(),
             success: function (res) {
@@ -34,10 +40,12 @@ $(document).ready(function () {
                     setTimeout(() => {
                         window.location.href = res.redirect_url;
                     }, 2000);
+                    submitBtn.html(originalText).prop('disabled', false);
                 }
             },
             error: function () {
                 alert('Gagal submit jawaban');
+                submitBtn.html(originalText).prop('disabled', false);
             }
         });
     }

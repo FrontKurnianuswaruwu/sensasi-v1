@@ -51,7 +51,7 @@ Route::get('/kontak', [DashboardController::class, 'kontak'])->name('user.kontak
 Route::get('berita/{id}', [DashboardController::class, 'detailberita'])->name('user.berita.detail');
 Route::get('kreative/{id}', [DashboardController::class, 'detailkreative'])->name('user.kreatif.detail');
 
-Route::middleware(['check.expired', 'check.permission'])->group(function() {
+Route::middleware(['check.expired', 'check.permission', 'check.pendaftaran', 'check.status'])->group(function() {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard.index');
 
     // User Routes

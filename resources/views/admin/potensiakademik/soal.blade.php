@@ -17,6 +17,7 @@
                 Waktu: <span id="countdown">10:00</span>
             </div>
         </div>
+        <input type="hidden" id="waktuPengerjaan" value="{{ $waktupenngerjaan }}">
 
         <!-- Form Test dengan dummy data -->
         <form id="testForm" action="{{ route('admin.potensiakademik.submit') }}" method="POST" class="space-y-6 bg-white p-6 rounded-xl shadow-md mt-4">
@@ -44,7 +45,7 @@
             @endforeach
 
             <div class="pt-4 flex justify-end">
-                <button type="submit"
+                <button type="submit" id="submit"
                         class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition">
                     Submit Jawaban
                 </button>

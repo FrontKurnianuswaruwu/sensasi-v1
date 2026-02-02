@@ -37,6 +37,8 @@ class PotensiakademikController extends Controller
         $user = auth()->user();
         $kategoriId = $request->query('kategori_id');
 
+        $waktupenngerjaan = KategoriSoal::where('id', $kategoriId)->value('waktu_pengerjaan');
+
         if (!$kategoriId) {
             abort(404, 'Kategori tidak ditemukan');
         }
@@ -73,7 +75,8 @@ class PotensiakademikController extends Controller
             'kategoriId',
             'mahasiswaId',
             'nameuser',
-            'userstatus'
+            'userstatus',
+            'waktupenngerjaan'
         ));
     }
 
@@ -114,38 +117,45 @@ class PotensiakademikController extends Controller
 
     public function submit(Request $request)
     {
-        $userid = auth()->id();
-        $mahasiswaId = BiodataMahasiswa::where('user_id', $userid)->first()->id;
+        $user = auth()->user();
+
+        $biodata = BiodataMahasiswa::where('user_id', $user->id)->firstOrFail();
+        $mahasiswaId = $biodata->id;
+
         $kategoriId = $request->kategori_id;
-        $jawaban = $request->jawaban; 
+
+        $soals = Soal::where('kategori_id', $kategoriId)->get();
+
+        $jawabanUser = $request->input('jawaban', []);
 
         $jumlahBenar = 0;
         $jumlahSalah = 0;
 
-        foreach ($jawaban as $soalId => $pilihanId) {
-            $pilihan = Pilihan::find($pilihanId);
-            if (!$pilihan) continue;
+        foreach ($soals as $soal) {
+            $pilihanId = $jawabanUser[$soal->id] ?? null;
 
-            if ($pilihan->is_true) {
-                $jumlahBenar++;
+            if ($pilihanId) {
+                $pilihan = Pilihan::find($pilihanId);
+                if ($pilihan && $pilihan->is_true) {
+                    $jumlahBenar++;
+                } else {
+                    $jumlahSalah++;
+                }
             } else {
                 $jumlahSalah++;
             }
         }
 
-        // Simpan langsung ke hasil_ujian
-        $hasilUjian = HasilUjian::create([
+        HasilUjian::create([
             'mahasiswa_id' => $mahasiswaId,
-            'kategori_id' => $kategoriId,
+            'kategori_id'  => $kategoriId,
             'jumlah_benar' => $jumlahBenar,
             'jumlah_salah' => $jumlahSalah,
-            'jawaban' => $jawaban,
-            'tanggal' => now(),
-            'status' => 'selesai',
+            'jawaban'      => $jawabanUser,
+            'tanggal'      => now(),
+            'status'       => 'selesai',
         ]);
 
-        // update status_user jadi Verifikasi
-        $user = auth()->user();
         $user->status_user = 'Verifikasi';
         $user->save();
 

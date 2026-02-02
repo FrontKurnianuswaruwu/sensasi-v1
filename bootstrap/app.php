@@ -3,6 +3,7 @@
 use App\Http\Middleware\CheckExpired;
 use App\Http\Middleware\CheckPermission;
 use App\Http\Middleware\CheckPendaftaran;
+use App\Http\Middleware\CheckStatus;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -18,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'check.expired' => CheckExpired::class,
             'check.permission' => CheckPermission::class,
             'check.pendaftaran' => CheckPendaftaran::class,
+            'check.status' => CheckStatus::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
