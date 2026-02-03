@@ -132,11 +132,11 @@ function renderTable(data, isMahasiswa) {
                     <div class="flex items-center">
                         <div class="flex-shrink-0 h-10 w-10">
                             <div class="h-10 w-10 rounded-full bg-gradient-to-r gradient-bg to-blue-light flex items-center justify-center text-white font-semibold">
-                                ${pengajuandana.mahasiswa.user.name.charAt(0) || '-'}
+                                ${pengajuandana.mahasiswa.user.name.charAt(0) ?? '-'}
                             </div>
                         </div>
                         <div class="ml-4">
-                            ${pengajuandana.mahasiswa.user.name || '-'}
+                            ${pengajuandana.mahasiswa.user.name ?? '-'}
                         </div>
                     </div>
                 </td>
@@ -144,13 +144,13 @@ function renderTable(data, isMahasiswa) {
                     <div class="text-sm font-medium text-gray-900">${semesterText}</div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${pengajuandana.ip_semester || '-'}
+                    ${pengajuandana.ip_semester ?? '-'}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     ${formatRupiah(pengajuandana.total)}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${ pengajuandana.catatan || '-'}
+                    ${ pengajuandana.catatan ?? '-'}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     ${statusBadge}

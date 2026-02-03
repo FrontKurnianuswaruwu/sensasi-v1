@@ -141,25 +141,36 @@
 
         <!-- Pengurus -->
         <div>
-            <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">Pengurus</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">
+                Pengurus
+            </h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 justify-items-center">
                 @foreach ($datapengurus->take(4) as $pengurus)
-                    <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden w-full max-w-sm">
                         <div class="bg-gray-200 h-64 flex items-center justify-center">
-                            <img src="{{ $pengurus->foto }}" loading="lazy" alt="Pengurus" class="w-full h-full object-cover">
+                            <img src="{{ $pengurus->foto }}" loading="lazy"
+                                alt="Pengurus"
+                                class="w-full h-full object-cover">
                         </div>
-                        <div class="p-6">
-                            <h4 class="font-bold text-xl text-gray-800 mb-1">{{  $pengurus->nama }}</h4>
-                            <p class="text-sky-800 font-medium mb-3">{{ $pengurus->jabatan }}</p>
+
+                        <div class="p-6 text-center">
+                            <h4 class="font-bold text-xl text-gray-800 mb-1">
+                                {{ $pengurus->nama }}
+                            </h4>
+                            <p class="text-sky-800 font-medium mb-3">
+                                {{ $pengurus->jabatan }}
+                            </p>
                         </div>
                     </div>
                 @endforeach
             </div>
+
             @if ($countpengurus > 4)
-                <div class="mt-6 text-end">
+                <div class="mt-6 text-center">
                     <a href="#" class="text-sky-800 hover:text-sky-700 font-semibold">
-                            Lihat Lainnya <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
+                        Lihat Lainnya <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
                 </div>
             @endif
         </div>
