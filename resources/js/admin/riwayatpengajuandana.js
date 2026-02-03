@@ -494,6 +494,8 @@ $(document).on('click', '.detail-btn', function() {
         url: '/admin/riwayatpengajuandana/' + currentPengajuandanaId,
         type: 'GET',
         success: function(riwayatpengajuandana) {
+            $('#paketFields').addClass('hidden');
+            $('#sksFields').addClass('hidden');
             $('#riwayatpengajuandanaId').val(riwayatpengajuandana.id);
             $('#riwayatpengajuandanaSemester').val('Semester ' + riwayatpengajuandana.semester);
             $('#riwayatpengajuandanaIpsemester').val(riwayatpengajuandana.ip_semester);
@@ -509,15 +511,22 @@ $(document).on('click', '.detail-btn', function() {
 
             $('#riwayatpengajuandanaPengajuandana').val(tipeText).trigger('change');
 
-            if (riwayatpengajuandana.tipe === 1) {
+            if (Number(riwayatpengajuandana.tipe) === 1) {
+                $('#paketFields').removeClass('hidden');
+
                 $('#sppTetap').val(formatRupiah(riwayatpengajuandana.spp_tetap));
                 $('#sppVariabel').val(formatRupiah(riwayatpengajuandana.spp_variabel));
                 $('#praktikumPaket').val(formatRupiah(riwayatpengajuandana.praktikum));
+
                 hitungTotalPaket();
-            } else if (riwayatpengajuandana.tipe === 2) {
-                $('#jumlahSks').val(formatRupiah(riwayatpengajuandana.jml_sks));
+
+            } else if (Number(riwayatpengajuandana.tipe) === 2) {
+                $('#sksFields').removeClass('hidden');
+
+                $('#jumlahSks').val(riwayatpengajuandana.jml_sks);
                 $('#nominal').val(formatRupiah(riwayatpengajuandana.nominal));
                 $('#praktikumSks').val(formatRupiah(riwayatpengajuandana.praktikum));
+
                 hitungTotalSks();
             }
             showModal('riwayatpengajuandanaModal');
