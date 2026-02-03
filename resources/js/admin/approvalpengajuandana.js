@@ -82,8 +82,8 @@ function renderTable(data) {
 
         const row = `
             <tr class="hover:bg-gray-50 transition-colors duration-200">
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
-            <td class="px-6 py-4 whitespace-nowrap">
+            <td class="px-6 py-4 text-sm text-gray-900">${index + 1}</td>
+            <td class="px-6 py-4">
                 <div class="flex items-center">
                 <div class="flex-shrink-0 h-10 w-10">
                     <div class="h-10 w-10 rounded-full bg-gradient-to-r gradient-bg to-blue-light flex items-center justify-center text-white font-semibold">
@@ -95,13 +95,13 @@ function renderTable(data) {
                 </div>
                 </div>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            <td class="px-6 py-4 text-sm text-gray-900">
                 ${approvalpengajuandana.ip_semester || '-'}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            <td class="px-6 py-4 text-sm text-gray-900">
                 ${formatRupiah(approvalpengajuandana.total)}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            <td class="px-6 py-4 text-sm text-gray-900">
                 ${statusBadge}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm">

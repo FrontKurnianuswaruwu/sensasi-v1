@@ -72,13 +72,13 @@
                     <i class="fas fa-times text-2xl"></i>
                 </button>
                 <div class="mt-12 space-y-4">
-                    <a href="#home" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Home</a>
-                    <a href="#profile" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Profile</a>
-                    <a href="#mitra" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Mitra</a>
-                    <a href="#berita" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Berita</a>
-                    <a href="#club" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Sensasi Club</a>
-                    <a href="#creative" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Kolom Creative</a>
-                    <a href="#kontak" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Kontak</a>
+                    <a href="{{ route('user.dashboard.index') }}" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Home</a>
+                    <a href="{{ route('user.profile.index') }}" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Profile</a>
+                    <a href="{{ route('user.mitra.index') }}" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Mitra</a>
+                    <a href="{{ route('user.berita.index') }}" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Berita</a>
+                    <a href="{{ route('user.sensasiclub.index') }}" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Sensasi Club</a>
+                    <a href="{{ route('user.kreatif.index') }}" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Kolom Creative</a>
+                    <a href="{{ route('user.kontak.index') }}" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Kontak</a>
                 </div>
             </div>
         </div>
