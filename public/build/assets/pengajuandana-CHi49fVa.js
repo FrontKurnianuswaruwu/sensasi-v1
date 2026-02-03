@@ -39,11 +39,11 @@ import{$ as e}from"./jquery-BvxTx_lq.js";e.ajaxSetup({headers:{"X-CSRF-TOKEN":e(
                     <div class="flex items-center">
                         <div class="flex-shrink-0 h-10 w-10">
                             <div class="h-10 w-10 rounded-full bg-gradient-to-r gradient-bg to-blue-light flex items-center justify-center text-white font-semibold">
-                                ${t.mahasiswa.user.name.charAt(0)??"-"}
+                                ${t.mahasiswa?.user?.name.charAt(0)??"-"}
                             </div>
                         </div>
                         <div class="ml-4">
-                            ${t.mahasiswa.user.name??"-"}
+                            ${t.mahasiswa?.user?.name??"-"}
                         </div>
                     </div>
                 </td>
