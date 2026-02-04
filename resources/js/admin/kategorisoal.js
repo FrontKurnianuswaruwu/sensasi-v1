@@ -351,10 +351,9 @@ $('#kategorisoalForm').on('submit', function(e) {
     const formData = {
         name: $('#kategorisoalName').val(),
         waktu_pengerjaan: $('#kategorisoalWaktu').val(),
-        is_active: $('#kategorisoalStatus').val()
+        is_active: parseInt($('#kategorisoalStatus').val())
     };
 
-    // Tentukan URL dan method berdasarkan mode
     const url = kategorisoalId ? `/admin/kategorisoal/${kategorisoalId}` : '/admin/kategorisoal';
     const method = kategorisoalId ? 'PUT' : 'POST';
 
@@ -364,7 +363,7 @@ $('#kategorisoalForm').on('submit', function(e) {
         data: JSON.stringify(formData),
         contentType: 'application/json',
         success: function(response) {
-            showNotification(response.message, response.status); // response.status = 'success'
+            showNotification(response.message, response.status);
 
             hideModalEnhanced('kategorisoalModal');
             submitBtn.html(originalText).prop('disabled', false);
@@ -384,7 +383,7 @@ $('#kategorisoalForm').on('submit', function(e) {
                     }
                 }
 
-                showNotification(messages.join(' | '), 'error'); // tampilkan notifikasi
+                showNotification(messages.join(' | '), 'error'); 
             } else {
                 let msg = (xhr.responseJSON && xhr.responseJSON.message) 
                             ? xhr.responseJSON.message 

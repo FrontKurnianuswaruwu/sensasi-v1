@@ -91,6 +91,8 @@ class KategorisoalController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
+            'waktu_pengerjaan' => 'required|numeric',
+            'is_active' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -98,16 +100,16 @@ class KategorisoalController extends Controller
         }
 
         $kategorisoal->name = $request->name;
-        $kategorisoal->waktu_pengerjaan = $request->waktu_pengerjaan;
-        $kategorisoal->is_active = $request->is_active;
+        $kategorisoal->waktu_pengerjaan = $request->waktu_pengerjaan;        
+        $kategorisoal->is_active = $request->is_active == '1' ? 1 : 0;
 
         $kategorisoal->save();
 
         return response()->json([
             'status' => 'success',
             'message' => 'Data kategori berhasil diupdate', 
-            'kategorisoal' => $kategorisoal],
-        200);
+            'kategorisoal' => $kategorisoal
+        ], 200);
     }
 
     public function delete($id)

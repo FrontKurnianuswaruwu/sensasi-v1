@@ -108,7 +108,7 @@
                                 <label for="nik" class="block text-sm font-semibold text-gray-600">
                                     <i class="fas fa-id-card mr-2 text-blue-primary"></i>NIK
                                 </label>
-                                <input type="text" id="nik" name="nik"
+                                <input type="number" id="nik" name="nik"
                                     class="input-focus w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-primary focus:ring-0 transition-all duration-300 text-gray-500"
                                     placeholder="Masukkan NIK">
                             </div>
@@ -154,9 +154,16 @@
                                 <label for="agama" class="block text-sm font-semibold text-gray-600">
                                     <i class="fas fa-praying-hands mr-2 text-blue-primary"></i>Agama
                                 </label>
-                                <input type="text" id="agama" name="agama"
-                                    class="input-focus w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-primary text-gray-500"
-                                    placeholder="Masukkan agama">
+                                <select id="agama" name="agama"
+                                    class="input-focus w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-primary bg-white text-gray-500">
+                                    <option value="">Pilih agama</option>
+                                    <option value="Islam">Islam</option>
+                                    <option value="Kristen">Kristen</option>
+                                    <option value="Katolik">Katolik</option>
+                                    <option value="Hindu">Hindu</option>
+                                    <option value="Budha">Budha</option>
+                                    <option value="Khonghucu">Khonghucu</option>
+                                </select>
                             </div>
                         </div>
 
@@ -176,7 +183,7 @@
                                 <label for="no_wa" class="block text-sm font-semibold text-gray-600">
                                     <i class="fab fa-whatsapp mr-2 text-blue-primary"></i>No. WhatsApp
                                 </label>
-                                <input type="text" id="no_wa" name="no_wa"
+                                <input type="number" id="no_wa" name="no_wa"
                                     class="input-focus w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-primary text-gray-500"
                                     placeholder="08xxxxxxxxxx">
                             </div>
@@ -289,13 +296,17 @@
                         <!-- Baris 3: Semester & IP Terakhir -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Semester -->
-                            <div class="space-y-2">
+                           <div class="space-y-2">
                                 <label for="semester" class="block text-sm font-semibold text-gray-600">
                                     <i class="fas fa-layer-group mr-2 text-blue-primary"></i>Semester
                                 </label>
-                                <input type="number" id="semester" name="semester" min="1" max="14"
-                                    class="input-focus w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-primary focus:ring-0 transition-all duration-300 text-gray-500"
-                                    placeholder="Masukkan semester saat ini">
+                                <select id="semester" name="semester"
+                                    class="input-focus w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-primary bg-white text-gray-500 transition-all duration-300">
+                                    <option value="">Pilih Semester</option>
+                                    @for ($i = 1; $i <= 8; $i++)
+                                        <option value="{{ $i }}">Semester {{ $i }}</option>
+                                    @endfor
+                                </select>
                             </div>
 
                             <!-- IP Terakhir -->
@@ -441,7 +452,7 @@
                                 <label for="no_wa_ortu" class="block text-sm font-semibold text-gray-600">
                                     <i class="fab fa-whatsapp mr-2 text-blue-primary"></i>No. WA Orang Tua/Wali
                                 </label>
-                                <input type="text" id="no_wa_ortu" name="no_wa_ortu"
+                                <input type="number" id="no_wa_ortu" name="no_wa_ortu"
                                     class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-primary text-gray-500"
                                     placeholder="08xxxxxxxxxx">
                             </div>

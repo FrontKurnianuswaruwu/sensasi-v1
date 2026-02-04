@@ -11,6 +11,7 @@ use App\Models\OrangtuaMahasiswa;
 use App\Models\TahunAkademik;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class BiodatamahasiswaController extends Controller
 {
@@ -77,6 +78,10 @@ class BiodatamahasiswaController extends Controller
     {
         $request->validate([
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:500'
+        ], [
+            'foto.image' => 'File harus berupa gambar.',
+            'foto.mimes' => 'Format gambar harus jpg, jpeg, atau png.',
+            'foto.max' => 'Ukuran gambar maksimal 500KB.'
         ]);
 
         $id = $request->session()->get('user_id');
@@ -93,6 +98,25 @@ class BiodatamahasiswaController extends Controller
                 'status' => 'error',
                 'message' => 'Biodata tidak ditemukan'
             ], 404);
+        }
+        if ($biodata->nim != $request->nim) {
+            $cekNim = BiodataMahasiswa::where('nim', $request->nim)->first();
+            if ($cekNim) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'NIM sudah digunakan'
+                ], 400);
+            }
+        } 
+
+        if ($biodata->nik != $request->nik) {
+            $cekNik = BiodataMahasiswa::where('nik', $request->nik)->first();
+            if ($cekNik) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'NIK sudah digunakan'
+                ], 400);
+            }
         }
         $user->name = $request->nama;
         $biodata->nik = $request->nik;
@@ -224,6 +248,30 @@ class BiodatamahasiswaController extends Controller
             ], 401);
         }
 
+        $fields = [
+            'scan_ktp', 'scan_kartu_mahasiswa', 'scan_kk', 'transkrip_nilai',
+            'surat_keterangan_aktif', 'foto_profil', 'essay_motivasi', 'sertifikat_prestasi'
+        ];
+
+        $rules = [];
+        $messages = [];
+        foreach ($fields as $field) {
+            $rules[$field] = $field === 'foto_profil' 
+                ? 'nullable|image|mimes:jpg,jpeg,png|max:500' 
+                : 'nullable|mimes:pdf|max:500';
+            
+            $messages[$field . '.max'] = 'File ' . str_replace('_', ' ', $field) . ' tidak boleh lebih dari 500 KB.';
+        }
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
+
         $dokumen = DokumenMahasiswa::where('user_id', $id)->first();
         $isNew = false;
         if (!$dokumen) {
@@ -232,20 +280,8 @@ class BiodatamahasiswaController extends Controller
             $isNew = true;
         }
 
-        $fields = [
-            'scan_ktp', 
-            'scan_kartu_mahasiswa', 
-            'scan_kk', 
-            'transkrip_nilai',
-            'surat_keterangan_aktif',
-            'foto_profil',
-            'essay_motivasi',
-            'sertifikat_prestasi'
-        ];
-
         foreach ($fields as $field) {
             if ($request->hasFile($field)) {
-
                 if (!empty($dokumen->$field)) {
                     $oldFilePath = $_SERVER['DOCUMENT_ROOT'].'/'.$dokumen->$field;
                     if (file_exists($oldFilePath)) {
@@ -254,11 +290,7 @@ class BiodatamahasiswaController extends Controller
                 }
 
                 $file = $request->file($field);
-
-                $ext = $field === 'foto_profil'
-                    ? $file->getClientOriginalExtension()
-                    : 'pdf';
-
+                $ext = $field === 'foto_profil' ? $file->getClientOriginalExtension() : 'pdf';
                 $folder = 'pdf/dokumen/';
                 $destinationPath = $_SERVER['DOCUMENT_ROOT'].'/'.$folder;
 
@@ -267,9 +299,7 @@ class BiodatamahasiswaController extends Controller
                 }
 
                 $filename = $id.'_'.$field.'_'.time().'.'.$ext;
-
                 $file->move($destinationPath, $filename);
-
                 $dokumen->$field = $folder.$filename;
             }
         }

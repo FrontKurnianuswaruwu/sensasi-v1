@@ -274,6 +274,25 @@ $("#biodataForm").on("submit", function (e) {
     });
 });
 
+$('#ip_terakhir').on('input', function() {
+    let val = $(this).val();
+
+    // 1. Cek jika angka di depan koma/titik lebih dari 4
+    let parts = val.split('.');
+    if (parseFloat(parts[0]) > 4) {
+        $(this).val(4);
+        return;
+    }
+
+    // 2. Batasi maksimal 3 angka di belakang koma menggunakan Regex
+    // Regex ini mencari: angka depan (0-4), lalu titik, lalu maksimal 3 angka
+    if (val.indexOf('.') !== -1) {
+        if (parts[1].length > 3) {
+            $(this).val(parts[0] + '.' + parts[1].slice(0, 3));
+        }
+    }
+});
+
 $("#akademikForm").on("submit", function (e) {
     e.preventDefault();
 
@@ -366,6 +385,23 @@ $("#orangtuaForm").on("submit", function (e) {
             }
         }
     });
+});
+
+$('input[type="file"]').on('change', function() {
+    const file = this.files[0];
+    const maxSize = 500 * 1024;
+    
+    const labelText = $(this).closest('.space-y-2').find('label').text().trim();
+
+    if (file) {
+        if (file.size > maxSize) {
+            showNotification(`File "${labelText}" terlalu besar! Maksimal 500 KB.`, 'error');
+            
+            $(this).val('');
+        } else {
+            showNotification(`File "${labelText}" terpilih.`, 'success');
+        }
+    }
 });
 
 $("#dokumenForm").on("submit", function (e) {
