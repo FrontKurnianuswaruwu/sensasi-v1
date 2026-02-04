@@ -41,14 +41,16 @@
         </div>
 
         <!-- News Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="flex flex-wrap justify-center gap-8">
             @foreach ($databerita->slice(1) as $berita )
-                <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden w-full md:w-[calc(50%-2rem)] lg:w-[calc(33.333%-2rem)] min-w-[300px]">
                     <div class="bg-gray-200 h-48 flex items-center justify-center">
-                        <img src="{{ $berita->foto }}" alt="" class="w-full h-full object-cover">
+                        <img src="{{ $berita->foto }}" alt="Foto" loading="lazy" class="w-full h-full object-cover">
                     </div>
                     <div class="p-6">
-                        <span class="inline-block bg-blue-100 text-blue-600 text-xs font-semibold px-3 py-1 rounded-full mb-3">{{ $berita->ketegori }}</span>
+                        <span class="inline-block bg-sky-100 text-sky-800 text-xs font-semibold px-3 py-1 rounded-full mb-3">
+                            {{ $berita->ketegori }}
+                        </span>
                         <h4 class="font-bold text-lg text-gray-800 mb-3">{{ $berita->judul }}</h4>
                         <p class="text-gray-600 text-sm mb-4">{{ Str::limit(strip_tags($berita->deskripsi), 80, '...') }}</p>
                         <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
@@ -61,7 +63,6 @@
                     </div>
                 </div>
             @endforeach
-
         </div>
 
     </div>

@@ -14,38 +14,34 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-in">
-            @foreach ($datakreative as $kreative)
-            <div class="card-hover-page bg-white rounded-xl shadow-lg overflow-hidden">
-                <a href="{{ route('user.kreatif.detail', $kreative->id) }}">
-                    <div class="bg-gradient-to-br from-sky-100 via-yellow-200 to-sky-100 h-64 flex items-center justify-center relative overflow-hidden">
-                        @if($kreative->foto)
-                            <img src="{{ asset($kreative->foto) }}" alt="{{ $kreative->nama }}" class="w-full h-full object-cover relative z-10">
-                        @else
-                            <i class="fas fa-file-alt text-6xl text-sky-800 relative z-10"></i>
-                        @endif
-                    </div>
-
-                    <div class="p-6">
-                        <span class="inline-block bg-sky-100 text-sky-600 text-xs font-semibold px-3 py-1 rounded-full mb-3">Artikel</span>
-                        <h4 class="font-bold text-lg text-gray-800 mb-3">{{ $kreative->nama }}</h4>
-
-                        <div class="flex items-center text-sm text-gray-600 mb-4">
-                            <i class="fas fa-user mr-2"></i>
-                            <span>{{ $kreative?->biodataMahasiswa?->user?->name }}</span>
-                            <span class="mx-2">•</span>
-                            <span>{{ $kreative?->biodataMahasiswa?->mitra?->nama_mitra }}</span>
+        <div class="flex flex-wrap justify-center gap-8">
+            @foreach ($datakreative as $kreative )
+                <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden w-full md:w-[calc(50%-2rem)] lg:w-[calc(33.333%-2rem)] min-w-[300px]">
+                    <a href="{{ route('user.kreatif.detail', $kreative->id) }}">
+                        <div class="bg-gradient-to-br from-sky-100 via-yellow-200 to-sky-100 h-64 flex items-center justify-center relative overflow-hidden">
+                            @if($kreative->foto)
+                                <img src="{{ asset($kreative->foto) }}" alt="{{ $kreative->nama }}" loading="lazy" class="w-full h-full object-cover relative z-10">
+                            @else
+                                <i class="fas fa-file-alt text-6xl text-sky-800 relative z-10"></i>
+                            @endif
                         </div>
-                    </div>
-                </a>
-
-                <!-- link PDF DI LUAR link card -->
-                <div class="px-6 pb-6">
-                    <a href="{{ asset($kreative->pdf) }}" target="_blank" class="inline-block text-sky-600 hover:text-sky-700 font-medium text-sm">
-                        <i class="fas fa-file-pdf mr-2"></i>Baca PDF
+                        <div class="p-6">
+                            <span class="inline-block bg-sky-100 text-sky-800 text-xs font-semibold px-3 py-1 rounded-full mb-3">Artikel</span>
+                            <h4 class="font-bold text-lg text-gray-800 mb-3">{{ $kreative->nama }}</h4>
+                            <div class="flex items-center text-sm text-gray-600 mb-4">
+                                <i class="fas fa-user mr-2"></i>
+                                <span>{{ $kreative?->biodataMahasiswa?->user?->name ?? '-' }}</span>
+                                <span class="mx-2">•</span>
+                                <span>{{ $kreative?->biodataMahasiswa?->mitra?->nama_mitra ?? '-' }}</span>
+                            </div>
+                        </div>
                     </a>
+                    <div class="px-6 pb-6">
+                        <a href="{{ asset($kreative->pdf) }}" target="_blank" class="inline-block text-sky-600 hover:text-sky-700 font-medium text-sm">
+                            <i class="fas fa-file-pdf mr-2"></i>Baca PDF
+                        </a>
+                    </div>
                 </div>
-            </div>
             @endforeach
         </div>
 

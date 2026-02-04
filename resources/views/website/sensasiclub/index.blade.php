@@ -25,80 +25,37 @@
         </div>
 
         <div id="anggota-tab" class="tab-content animate-fade-in">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="flex flex-wrap justify-center gap-8">
                 @foreach ($datasensasiclub as $sensasiclub )
-                    <div class="card-hover-page bg-white rounded-xl shadow-lg overflow-hidden text-center">
+                    <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden text-center w-full sm:w-[calc(50%-2rem)] lg:w-[calc(25%-2rem)] min-w-[250px]">
                         <div class="bg-gray-200 h-48 flex items-center justify-center">
-                           <img src="{{ $sensasiclub->mahasiswa->foto }}" alt="" class="w-full h-full object-cover">
+                        <img src="{{ $sensasiclub->mahasiswa->foto }}" loading="lazy" alt="Foto" class="w-full h-full object-cover">
                         </div>
                         <div class="p-6">
                             <h4 class="font-bold text-lg text-gray-800 mb-1">{{ $sensasiclub->mahasiswa->user->name ?? '-' }}</h4>
-                            <p class="text-sky-600 text-sm font-medium mb-3">{{ $sensasiclub->mahasiswa->mitra->nama_mitra ?? '-'}}</p>
-                            {{-- <p class="text-gray-600 text-sm mb-4">Biodata singkat anggota dan keahlian yang dimiliki</p> --}}
-                            <a href="#" class="text-sky-600 hover:text-sky-700">
+                            <p class="text-sky-800 text-sm font-medium mb-3">{{ $sensasiclub->mahasiswa->mitra->nama_mitra ?? '-' }}</p>
+                            <a href="#" class="text-sky-800 hover:text-sky-700">
                                 <i class="fab fa-instagram text-xl"></i>
                             </a>
                         </div>
                     </div>
                 @endforeach
-
-                {{-- <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden text-center">
-                    <div class="bg-gray-200 h-48 flex items-center justify-center">
-                        <i class="fas fa-user text-6xl text-gray-400"></i>
-                    </div>
-                    <div class="p-6">
-                        <h4 class="font-bold text-lg text-gray-800 mb-1">Nama Anggota</h4>
-                        <p class="text-sky-600 text-sm font-medium mb-3">Mitra B</p>
-                        <p class="text-gray-600 text-sm mb-4">Biodata singkat anggota dan keahlian yang dimiliki</p>
-                        <a href="#" class="text-sky-600 hover:text-sky-700">
-                            <i class="fab fa-instagram text-xl"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden text-center">
-                    <div class="bg-gray-200 h-48 flex items-center justify-center">
-                        <i class="fas fa-user text-6xl text-gray-400"></i>
-                    </div>
-                    <div class="p-6">
-                        <h4 class="font-bold text-lg text-gray-800 mb-1">Nama Anggota</h4>
-                        <p class="text-sky-600 text-sm font-medium mb-3">Mitra C</p>
-                        <p class="text-gray-600 text-sm mb-4">Biodata singkat anggota dan keahlian yang dimiliki</p>
-                        <a href="#" class="text-sky-600 hover:text-sky-700">
-                            <i class="fab fa-instagram text-xl"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden text-center">
-                    <div class="bg-gray-200 h-48 flex items-center justify-center">
-                        <i class="fas fa-user text-6xl text-gray-400"></i>
-                    </div>
-                    <div class="p-6">
-                        <h4 class="font-bold text-lg text-gray-800 mb-1">Nama Anggota</h4>
-                        <p class="text-sky-600 text-sm font-medium mb-3">Mitra D</p>
-                        <p class="text-gray-600 text-sm mb-4">Biodata singkat anggota dan keahlian yang dimiliki</p>
-                        <a href="#" class="text-sky-600 hover:text-sky-700">
-                            <i class="fab fa-instagram text-xl"></i>
-                        </a>
-                    </div>
-                </div> --}}
             </div>
         </div>
 
         <div id="karya-tab" class="tab-content hidden">
             <div class="mb-12">
                 <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">Video YouTube</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="flex flex-wrap justify-center gap-8">
                     @foreach ($datasensasiclubkaryawan as $sensasiclubkarya )
-                        <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden">
+                        <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden w-full md:w-[calc(50%-2rem)] lg:w-[calc(33.333%-2rem)] min-w-[300px]">
                             <div class="bg-gray-800 h-48 flex items-center justify-center relative">
                                 @php
                                     preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/', $sensasiclubkarya->link_youtube, $matches);
                                     $youtubeId = $matches[1] ?? null;
                                 @endphp
                                 @if($youtubeId)
-                                    <img src="https://img.youtube.com/vi/{{ $youtubeId }}" alt="Thumbnail YouTube" class="w-full h-full object-cover">
+                                    <img src="https://img.youtube.com/vi/{{ $youtubeId }}/0.jpg" loading="lazy" alt="Thumbnail YouTube" class="w-full h-full object-cover">
                                     <a href="{{ $sensasiclubkarya->link_youtube }}" target="_blank" class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 hover:bg-opacity-60 transition">
                                         <i class="fab fa-youtube text-5xl text-red-600"></i>
                                     </a>
@@ -109,24 +66,23 @@
                             <div class="p-6">
                                 <h4 class="font-bold text-lg text-gray-800 mb-2">{{ $sensasiclubkarya->judul ?? '-' }}</h4>
                                 <p class="text-sm text-gray-600 mb-1">{{ $sensasiclubkarya->mahasiswa->user->name ?? '-' }} - {{ $sensasiclubkarya->mahasiswa->mitra->nama_mitra ?? '-' }}</p>
-                                <a href="{{ $sensasiclubkarya->link_youtube }}" class="inline-block mt-4 text-sky-800 hover:text-sky-700 font-medium text-sm" target="_blank">
+                                <a href="{{ $sensasiclubkarya->link_youtube ?? '-' }}" target="_blank" class="inline-block mt-4 text-sky-800 hover:text-sky-700 font-medium text-sm">
                                     <i class="fab fa-youtube mr-2"></i>Tonton di YouTube
                                 </a>
                             </div>
                         </div>
                     @endforeach
-
                 </div>
             </div>
 
             <div>
                 <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">Paper & Artikel</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="flex flex-wrap justify-center gap-8">
                     @foreach ($datasensasiclubartikel as $sensasiclubartikel )
-                        <div class="card-hover bg-white rounded-xl shadow-lg p-6">
+                        <div class="card-hover bg-white rounded-xl shadow-lg p-6 w-full md:w-[calc(50%-2rem)]">
                             <div class="flex items-start space-x-4">
                                 <div class="bg-sky-100 rounded-lg p-1 flex-shrink-0 w-24 h-24 flex items-center justify-center">
-                                    <img src="{{ $sensasiclubartikel->foto }}" alt="foto " class="object-cover w-full h-full rounded-md">
+                                    <img src="{{ $sensasiclubartikel->foto }}" loading="lazy" alt="foto" class="object-cover w-full h-full rounded-md">
                                 </div>
                                 <div class="flex-1">
                                     <h4 class="font-bold text-lg text-gray-800 mb-2">{{ $sensasiclubartikel->judul ?? '-' }}</h4>

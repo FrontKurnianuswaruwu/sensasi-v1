@@ -14,18 +14,18 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-in">
+        <div class="flex flex-wrap justify-center gap-8">
             @foreach ($datamitra as $mitra )
-                <div class="card-hover-page bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden w-full md:w-[calc(50%-2rem)] lg:w-[calc(33.333%-2rem)] min-w-[300px]">
                     <div class="bg-gray-200 h-48 flex items-center justify-center">
-                        <img src="{{ $mitra->logo_url }}" alt="">
+                        <img src="{{ $mitra->logo_url }}" loading="lazy" alt="Logo" class="w-full h-full object-cover">
                     </div>
                     <div class="p-6">
                         <h4 class="font-bold text-xl text-gray-800 mb-2">{{ $mitra->nama_mitra }}</h4>
                         <p class="text-gray-600 mb-4 text-sm">{{ Str::limit(strip_tags($mitra->deskripsi), 80, '...') }}</p>
                         <div class="flex items-center justify-between text-sm text-gray-500">
                             <span><i class="fas fa-calendar mr-2"></i>Sejak {{ $mitra->tahun_kerjasama }}</span>
-                            <a href="{{ $mitra->link_website }}" target="_blank" class="text-sky-600 hover:text-sky-700 font-medium">
+                            <a href="{{ $mitra->link_website }}" class="text-sky-800 hover:text-sky-700 font-medium">
                                 <i class="fas fa-external-link-alt mr-1"></i>Website
                             </a>
                         </div>

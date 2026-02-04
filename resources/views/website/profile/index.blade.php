@@ -35,15 +35,16 @@
                     @endif
                 </div>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="flex flex-wrap justify-center gap-4">
                 @foreach ($sejarahfotos as $foto)
-                    <div class="bg-gray-200 rounded-lg h-40 flex items-center justify-center">
+                    <div class="bg-gray-200 rounded-lg h-40 flex items-center justify-center overflow-hidden w-[calc(50%-1rem)] md:w-[calc(25%-1rem)]">
                         <img 
                             src="{{ asset($foto->foto) }}" 
-                            class="w-full h-full object-cover"
+                            class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                            loading="lazy"
+                            alt="Foto Sejarah"
                         >
                     </div>
-                    
                 @endforeach
             </div>
         </div>
@@ -69,14 +70,13 @@
         <!-- Pengurus -->
         <div>
             <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">Tim Pengurus</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="flex flex-wrap justify-center gap-8">
                 @foreach ($datapengurus as $pengurus)
-                    <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden w-full sm:w-[calc(50%-2rem)] lg:w-[calc(25%-2rem)] min-w-[260px]">
                         <div class="bg-gray-200 h-64 flex items-center justify-center">
-                            <img src="{{ $pengurus->foto }}" alt="" class="w-full h-full object-cover">
+                            <img src="{{ $pengurus->foto }}" alt="{{ $pengurus->nama }}" class="w-full h-full object-cover">
                         </div>
-                        <div class="p-6">
-                            <h4 class="font-bold text-xl text-gray-800 mb-1">{{  $pengurus->nama }}</h4>
+                        <div class="p-6 text-center"> <h4 class="font-bold text-xl text-gray-800 mb-1">{{ $pengurus->nama }}</h4>
                             <p class="text-sky-600 font-medium mb-3">{{ $pengurus->jabatan }}</p>
                         </div>
                     </div>
