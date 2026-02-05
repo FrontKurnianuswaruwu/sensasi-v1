@@ -7,49 +7,49 @@
     <div class="max-w-7xl mx-auto mt-12">
         <div class="flex flex-col-reverse md:grid md:grid-cols-2 gap-8 md:gap-12 items-center">
     
-            @php
-                $words = explode(' ', $dataherosection->name);
-                $title1 = $words[0]; 
-                $title2 = implode(' ', array_slice($words, 1));
-            @endphp
+        @php
+            $words = explode(' ', $dataherosection->name);
+            $title1 = $words[0]; 
+            $title2 = implode(' ', array_slice($words, 1));
+        @endphp
 
-            <div class="animate-fade-in"> 
-                <h1 class="hero-title text-3xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 text-gray-900 leading-tight">
-                    {{ $title1 }}
-                    <span class="text-sky-800">{{ $title2 }}</span>
-                </h1>
-                <p class="text-base md:text-xl mb-6 md:mb-8 text-gray-600">
-                    {{ strip_tags($dataherosection->deskripsi) }}
-                </p>
-                <div class="flex flex-wrap gap-4">
-                    <a href="#profile" class="bg-sky-800 text-white px-6 md:px-8 py-3 rounded-full font-semibold hover:bg-sky-700 transition shadow-lg text-sm md:text-base">
-                        Tentang Kami
-                    </a>
-                    <a href="#kontak" class="border-2 border-sky-700 text-sky-800 px-6 md:px-8 py-3 rounded-full font-semibold hover:bg-sky-800 hover:text-white transition text-sm md:text-base">
-                        Hubungi Kami
-                    </a>
-                </div>
+        <div class="animate-fade-in"> 
+            <h1 class="hero-title text-3xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 text-gray-900 leading-tight">
+                {{ $title1 }}
+                <span class="text-sky-800">{{ $title2 }}</span>
+            </h1>
+            <p class="text-base md:text-xl mb-6 md:mb-8 text-gray-600">
+                {{ strip_tags($dataherosection->deskripsi) }}
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="#profile" class="bg-sky-800 text-white px-6 md:px-8 py-3 rounded-full font-semibold hover:bg-sky-700 transition shadow-lg text-sm md:text-base">
+                    Tentang Kami
+                </a>
+                <a href="#kontak" class="border-2 border-sky-700 text-sky-800 px-6 md:px-8 py-3 rounded-full font-semibold hover:bg-sky-800 hover:text-white transition text-sm md:text-base">
+                    Hubungi Kami
+                </a>
             </div>
+        </div>
 
-            <div class="w-full mb-10 md:mb-0">
-                <div class="relative px-4 md:px-0"> 
-                    <div class="absolute inset-0 bg-sky-800 rounded-3xl transform rotate-2 md:rotate-6"></div>
+        <div class="w-full mb-10 md:mb-0">
+            <div class="relative px-4 md:px-0"> 
+                <div class="absolute inset-0 bg-sky-800 rounded-3xl transform rotate-2 md:rotate-6"></div>
 
-                    <div class="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-gray-100">
-                        <div id="heroImageSlider" class="relative w-full h-64 md:h-96"> 
-                            @foreach($dataherosection->herophotos as $photo)
-                                <img 
-                                    src="{{ asset('uploads/herosection/' . $photo->foto) }}"
-                                    class="slide w-full h-full object-cover" 
-                                    loading="lazy"
-                                >
-                            @endforeach
-                        </div>
+                <div class="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-gray-100">
+                    <div id="heroImageSlider" class="relative w-full h-64 md:h-96"> 
+                        @foreach($dataherosection->herophotos as $photo)
+                            <img 
+                                src="{{ asset('uploads/herosection/' . $photo->foto) }}"
+                                class="slide w-full h-full object-cover" 
+                                loading="lazy"
+                            >
+                        @endforeach
                     </div>
                 </div>
             </div>
-
         </div>
+
+    </div>
 
         <!-- Stats -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20">
