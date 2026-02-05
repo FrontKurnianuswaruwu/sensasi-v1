@@ -3,12 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Website resmi Yayasan Obor Emas Indonesia...">
-    <title>@yield('title')</title>
+    
+    <title>@yield('title') | Yayasan Obor Emas Indonesia</title>
+    
+    <meta name="description" content="@yield('meta_description', 'Yayasan Obor Emas Indonesia Melalui Program Beasiswa SENSASI (Selamatkan Satu Generasi).')">
+    <meta name="keywords" content="Yayasan Obor Emas, donasi, pemberdayaan masyarakat, yayasan sosial Indonesia">
+    <meta name="author" content="Yayasan Obor Emas Indonesia">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="@yield('title') | Yayasan Obor Emas Indonesia">
+    <meta property="og:description" content="@yield('meta_description', 'SENSASI Giving My Best.')">
+    <meta property="og:image" content="{{ asset('img/og-image-default.jpg') }}"> <link rel="canonical" href="{{ url()->current() }}">
+
     <link rel="icon" type="image/png" href="{{ asset('img/logo sensasi.png') }}">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "NGO", 
+      "name": "Yayasan Obor Emas Indonesia",
+      "alternateName": "SENSASI",
+      "url": "{{ url('/') }}",
+      "logo": "{{ asset('img/logo sensasi.png') }}",
+      "description": "Yayasan yang bergerak di bidang pendidikan melalui program Beasiswa SENSASI (Selamatkan Satu Generasi).",
+      "address": {
+        "@@type": "PostalAddress",
+        "addressCountry": "ID"
+      },
+      "sameAs": [
+        "https://www.instagram.com/sensasi.or.id/"
+      ]
+    }
+    </script>
 </head>
 <body class="bg-gray-50">
     <!-- Navbar -->
