@@ -85,7 +85,7 @@ class PendaftaranpbsController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Berhasil ubah alumni jadi pbsaktif.'
+            'message' => 'Berhasil ubah jadi pbsaktif.'
         ]);
     }
 }
