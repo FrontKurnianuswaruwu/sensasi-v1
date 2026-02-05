@@ -29,21 +29,17 @@
                     </a>
                 </div>
             </div>
-            <div class="hidden md:block">
-                <div class="relative">
+            <div class="block">
+                <div class="relative px-4 md:px-0"> <div class="absolute inset-0 bg-sky-800 rounded-3xl transform rotate-2 md:rotate-6"></div>
 
-                    <!-- Background kuning miring -->
-                    <div class="absolute inset-0 bg-sky-800 rounded-3xl transform rotate-6"></div>
-
-                    <!-- Container utama -->
                     <div class="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-gray-100">
 
-                        <!-- SLIDESHOW -->
-                        <div id="heroImageSlider" class="relative w-full h-96"> 
+                        <div id="heroImageSlider" class="relative w-full h-56 md:h-96"> 
                             @foreach($dataherosection->herophotos as $photo)
                                 <img 
                                     src="{{ asset('uploads/herosection/' . $photo->foto) }}"
-                                    class="slide w-full h-full object-cover" loading="lazy"
+                                    class="slide w-full h-full object-cover" 
+                                    loading="lazy"
                                 >
                             @endforeach
                         </div>
