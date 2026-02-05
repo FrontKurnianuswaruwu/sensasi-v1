@@ -30,9 +30,9 @@ function renderTable(data) {
     }
 
     data.forEach((kategorisoal, index) => {
-            let statusBadge = kategorisoal.is_active
-                ? '<span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">Aktif</span>'
-                : '<span class="px-2 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded-full">Tidak Aktif</span>';
+        let statusBadge = (kategorisoal.is_active == 1)
+            ? '<span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">Aktif</span>'
+            : '<span class="px-2 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded-full">Tidak Aktif</span>';
         const row = `
             <tr class="hover:bg-gray-50 transition-colors duration-200">
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
@@ -412,7 +412,7 @@ $(document).on('click', '.edit-btn', function() {
             $('#kategorisoalId').val(kategorisoal.id);
             $('#kategorisoalName').val(kategorisoal.name);
             $('#kategorisoalWaktu').val(kategorisoal.waktu_pengerjaan);
-            $('#kategorisoalStatus').val(kategorisoal.is_active ? '1' : '0');
+            $('#kategorisoalStatus').val(kategorisoal.is_active == 1 ? '1' : '0');
 
             showModal('kategorisoalModal');
         },
