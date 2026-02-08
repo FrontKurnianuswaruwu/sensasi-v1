@@ -233,7 +233,7 @@ class BiodatamahasiswaController extends Controller
 
         // update status_user jadi Potensi Akademik
         $user = User::find($id);
-        if ($user) {
+        if ($user->status_user == 'Biodata') {
             $user->status_user = 'Potensi Akademik';
             $user->save();
         }
