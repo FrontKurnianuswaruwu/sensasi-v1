@@ -66,7 +66,7 @@ function loadData() {
             $('#alamat_ktp').val(biodata.alamat_ktp);
             $('#nik').val(biodata.nik);
             $('#no_wa').val(biodata.no_wa);
-            $('#agama').val(biodata.agama);
+            $('#agama').val(biodata.agama ?? "");
             $('#status_pernikahan').val(biodata.status_pernikahan);
             $('#jumlah_saudara').val(biodata.jumlah_saudara);
             $('#anak_ke').val(biodata.anak_ke);
@@ -389,17 +389,33 @@ $("#orangtuaForm").on("submit", function (e) {
 
 $('input[type="file"]').on('change', function() {
     const file = this.files[0];
-    const maxSize = 500 * 1024;
+    const maxSize = 500 * 1024; 
     
     const labelText = $(this).closest('.space-y-2').find('label').text().trim();
+    
+    const container = $(this).next('div'); 
+    const fileNameDisplay = container.find('.file-name');
+    const previewBtn = container.find('.btn-preview');
 
     if (file) {
         if (file.size > maxSize) {
             showNotification(`File "${labelText}" terlalu besar! Maksimal 500 KB.`, 'error');
             
             $(this).val('');
+            fileNameDisplay.text('Pilih file...').removeClass('text-orange-600 font-bold');
+            previewBtn.addClass('hidden');
         } else {
             showNotification(`File "${labelText}" terpilih.`, 'success');
+
+            fileNameDisplay.text(file.name).addClass('text-orange-600 font-bold');
+            previewBtn.removeClass('hidden');
+
+            const fileURL = URL.createObjectURL(file);
+            previewBtn.off('click').on('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation(); 
+                window.open(fileURL, '_blank');
+            });
         }
     }
 });

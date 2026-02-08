@@ -23,6 +23,13 @@ class CheckStatus
                 $allowedRoutes = [
                     'admin.biodatamahasiswa.index',
                     'admin.dashboard.index',
+                    'admin.biodatamahasiswa.getdata',
+                    'gettahunakademik',
+                    'admin.biodata.getmitra',
+                    'admin.biodatamahasiswa.update',
+                    'admin.biodatamahasiswa.updateakademik',
+                    'admin.biodatamahasiswa.updateorangtua',
+                    'admin.biodatamahasiswa.updatedokumen',
                 ];
 
                 if (!in_array($request->route()->getName(), $allowedRoutes)) {
@@ -32,7 +39,15 @@ class CheckStatus
                 $allowedRoutes = [
                     'admin.biodatamahasiswa.index',
                     'admin.potensiakademik.index',
+                    'admin.potensiakademik.soal.index',
                     'admin.dashboard.index',
+                    'admin.biodatamahasiswa.getdata',
+                    'gettahunakademik',
+                    'admin.biodata.getmitra',
+                    'admin.biodatamahasiswa.update',
+                    'admin.biodatamahasiswa.updateakademik',
+                    'admin.biodatamahasiswa.updateorangtua',
+                    'admin.biodatamahasiswa.updatedokumen',
                 ];
 
                 if (!in_array($request->route()->getName(), $allowedRoutes)) {

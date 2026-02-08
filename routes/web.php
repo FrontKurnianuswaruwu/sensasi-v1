@@ -154,14 +154,14 @@ Route::middleware(['check.expired', 'check.permission'])->group(function() {
     Route::post('/admin/approvekreatif/{id}', [KreativeController::class, 'approve']);
     Route::post('/admin/rejectkreatif/{id}', [KreativeController::class, 'reject']);
 
-    Route::get('/admin/biodatamahasiswa', [BiodatamahasiswaController::class, 'index'])->name('admin.biodatamahasiswa.index');
+    Route::get('/admin/biodatamahasiswa', [BiodatamahasiswaController::class, 'index'])->name('admin.biodatamahasiswa.index')->middleware('check.status');
     Route::get('/admin/getbiodatamahasiswa', [BiodatamahasiswaController::class, 'getdata'])->name('admin.biodatamahasiswa.getdata');
-    Route::get('/admin/biodata/gettahunakademik', [BiodatamahasiswaController::class, 'gettahunakademik']);
-    Route::put('/admin/biodatamahasiswa',[BiodatamahasiswaController::class,'update']);
-    Route::get('/admin/biodata/getmitra', [BiodatamahasiswaController::class, 'getmitra']);
-    Route::put('/admin/akademikmahasiswa',[BiodatamahasiswaController::class,'updateakademik']);
-    Route::put('/admin/orangtuamahasiswa',[BiodatamahasiswaController::class,'updateorangtua']);
-    Route::post('/admin/dokumenmahasiswa',[BiodatamahasiswaController::class,'updatedokumen']);
+    Route::get('/admin/biodata/gettahunakademik', [BiodatamahasiswaController::class, 'gettahunakademik'])->name('gettahunakademik');
+    Route::put('/admin/biodatamahasiswa',[BiodatamahasiswaController::class,'update'])->name('admin.biodatamahasiswa.update');
+    Route::get('/admin/biodata/getmitra', [BiodatamahasiswaController::class, 'getmitra'])->name('admin.biodata.getmitra');
+    Route::put('/admin/akademikmahasiswa',[BiodatamahasiswaController::class,'updateakademik'])->name('admin.biodatamahasiswa.updateakademik');
+    Route::put('/admin/orangtuamahasiswa',[BiodatamahasiswaController::class,'updateorangtua'])->name('admin.biodatamahasiswa.updateorangtua');
+    Route::post('/admin/dokumenmahasiswa',[BiodatamahasiswaController::class,'updatedokumen'])->name('admin.biodatamahasiswa.updatedokumen');
 
     Route::get('/admin/tahunakademik', [TahunakademikController::class, 'index'])->name('admin.tahunakademik.index');
     Route::get('/admin/gettahunakademik', [TahunakademikController::class, 'getdata'])->name('admin.tahunakademik.getdata');
@@ -245,9 +245,9 @@ Route::middleware(['check.expired', 'check.permission'])->group(function() {
     Route::delete('/admin/sensasiclub/{id}', [SensasiclubController::class, 'delete']);
     Route::delete('/sensasiclub/deletePdf', [SensasiclubController::class, 'deletePdf']);
 
-    Route::get('/admin/potensiakademik', [PotensiakademikController::class, 'index'])->name('admin.potensiakademik.index');
+    Route::get('/admin/potensiakademik', [PotensiakademikController::class, 'index'])->name('admin.potensiakademik.index')->middleware('check.status');
     Route::get('/admin/getkategoripotensiakademik', [PotensiakademikController::class, 'getkategori'])->name('admin.potensiakademik.getkategori');
-    Route::get('/admin/potensiakademik/soal', [PotensiakademikController::class, 'soal'])->name('admin.potensiakademik.soal.index');
+    Route::get('/admin/potensiakademik/soal', [PotensiakademikController::class, 'soal'])->name('admin.potensiakademik.soal.index')->middleware('check.status');
     Route::post('/admin/potensiakademik/submit', [PotensiakademikController::class, 'submit'])->name('admin.potensiakademik.submit');
 
     Route::get('/admin/pendaftaranpbs', [PendaftaranpbsController::class, 'index'])->name('admin.pendaftaranpbs.index');
@@ -261,5 +261,7 @@ Route::middleware(['check.expired', 'check.permission'])->group(function() {
     Route::get('/admin/permission', [PermissionController::class, 'index'])->name('admin.permissions.index');
     Route::get('/admin/getpermission', [PermissionController::class, 'getdata'])->name('admin.permission.getdata');
     Route::post('/permission-role/store', [PermissionController::class, 'store']);
-});
+
+    Route::get('/admin/mahasiswa/detail/{id}', [BiodatamahasiswaController::class, 'detailMahasiswa'])->name('admin.mahasiswa.detail');
+    });
 

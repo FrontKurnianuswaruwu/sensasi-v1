@@ -39,4 +39,8 @@ class BiodataMahasiswa extends Model
     {
         return $this->belongsTo(Mitra::class, 'mitra_id');
     }
+    public function hasilujian()
+    {
+        return $this->hasMany(Hasilujian::class, 'mahasiswa_id');
+    }
 }

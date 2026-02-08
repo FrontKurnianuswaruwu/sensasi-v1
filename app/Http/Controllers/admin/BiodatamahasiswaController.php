@@ -93,21 +93,27 @@ class BiodatamahasiswaController extends Controller
         }
         $user = User::find($id);
         $biodata = BiodataMahasiswa::where('user_id', $id)->first();
+
         if (!$biodata) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Biodata tidak ditemukan'
             ], 404);
         }
-        if ($biodata->nim != $request->nim) {
-            $cekNim = BiodataMahasiswa::where('nim', $request->nim)->first();
+
+        if ($request->nim) {
+            $cekNim = BiodataMahasiswa::where('nim', trim($request->nim))
+                ->where('user_id', '!=', $id)
+                ->whereNotNull('nim')
+                ->first();
+
             if ($cekNim) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'NIM sudah digunakan'
+                    'message' => 'NIM sudah digunakan oleh mahasiswa lain'
                 ], 400);
             }
-        } 
+        }
 
         if ($biodata->nik != $request->nik) {
             $cekNik = BiodataMahasiswa::where('nik', $request->nik)->first();
@@ -311,5 +317,19 @@ class BiodatamahasiswaController extends Controller
             'message' => $isNew ? 'Dokumen berhasil diunggah' : 'Dokumen berhasil diperbarui',
             'data' => $dokumen
         ]);
+    }
+
+    public function detailMahasiswa($id)
+    {
+        $biodata = BiodataMahasiswa::with(['user', 'user.akademik', 'user.orangtua', 'user.dokumen', 'mitra', 'hasilujian', 'hasilujian.kategoriSoal'])->where('id', $id)->first();
+
+        if (!$biodata) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Data mahasiswa tidak ditemukan.'
+            ], 404);
+        }
+
+        return response()->json($biodata);
     }
 }

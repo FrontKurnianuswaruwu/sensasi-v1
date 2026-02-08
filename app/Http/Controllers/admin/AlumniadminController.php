@@ -31,7 +31,7 @@ class AlumniadminController extends Controller
         $loginMitraId = auth()->user()->mitra_id;
         
 
-        $query = BiodataMahasiswa::select('user_id', 'nim')
+        $query = BiodataMahasiswa::select('user_id', 'nim', 'id')
             ->with('user.akademik.mitra')
             ->whereHas('user', function ($q) {
                 $q->where('status_user', 'Tidak Aktif')

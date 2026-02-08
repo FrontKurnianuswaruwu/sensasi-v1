@@ -44,13 +44,12 @@ const rowsPerPage = 10;
 function renderTable(data, isMahasiswa) {
     const tablePengajuandana = $('#tablePengajuandana');
     tablePengajuandana.empty();
-    console.log(isMahasiswa);
 
     if (data.length === 0) {
         tablePengajuandana.append(`
             <tr>
-                <td colspan="8" class="px-6 py-8 text-center text-gray-500">
-                    <i class="fas fa-info-circle text-gray-400 mr-2"></i>
+                <td colspan="8" class="px-6 py-10 text-center text-gray-500">
+                    <i class="fas fa-info-circle text-gray-300 text-4xl mb-3 block"></i>
                     Tidak ada data ditemukan
                 </td>
             </tr>
@@ -62,51 +61,8 @@ function renderTable(data, isMahasiswa) {
         const semesterText = pengajuandana.semester 
             ? `Semester ${pengajuandana.semester}`
             : '-';
-        
-        let actionButtons = '';
-        if (isMahasiswa) {
-            if (pengajuandana.status === 'approved') {
-                actionButtons = `
-                    <i class="fas fa-lock text-gray-400" title="Aksi tidak tersedia"></i>
-                `;
-            } else if (pengajuandana.status === 'pending') {
-                actionButtons = `
-                    <button class="delete-btn px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all" 
-                        data-id="${pengajuandana.id}" data-name="${semesterText}">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                `;
-            } else {
-                actionButtons = `
-                    <button class="edit-btn px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all mr-2" 
-                            data-id="${pengajuandana.id}">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="delete-btn px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all" 
-                            data-id="${pengajuandana.id}" data-name="${semesterText}">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                `;
-            }
-        } else if (!isMahasiswa) {
-            if ( pengajuandana.status === 'approved' || pengajuandana.status === 'rejected') {
-                actionButtons = `
-                    <i class="fas fa-lock text-gray-400" title="Aksi tidak tersedia"></i>
-                `;
-            } else {
-                actionButtons = `
-                    <button class="approve-btn px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all mr-2" 
-                            data-id="${pengajuandana.id}" title="Approve">
-                        <i class="fas fa-check"></i>
-                    </button>
-                    <button class="reject-btn px-3 py-1 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-all" 
-                            data-id="${pengajuandana.id}" title="Reject">
-                        <i class="fas fa-times"></i>
-                    </button>
-                `;
-            }
-        }
 
+        // ===== STATUS BADGE =====
         let statusBadge = '';
         switch (pengajuandana.status) {
             case 1:
@@ -125,44 +81,115 @@ function renderTable(data, isMahasiswa) {
                 statusBadge = `<span class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-700 border border-gray-300">Unknown</span>`;
         }
 
+        // ===== ACTION BUTTONS =====
+        let actionButtons = '';
+
+        if (isMahasiswa) {
+            if (pengajuandana.status === 'approved') {
+                actionButtons = `
+                    <i class="fas fa-lock text-gray-400" title="Aksi tidak tersedia"></i>
+                `;
+            } else if (pengajuandana.status === 'pending') {
+                actionButtons = `
+                    <button class="delete-btn inline-flex items-center px-3 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-sm" 
+                        data-id="${pengajuandana.id}" data-name="${semesterText}">
+                        <i class="fas fa-trash mr-1.5"></i> Hapus
+                    </button>
+                `;
+            } else {
+                actionButtons = `
+                    <button class="edit-btn inline-flex items-center px-3 py-1.5 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all shadow-sm mr-2" 
+                        data-id="${pengajuandana.id}">
+                        <i class="fas fa-edit mr-1.5"></i> Edit
+                    </button>
+                    <button class="delete-btn inline-flex items-center px-3 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-sm" 
+                        data-id="${pengajuandana.id}" data-name="${semesterText}">
+                        <i class="fas fa-trash mr-1.5"></i> Hapus
+                    </button>
+                `;
+            }
+        } else {
+            if (pengajuandana.status === 'approved' || pengajuandana.status === 'rejected') {
+                actionButtons = `
+                    <button class="detail-btn inline-flex items-center px-3 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all shadow-sm mr-2" 
+                        data-id="${pengajuandana.mahasiswa_id}" title="Lihat Detail">
+                        <i class="fas fa-eye mr-1.5"></i> Detail
+                    </button>
+                    <i class="fas fa-lock text-gray-400" title="Aksi tidak tersedia"></i>
+                `;
+            } else {
+                actionButtons = `
+                    <button class="detail-btn inline-flex items-center px-3 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all shadow-sm mr-2" 
+                        data-id="${pengajuandana.mahasiswa_id}" title="Lihat Detail">
+                        <i class="fas fa-eye mr-1.5"></i> Detail
+                    </button>
+                    <button class="approve-btn inline-flex items-center px-3 py-1.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all shadow-sm mr-2" 
+                            data-id="${pengajuandana.id}" title="Approve">
+                        <i class="fas fa-check mr-1.5"></i> Approve
+                    </button>
+                    <button class="reject-btn inline-flex items-center px-3 py-1.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-all shadow-sm" 
+                            data-id="${pengajuandana.id}" title="Reject">
+                        <i class="fas fa-times mr-1.5"></i> Reject
+                    </button>
+                `;
+            }
+        }
+
+        const namaMahasiswa = pengajuandana.mahasiswa?.user?.name ?? '-';
+        const avatarChar = namaMahasiswa.charAt(0).toUpperCase();
+
         const row = `
-            <tr class="hover:bg-gray-50 transition-colors duration-200">
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
+            <tr class="hover:bg-gray-50 transition-colors duration-200 border-b border-gray-100">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    ${index + 1}
+                </td>
+
                 <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center">
                         <div class="flex-shrink-0 h-10 w-10">
-                            <div class="h-10 w-10 rounded-full bg-gradient-to-r gradient-bg to-blue-light flex items-center justify-center text-white font-semibold">
-                                ${pengajuandana.mahasiswa?.user?.name.charAt(0) ?? '-'}
+                            <div class="h-10 w-10 rounded-full bg-gradient-to-r from-blue-600 to-blue-400 flex items-center justify-center text-white font-bold shadow-sm">
+                                ${avatarChar}
                             </div>
                         </div>
                         <div class="ml-4">
-                            ${pengajuandana.mahasiswa?.user?.name ?? '-'}
+                            <div class="text-sm font-semibold text-gray-900">${namaMahasiswa}</div>
+                            <div class="text-xs text-gray-500">Mahasiswa</div>
                         </div>
                     </div>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    <div class="text-sm font-medium text-gray-900">${semesterText}</div>
+
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-medium">
+                    ${semesterText}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${pengajuandana.ip_semester ?? '-'}
+
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                    <span class="px-2 py-1 bg-gray-100 text-gray-700 font-bold rounded border border-gray-200">
+                        ${pengajuandana.ip_semester ?? '0.00'}
+                    </span>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
                     ${formatRupiah(pengajuandana.total)}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${ pengajuandana.catatan ?? '-'}
+
+                <td class="px-6 py-4 text-sm text-gray-700">
+                    ${pengajuandana.catatan ?? '-'}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
                     ${statusBadge}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm">
+
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     ${actionButtons}
                 </td>
             </tr>
         `;
+
         tablePengajuandana.append(row);
     });
 }
+
 
 function renderCards(data, isMahasiswa) {
     const cardContainer = $('#cardContainer');
@@ -170,111 +197,70 @@ function renderCards(data, isMahasiswa) {
 
     if (data.length === 0) {
         cardContainer.append(`
-            <div class="p-6 text-center text-gray-500">
-                <i class="fas fa-info-circle text-gray-400 mr-2"></i>
-                Tidak ada data ditemukan
+            <div class="p-10 text-center text-gray-400 font-medium bg-white rounded-xl border border-dashed border-gray-300">
+                Tidak ada data pengajuan.
             </div>
         `);
         return;
     }
 
     data.forEach((pengajuandana) => {
-        const semesterText = pengajuandana.semester 
-            ? `Semester ${pengajuandana.semester}`
-            : '-';
+        const semesterText = pengajuandana.semester ? `Semester ${pengajuandana.semester}` : '-';
+        const status = pengajuandana.status?.toString().toLowerCase();
 
-        let actionButtons = '';
-
-        if (isMahasiswa) {
-            if (pengajuandana.status === 'approved') {
-                actionButtons = `
-                    <div class="text-center text-gray-400 text-xl">
-                        <i class="fas fa-lock"></i>
-                    </div>
-                `;
-            } 
-            else if (pengajuandana.status === 'pending') {
-                actionButtons = `
-                    <button class="delete-btn flex-1 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all" 
-                        data-id="${pengajuandana.id}" data-name="${semesterText}">
-                        <i class="fas fa-trash mr-1"></i> Hapus
-                    </button>
-                `;
-            } 
-            else {
-                actionButtons = `
-                    <button class="edit-btn flex-1 px-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all" 
-                        data-id="${pengajuandana.id}">
-                        <i class="fas fa-edit mr-1"></i> Edit
-                    </button>
-                    <button class="delete-btn flex-1 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all" 
-                        data-id="${pengajuandana.id}" data-name="${semesterText}">
-                        <i class="fas fa-trash mr-1"></i> Hapus
-                    </button>
-                `;
-            }
-        } 
-        else { 
-            if (pengajuandana.status === 'approved' || pengajuandana.status === 'rejected') {
-                actionButtons = `
-                    <div class="text-center text-gray-400 text-xl">
-                        <i class="fas fa-lock"></i>
-                    </div>
-                `;
-            } else {
-                actionButtons = `
-                    <button class="approve-btn flex-1 px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all" 
-                        data-id="${pengajuandana.id}">
-                        <i class="fas fa-check mr-1"></i> Approve
-                    </button>
-                    <button class="reject-btn flex-1 px-3 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-all" 
-                        data-id="${pengajuandana.id}">
-                        <i class="fas fa-times mr-1"></i> Reject
-                    </button>
-                `;
-            }
-        }
-
+        // Badge Status Konsisten
         let statusBadge = '';
-        switch (pengajuandana.status) {
-            case 1:
-            case 'pending':
-                statusBadge = `<span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-700 border border-yellow-300">Pending</span>`;
-                break;
-            case 2:
-            case 'approved':
-                statusBadge = `<span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700 border border-green-300">Approved</span>`;
-                break;
-            case 3:
-            case 'rejected':
-                statusBadge = `<span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-700 border border-red-300">Rejected</span>`;
-                break;
-            default:
-                statusBadge = `<span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-700 border border-gray-300">Unknown</span>`;
+        if (status === '1' || status === 'pending') {
+            statusBadge = `<span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-yellow-100 text-yellow-700 border border-yellow-200">Pending</span>`;
+        } else if (status === '2' || status === 'approved') {
+            statusBadge = `<span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-green-100 text-green-700 border border-green-200">Approved</span>`;
+        } else if (status === '3' || status === 'rejected') {
+            statusBadge = `<span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-red-100 text-red-700 border border-red-200">Rejected</span>`;
         }
 
         const card = `
-            <div class="bg-white rounded-xl shadow-md p-4 mb-4 border border-gray-200">
-                
-                <!-- Header -->
-                <div class="flex justify-between items-start mb-2">
-                    <h3 class="text-lg font-bold text-gray-800">${semesterText}</h3>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-4 hover:shadow-md transition-shadow">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="flex items-center">
+                        <div class="h-10 w-10 rounded-full bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center text-white font-bold shadow-sm mr-3">
+                            ${(pengajuandana.mahasiswa?.user?.name || 'M').charAt(0)}
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-gray-900">${pengajuandana.mahasiswa?.user?.name ?? 'Mahasiswa'}</h3>
+                            <p class="text-xs text-gray-500">${semesterText}</p>
+                        </div>
+                    </div>
                     ${statusBadge}
                 </div>
 
-                <!-- Total Dana -->
-                <div class="flex items-center text-sm text-gray-600 mb-4">
-                    <i class="fas fa-money-bill-wave w-5 mr-2 text-green-500"></i>
-                    <span>Total: <span class="font-semibold text-gray-800">${formatRupiah(pengajuandana.total)}</span></span>
+                <div class="bg-gray-50 rounded-lg p-3 mb-4 space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Total Dana:</span>
+                        <span class="font-bold text-blue-600">${formatRupiah(pengajuandana.total)}</span>
+                    </div>
+                    <div class="text-xs text-gray-500 italic">
+                        <i class="fas fa-quote-left mr-1 opacity-50"></i>${pengajuandana.catatan || '-'}
+                    </div>
                 </div>
 
-                <!-- Action Buttons -->
                 <div class="flex gap-2">
-                    ${actionButtons}
+                    ${isMahasiswa ? (
+                        (status === 'approved' || status === '2') 
+                        ? `<div class="w-full py-2 bg-gray-100 text-gray-400 text-center rounded-lg text-sm italic"><i class="fas fa-lock mr-2"></i>Pengajuan Selesai</div>`
+                        : `
+                            <button class="edit-btn flex-1 py-2.5 bg-yellow-500 text-white rounded-lg text-sm font-bold shadow-sm" data-id="${pengajuandana.id}"><i class="fas fa-edit mr-1"></i> Edit</button>
+                            <button class="delete-btn flex-1 py-2.5 bg-red-500 text-white rounded-lg text-sm font-bold shadow-sm" data-id="${pengajuandana.id}" data-name="${semesterText}"><i class="fas fa-trash mr-1"></i> Hapus</button>
+                        `
+                    ) : `
+                        <button class="detail-btn flex-1 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-bold shadow-sm" data-id="${pengajuandana.mahasiswa_id}"><i class="fas fa-eye mr-1"></i> Detail</button>
+                        ${(status === 'pending' || status === '1') ? `
+                            <button class="approve-btn flex-1 py-2.5 bg-green-500 text-white rounded-lg text-sm font-bold shadow-sm" data-id="${pengajuandana.id}"><i class="fas fa-check"></i></button>
+                            <button class="reject-btn flex-1 py-2.5 bg-gray-600 text-white rounded-lg text-sm font-bold shadow-sm" data-id="${pengajuandana.id}"><i class="fas fa-times"></i></button>
+                        ` : ''}
+                    `}
                 </div>
             </div>
         `;
-
         cardContainer.append(card);
     });
 }
@@ -403,6 +389,9 @@ $('#cancelDeleteBtn').on('click', function() {
 $('#cancelDeleteBtnApprove').on('click', function() {
     hideModalEnhanced('approveModal');
 });
+$('#cancelMahasiswaBtn').on('click', function() {
+    hideModalEnhanced('detailMahasiswaModal');
+});
 $('#cancelRejectBtn').on('click', function() {
     hideModalEnhanced('rejectModal');
 });
@@ -443,6 +432,8 @@ $('.modal-overlay').on('click', function(e) {
             hideModalEnhanced('approveModal');
         } else if ($(this).closest('#rejectModal').length) {
             hideModalEnhanced('rejectModal');
+        } else if ($(this).closest('#detailMahasiswaModal').length) {
+            hideModalEnhanced('detailMahasiswaModal');
         }
     }
 });
@@ -896,3 +887,112 @@ function resetApproveModal() {
         hideFieldError('#rejectCatatan');
     }
 }
+
+$(document).on('click', '.detail-btn', function() {
+    const mahasiswaId = $(this).data('id');
+    
+    showModalEnhanced('detailMahasiswaModal');
+
+    $.ajax({
+        url: `/admin/mahasiswa/detail/${mahasiswaId}`,
+        type: 'GET',
+        success: function(res) {
+            $('#detail_nama_mahasiswa').text(res.user.name);
+            $('#detail_nim').text('NIM: ' + res.nim);
+            $('#det_jk').text(res.jenis_kelamin);
+            $('#det_email').text(res.user.email);
+            $('#det_agama').text(res.agama);
+            $('#det_telp').text(res.no_wa);
+            $('#det_alamat').text(res.alamat_ktp);
+            $('#det_semester').text(res.user.akademik.semester);
+            $('#det_ipk').text(res.user.akademik.ip_terakhir);
+            $('#det_status').text(res.user.status_user);
+            $('#det_ayah_nama').text(res.user.orangtua.nama_ayah);
+            $('#det_ayah_kerja').text(res.user.orangtua.pekerjaan_ayah);
+            $('#det_ibu_nama').text(res.user.orangtua.nama_ibu);
+            $('#det_ibu_kerja').text(res.user.orangtua.pekerjaan_ibu);
+            $('#det_tgllahir').text(formatTanggal(res.tanggal_lahir));
+            $('#det_universitas').text(res.mitra.nama_mitra);
+            $('#det_ayah_gaji').text(formatRupiah(res.user.orangtua.penghasilan_ayah));
+            $('#det_ibu_gaji').text(formatRupiah(res.user.orangtua.penghasilan_ibu));
+            $('#det_ortu_telp').text(res.user.orangtua.no_wa_ortu);
+            $('#det_tanggungan').text(res.user.orangtua.jumlah_tanggungan);
+
+            const fotoProfilElement = $('#detail_foto_profil');
+    
+            // Ambil dari variabel window yang kita buat di Blade
+            const defaultFoto = window.defaultAvatar; 
+
+            fotoProfilElement.off('error'); 
+
+            if (res.foto) {
+                // Gabungkan origin dengan path dari database
+                const fotoUrl = window.location.origin + '/' + res.foto;
+
+                fotoProfilElement.one('error', function() {
+                    $(this).attr('src', defaultFoto);
+                }).attr('src', fotoUrl);
+            } else {
+                fotoProfilElement.attr('src', defaultFoto);
+            }
+
+            const docContainer = $('#document-list');
+            docContainer.empty();
+
+            const docFields = [
+                { field: 'scan_ktp', label: 'Scan KTP' },
+                { field: 'scan_kartu_mahasiswa', label: 'Kartu Mahasiswa' },
+                { field: 'scan_kk', label: 'Kartu Keluarga' },
+                { field: 'transkrip_nilai', label: 'Transkrip Nilai' },
+                { field: 'surat_keterangan_aktif', label: 'Surat Aktif' },
+                { field: 'essay_motivasi', label: 'Essay Motivasi' }
+            ];
+
+            const dokumen = res.user.dokumen;    
+
+            if (dokumen) {
+                docFields.forEach(item => {
+                    const filePath = dokumen[item.field];
+                    if (filePath) {
+                        const fullUrl = window.location.origin + '/' + filePath;
+                        
+                        const docHtml = `
+                            <a href="${fullUrl}" target="_blank" class="flex items-center p-3 border-2 border-gray-100 rounded-xl hover:bg-gray-50 transition group">
+                                <div class="w-10 h-10 bg-red-100 text-red-600 rounded-lg flex items-center justify-center mr-3 group-hover:bg-red-600 group-hover:text-white transition">
+                                    <i class="fas fa-file-pdf"></i>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-xs text-gray-400 uppercase font-bold">${item.label}</span>
+                                    <span class="text-sm font-medium text-gray-700 truncate max-w-[150px]">Lihat Dokumen</span>
+                                </div>
+                            </a>
+                        `;
+                        docContainer.append(docHtml);
+                    }
+                });
+            } else {
+                docContainer.append('<p class="text-gray-500 italic text-sm">Belum ada dokumen yang diunggah.</p>');
+            }
+        },
+        error: function() {
+            showNotification('Gagal mengambil data detail', 'error');
+        }
+    });
+});
+
+$(document).on('click', '.tab-btn', function() {
+    const targetTab = $(this).data('tab');
+
+    $('.tab-btn').removeClass('active-tab border-blue-700 text-blue-700')
+                    .addClass('border-transparent text-gray-500');
+    
+    $(this).addClass('active-tab border-blue-700 text-blue-700')
+            .removeClass('border-transparent text-gray-500');
+
+    $('.tab-content').addClass('hidden'); 
+    $('#' + targetTab).removeClass('hidden');
+});
+
+$(document).on('click', '.detail-btn', function() {
+    $('.tab-btn[data-tab="tab-biodata"]').trigger('click');
+});

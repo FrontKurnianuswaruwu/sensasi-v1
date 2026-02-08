@@ -74,6 +74,10 @@ function renderTable(data) {
                     ${
                         employee.user.status_user !== 'Aktif'
                         ? `
+                            <button class="detail-btn px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all mr-2" 
+                                data-id="${employee.id}" title="Lihat Detail">
+                                <i class="fas fa-eye"></i>
+                            </button>
                             <button class="aktif-btn px-3 py-1 text-green-600 hover:text-green-800 transition-all"
                                 title="Set PBS Aktif" data-id="${employee.user?.id}" data-name="${employee.user.name}">
                                 <i class="fa-solid fa-circle-check text-xl"></i>
@@ -91,63 +95,83 @@ function renderTable(data) {
 }
 
 // Render mobile cards
-// function renderCards(data) {
-//     const cardContainer = $('#cardContainer');
-//     cardContainer.empty();
+function renderCards(data) {
+    const cardContainer = $('#cardContainer');
+    cardContainer.empty();
 
-//     if (data.length === 0) {
-//         cardContainer.append(`
-//             <div class="p-6 text-center text-gray-500">
-//                 <i class="fas fa-info-circle text-gray-400 mr-2"></i>
-//                 Tidak ada data ditemukan
-//             </div>
-//         `);
-//         return;
-//     }
+    if (data.length === 0) {
+        cardContainer.append(`
+            <div class="p-6 text-center text-gray-500">
+                <i class="fas fa-info-circle text-gray-400 mr-2"></i>
+                Tidak ada data ditemukan
+            </div>
+        `);
+        return;
+    }
 
-//     data.forEach((employee) => {
-//         const statusClass = employee.status_user === 'Aktif'
-//             ? 'bg-green-100 text-green-800'
-//             : 'bg-red-100 text-red-800';
+    data.forEach((employee) => {
+        // Sesuai logika Desktop: Ambil status dan ubah 'Tidak Aktif' menjadi 'Alumni'
+        let status = employee.user?.status_user;
+        if (status === 'Tidak Aktif') {
+            status = 'Alumni';
+        }
 
-//         const card = `
-//             <div class="p-4 border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
-//                 <div class="flex items-start space-x-3">
-//                     <div class="flex-shrink-0 h-12 w-12 rounded-full bg-gradient-to-r gradient-bg to-blue-light flex items-center justify-center text-white font-semibold text-lg">
-//                         ${employee.user?.name.charAt(0)}
-//                     </div>
-//                     <div class="flex-1 min-w-0">
-//                         <div class="flex items-center justify-between mb-2">
-//                             <h3 class="text-lg font-semibold text-gray-900 truncate">${employee.name}</h3>
-//                             <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">
-//                                 ${employee.status_user}
-//                             </span>
-//                         </div>
-//                         <div class="space-y-1 text-sm text-gray-600">
-//                             <div class="flex items-center">
-//                                 <i class="fas fa-envelope w-4 mr-2 text-orange-primary"></i>
-//                                 <span>${employee.email}</span>
-//                             </div>
-//                             <div class="flex mt-4 space-x-2">
-//                                 ${canEdit ? `
-//                                     <button class="edit-btn flex-1 px-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all" data-id="${employee.id}">
-//                                         <i class="fas fa-edit"></i> Edit
-//                                     </button>
-//                                 ` : ''}
-//                                 ${canDelete ? `
-//                                     <button class="delete-btn flex-1 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all" data-id="${employee.id}">
-//                                         <i class="fas fa-trash"></i> Hapus
-//                                     </button>
-//                                 ` : ''}
-//                             </div>
-//                         </div>
-//                     </div>
-//                 </div>
-//             </div>
-//         `;
-//         cardContainer.append(card);
-//     });
-// }
+        // Penyesuaian warna label status
+        const statusClass = status === 'Aktif'
+            ? 'bg-green-100 text-green-800'
+            : 'bg-blue-100 text-blue-800';
+
+        const card = `
+            <div class="p-4 border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
+                <div class="flex items-start space-x-3">
+                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-gradient-to-r gradient-bg to-blue-light flex items-center justify-center text-white font-semibold text-lg">
+                        ${employee.user?.name ? employee.user.name.charAt(0) : '?'}
+                    </div>
+
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-base font-bold text-gray-900 truncate">
+                                ${employee.user?.name || '-'}
+                            </h3>
+                            <span class="px-2 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">
+                                ${status ?? '-'}
+                            </span>
+                        </div>
+
+                        <div class="space-y-1 text-sm text-gray-600">
+                            <div class="flex items-center">
+                                <i class="fas fa-university w-4 mr-2 text-blue-500"></i>
+                                <span class="truncate">${employee.user?.akademik?.mitra?.nama_mitra || '-'}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-envelope w-4 mr-2 text-orange-primary"></i>
+                                <span class="truncate">${employee.user?.email || '-'}</span>
+                            </div>
+                        </div>
+
+                        <div class="flex mt-4 space-x-2">
+                            ${employee.user?.status_user !== 'Aktif' ? `
+                                <button class="detail-btn flex-1 flex items-center justify-center px-3 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-all" 
+                                    data-id="${employee.id}">
+                                    <i class="fas fa-eye mr-2"></i> Detail
+                                </button>
+                                <button class="aktif-btn flex-1 flex items-center justify-center px-3 py-2 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-600 transition-all"
+                                    data-id="${employee.user?.id}" data-name="${employee.user?.name}">
+                                    <i class="fa-solid fa-circle-check mr-2"></i> Aktifkan
+                                </button>
+                            ` : `
+                                <div class="flex-1 flex items-center justify-center px-3 py-2 bg-gray-100 text-gray-400 text-sm rounded-lg italic border border-dashed border-gray-300">
+                                    <i class="fas fa-lock mr-2"></i> Aksi Terkunci (User Aktif)
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        cardContainer.append(card);
+    });
+}
 
 // Ambil data dari server dengan pagination & search
 function loadData(query = '', page = 1) {
@@ -165,9 +189,9 @@ function loadData(query = '', page = 1) {
             }
 
             renderTable(data);
-            // renderCards(data);
+            renderCards(data);
             renderPagination(res.last_page, query);
-            // renderPaginationMobile(res.last_page, query);
+            renderPaginationMobile(res.last_page, query);
 
             let start = (res.current_page - 1) * rowsPerPage + 1;
             let end = start + data.length - 1;
@@ -410,6 +434,10 @@ $('#cancelActiveBtn').on('click', function() {
     hideModalEnhanced('activeModal');
 });
 
+$('#cancelMahasiswaBtn').on('click', function() {
+    hideModalEnhanced('detailMahasiswaModal');
+});
+
 
 // Close modal when clicking outside
 $('.modal-overlay').on('click', function(e) {
@@ -418,6 +446,8 @@ $('.modal-overlay').on('click', function(e) {
             hideModalEnhanced('employeeModal');
         } else if ($(this).closest('#activeModal').length) {
             hideModalEnhanced('activeModal');
+        } else if ($(this).closest('#detailMahasiswaModal').length) {
+            hideModalEnhanced('detailMahasiswaModal');
         }
     }
 });
@@ -459,4 +489,113 @@ $(document).on('click', '#confirmActiveBtn', function() {
             activeBtn.html(originalText).prop('disabled', false);
         }
     });
+});
+
+$(document).on('click', '.detail-btn', function() {
+    const mahasiswaId = $(this).data('id');
+    
+    showModalEnhanced('detailMahasiswaModal');
+
+    $.ajax({
+        url: `/admin/mahasiswa/detail/${mahasiswaId}`,
+        type: 'GET',
+        success: function(res) {
+            $('#detail_nama_mahasiswa').text(res.user.name);
+            $('#detail_nim').text('NIM: ' + res.nim);
+            $('#det_jk').text(res.jenis_kelamin);
+            $('#det_email').text(res.user.email);
+            $('#det_agama').text(res.agama);
+            $('#det_telp').text(res.no_wa);
+            $('#det_alamat').text(res.alamat_ktp);
+            $('#det_semester').text(res.user.akademik.semester);
+            $('#det_ipk').text(res.user.akademik.ip_terakhir);
+            $('#det_status').text(res.user.status_user);
+            $('#det_ayah_nama').text(res.user.orangtua.nama_ayah);
+            $('#det_ayah_kerja').text(res.user.orangtua.pekerjaan_ayah);
+            $('#det_ibu_nama').text(res.user.orangtua.nama_ibu);
+            $('#det_ibu_kerja').text(res.user.orangtua.pekerjaan_ibu);
+            $('#det_tgllahir').text(formatTanggal(res.tanggal_lahir));
+            $('#det_universitas').text(res.mitra.nama_mitra);
+            $('#det_ayah_gaji').text(formatRupiah(res.user.orangtua.penghasilan_ayah));
+            $('#det_ibu_gaji').text(formatRupiah(res.user.orangtua.penghasilan_ibu));
+            $('#det_ortu_telp').text(res.user.orangtua.no_wa_ortu);
+            $('#det_tanggungan').text(res.user.orangtua.jumlah_tanggungan);
+
+            const fotoProfilElement = $('#detail_foto_profil');
+    
+            // Ambil dari variabel window yang kita buat di Blade
+            const defaultFoto = window.defaultAvatar; 
+
+            fotoProfilElement.off('error'); 
+
+            if (res.foto) {
+                // Gabungkan origin dengan path dari database
+                const fotoUrl = window.location.origin + '/' + res.foto;
+
+                fotoProfilElement.one('error', function() {
+                    $(this).attr('src', defaultFoto);
+                }).attr('src', fotoUrl);
+            } else {
+                fotoProfilElement.attr('src', defaultFoto);
+            }
+
+            const docContainer = $('#document-list');
+            docContainer.empty();
+
+            const docFields = [
+                { field: 'scan_ktp', label: 'Scan KTP' },
+                { field: 'scan_kartu_mahasiswa', label: 'Kartu Mahasiswa' },
+                { field: 'scan_kk', label: 'Kartu Keluarga' },
+                { field: 'transkrip_nilai', label: 'Transkrip Nilai' },
+                { field: 'surat_keterangan_aktif', label: 'Surat Aktif' },
+                { field: 'essay_motivasi', label: 'Essay Motivasi' }
+            ];
+
+            const dokumen = res.user.dokumen;    
+
+            if (dokumen) {
+                docFields.forEach(item => {
+                    const filePath = dokumen[item.field];
+                    if (filePath) {
+                        const fullUrl = window.location.origin + '/' + filePath;
+                        
+                        const docHtml = `
+                            <a href="${fullUrl}" target="_blank" class="flex items-center p-3 border-2 border-gray-100 rounded-xl hover:bg-gray-50 transition group">
+                                <div class="w-10 h-10 bg-red-100 text-red-600 rounded-lg flex items-center justify-center mr-3 group-hover:bg-red-600 group-hover:text-white transition">
+                                    <i class="fas fa-file-pdf"></i>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-xs text-gray-400 uppercase font-bold">${item.label}</span>
+                                    <span class="text-sm font-medium text-gray-700 truncate max-w-[150px]">Lihat Dokumen</span>
+                                </div>
+                            </a>
+                        `;
+                        docContainer.append(docHtml);
+                    }
+                });
+            } else {
+                docContainer.append('<p class="text-gray-500 italic text-sm">Belum ada dokumen yang diunggah.</p>');
+            }
+        },
+        error: function() {
+            showNotification('Gagal mengambil data detail', 'error');
+        }
+    });
+});
+
+$(document).on('click', '.tab-btn', function() {
+    const targetTab = $(this).data('tab');
+
+    $('.tab-btn').removeClass('active-tab border-blue-700 text-blue-700')
+                    .addClass('border-transparent text-gray-500');
+    
+    $(this).addClass('active-tab border-blue-700 text-blue-700')
+            .removeClass('border-transparent text-gray-500');
+
+    $('.tab-content').addClass('hidden'); 
+    $('#' + targetTab).removeClass('hidden');
+});
+
+$(document).on('click', '.detail-btn', function() {
+    $('.tab-btn[data-tab="tab-biodata"]').trigger('click');
 });

@@ -53,7 +53,7 @@
     ]
   },
   "resources/js/admin/alumniadmin.js": {
-    "file": "assets/alumniadmin-CjlnMaIu.js",
+    "file": "assets/alumniadmin-B4FsnDo0.js",
     "name": "alumniadmin",
     "src": "resources/js/admin/alumniadmin.js",
     "isEntry": true,
@@ -62,7 +62,7 @@
     ]
   },
   "resources/js/admin/approvalpengajuandana.js": {
-    "file": "assets/approvalpengajuandana-CLh739Zg.js",
+    "file": "assets/approvalpengajuandana-C_4n5UKt.js",
     "name": "approvalpengajuandana",
     "src": "resources/js/admin/approvalpengajuandana.js",
     "isEntry": true,
@@ -71,7 +71,7 @@
     ]
   },
   "resources/js/admin/artikel.js": {
-    "file": "assets/artikel-ZNwLtfJE.js",
+    "file": "assets/artikel-DrCJ1Tn_.js",
     "name": "artikel",
     "src": "resources/js/admin/artikel.js",
     "isEntry": true,
@@ -89,7 +89,7 @@
     ]
   },
   "resources/js/admin/biodata.js": {
-    "file": "assets/biodata-BGShvrMK.js",
+    "file": "assets/biodata-BdEi7bfq.js",
     "name": "biodata",
     "src": "resources/js/admin/biodata.js",
     "isEntry": true,
@@ -161,7 +161,7 @@
     ]
   },
   "resources/js/admin/nilai.js": {
-    "file": "assets/nilai-BHnnmdIa.js",
+    "file": "assets/nilai-DrL7Euwe.js",
     "name": "nilai",
     "src": "resources/js/admin/nilai.js",
     "isEntry": true,
@@ -179,7 +179,7 @@
     ]
   },
   "resources/js/admin/pbsaktif.js": {
-    "file": "assets/pbsaktif-DC1gUA78.js",
+    "file": "assets/pbsaktif-ZQvxKEGv.js",
     "name": "pbsaktif",
     "src": "resources/js/admin/pbsaktif.js",
     "isEntry": true,
@@ -188,7 +188,7 @@
     ]
   },
   "resources/js/admin/pendaftaranpbs.js": {
-    "file": "assets/pendaftaranpbs-xx5yyeVJ.js",
+    "file": "assets/pendaftaranpbs-BUAMJh3q.js",
     "name": "pendaftaranpbs",
     "src": "resources/js/admin/pendaftaranpbs.js",
     "isEntry": true,
@@ -197,7 +197,7 @@
     ]
   },
   "resources/js/admin/pengajuandana.js": {
-    "file": "assets/pengajuandana-CHi49fVa.js",
+    "file": "assets/pengajuandana-Cy5gcVee.js",
     "name": "pengajuandana",
     "src": "resources/js/admin/pengajuandana.js",
     "isEntry": true,
@@ -260,7 +260,7 @@
     ]
   },
   "resources/js/admin/riwayatpengajuandana.js": {
-    "file": "assets/riwayatpengajuandana-D8nGdNJh.js",
+    "file": "assets/riwayatpengajuandana-DQcT_8NV.js",
     "name": "riwayatpengajuandana",
     "src": "resources/js/admin/riwayatpengajuandana.js",
     "isEntry": true,

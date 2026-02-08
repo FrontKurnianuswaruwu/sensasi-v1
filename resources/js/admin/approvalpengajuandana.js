@@ -48,8 +48,8 @@ function renderTable(data) {
     if (data.length === 0) {
         tablePengajuandana.append(`
             <tr>
-                <td colspan="5" class="px-6 py-8 text-center text-gray-500">
-                    <i class="fas fa-info-circle text-gray-400 mr-2"></i>
+                <td colspan="5" class="px-6 py-10 text-center text-gray-500">
+                    <i class="fas fa-info-circle text-gray-300 text-4xl mb-3 block"></i>
                     Tidak ada data ditemukan
                 </td>
             </tr>
@@ -62,6 +62,7 @@ function renderTable(data) {
             ? `Semester ${approvalpengajuandana.semester}`
             : '-';
 
+        // ===== STATUS BADGE =====
         let statusBadge = '';
         switch (approvalpengajuandana.status) {
             case 1:
@@ -80,37 +81,52 @@ function renderTable(data) {
                 statusBadge = `<span class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-700 border border-gray-300">Unknown</span>`;
         }
 
+        const avatarChar = approvalpengajuandana.semester 
+            ? 'S' + approvalpengajuandana.semester 
+            : '-';
+
         const row = `
-            <tr class="hover:bg-gray-50 transition-colors duration-200">
-            <td class="px-6 py-4 text-sm text-gray-900">${index + 1}</td>
-            <td class="px-6 py-4">
-                <div class="flex items-center">
-                <div class="flex-shrink-0 h-10 w-10">
-                    <div class="h-10 w-10 rounded-full bg-gradient-to-r gradient-bg to-blue-light flex items-center justify-center text-white font-semibold">
-                    ${approvalpengajuandana.semester ? 'S' + approvalpengajuandana.semester : '-'}
+            <tr class="hover:bg-gray-50 transition-colors duration-200 border-b border-gray-100">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    ${index + 1}
+                </td>
+
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 h-10 w-10">
+                            <div class="h-10 w-10 rounded-full bg-gradient-to-r from-blue-600 to-blue-400 flex items-center justify-center text-white font-bold shadow-sm">
+                                ${avatarChar}
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <div class="text-sm font-semibold text-gray-900">${semesterText}</div>
+                            <div class="text-xs text-gray-500">Semester</div>
+                        </div>
                     </div>
-                </div>
-                <div class="ml-4">
-                    <div class="text-sm font-medium text-gray-900">${semesterText}</div>
-                </div>
-                </div>
-            </td>
-            <td class="px-6 py-4 text-sm text-gray-900">
-                ${approvalpengajuandana.ip_semester || '-'}
-            </td>
-            <td class="px-6 py-4 text-sm text-gray-900">
-                ${formatRupiah(approvalpengajuandana.total)}
-            </td>
-            <td class="px-6 py-4 text-sm text-gray-900">
-                ${statusBadge}
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm">
-                <button class="detail-btn px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all mr-2" data-id="${approvalpengajuandana.id}">
-                    <i class="fas fa-info-circle"></i> Detail
-                </button>
-            </td>
+                </td>
+
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                    <span class="px-2 py-1 bg-gray-100 text-gray-700 font-bold rounded border border-gray-200">
+                        ${approvalpengajuandana.ip_semester || '0.00'}
+                    </span>
+                </td>
+
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    ${formatRupiah(approvalpengajuandana.total)}
+                </td>
+
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                    ${statusBadge}
+                </td>
+
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <button class="detail-btn inline-flex items-center px-3 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all shadow-sm" data-id="${approvalpengajuandana.id}">
+                        <i class="fas fa-info-circle mr-1.5"></i> Detail
+                    </button>
+                </td>
             </tr>
         `;
+
         tablePengajuandana.append(row);
     });
 }
@@ -122,52 +138,71 @@ function renderCards(data) {
 
     if (data.length === 0) {
         cardContainer.append(`
-            <div class="p-6 text-center text-gray-500">
-                <i class="fas fa-info-circle text-gray-400 mr-2"></i>
+            <div class="p-10 text-center text-gray-500">
+                <i class="fas fa-info-circle text-gray-300 text-4xl mb-3 block"></i>
                 Tidak ada data ditemukan
             </div>
         `);
         return;
     }
 
-    data.forEach((approvalpengajuandana) => {
-        // Tentukan ikon berdasarkan jabatan
-        let jabatanIcon = 'fa-user-tie'; // default
-        if (approvalpengajuandana.jabatan) {
-            const jabatan = approvalpengajuandana.jabatan.toLowerCase();
-            if (jabatan.includes('ketua')) jabatanIcon = 'fa-crown';
-            else if (jabatan.includes('wakil')) jabatanIcon = 'fa-user-friends';
-            else if (jabatan.includes('sekretaris')) jabatanIcon = 'fa-file-signature';
-            else if (jabatan.includes('bendahara')) jabatanIcon = 'fa-wallet';
-            else if (jabatan.includes('anggota')) jabatanIcon = 'fa-users';
+    data.forEach((item) => {
+        // Logika Semester & Avatar
+        const semesterText = item.semester ? `Semester ${item.semester}` : '-';
+        const avatarChar = item.semester ? 'S' + item.semester : '-';
+        
+        // Logika Status Badge (Sesuaikan dengan desain baru)
+        let statusBadge = '';
+        switch (item.status) {
+            case 1: case 'pending':
+                statusBadge = `<span class="px-3 py-1 text-[10px] font-bold rounded-full bg-yellow-100 text-yellow-700 border border-yellow-300">PENDING</span>`;
+                break;
+            case 2: case 'approved':
+                statusBadge = `<span class="px-3 py-1 text-[10px] font-bold rounded-full bg-green-100 text-green-700 border border-green-300">APPROVED</span>`;
+                break;
+            case 3: case 'rejected':
+                statusBadge = `<span class="px-3 py-1 text-[10px] font-bold rounded-full bg-red-100 text-red-700 border border-red-300">REJECTED</span>`;
+                break;
+            default:
+                statusBadge = `<span class="px-3 py-1 text-[10px] font-bold rounded-full bg-gray-100 text-gray-700 border border-gray-300">UNKNOWN</span>`;
         }
 
         const card = `
-            <div class="p-4 border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
-            <div class="flex items-start space-x-3">
-                <div class="flex-shrink-0 h-12 w-12 rounded-full bg-gradient-to-r gradient-bg to-blue-light flex items-center justify-center text-white font-semibold text-lg">
-                ${approvalpengajuandana.nama.charAt(0)}
-                </div>
-                <div class="flex-1 min-w-0">
-                <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-lg font-semibold text-gray-900 truncate">${approvalpengajuandana.nama}</h3>
-                </div>
-                <div class="space-y-1 text-sm text-gray-600">
-                    <div class="flex items-center">
-                    <i class="fas ${jabatanIcon} w-4 mr-2 text-orange-primary"></i>
-                    <span class="truncate">${approvalpengajuandana.jabatan || '-'}</span>
+            <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm active:scale-[0.98] transition-transform mb-4">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold">
+                            ${avatarChar}
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-gray-900">${semesterText}</h3>
+                            <p class="text-xs text-gray-500 line-clamp-1">Pengajuan Dana Mahasiswa</p>
+                        </div>
                     </div>
-                    <div class="flex mt-4 space-x-2">
-                    <button class="edit-btn flex-1 px-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all" data-id="${approvalpengajuandana.id}">
-                        <i class="fas fa-edit"></i> Edit
-                    </button>
-                    <button class="delete-btn flex-1 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all" data-id="${approvalpengajuandana.id}" data-name="${approvalpengajuandana.nama}">
-                        <i class="fas fa-trash"></i> Hapus
-                    </button>
+                    ${statusBadge}
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 py-3 border-y border-dashed border-gray-100 my-3">
+                    <div>
+                        <p class="text-[10px] uppercase tracking-wider text-gray-400 font-bold">Total Dana</p>
+                        <p class="text-sm font-black text-blue-700">${formatRupiah(item.total)}</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] uppercase tracking-wider text-gray-400 font-bold">IP Semester</p>
+                        <p class="text-sm font-bold text-gray-700">${item.ip_semester || '0.00'}</p>
                     </div>
                 </div>
+
+                <div class="flex space-x-2 mt-4">
+                    <button class="detail-btn flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold hover:bg-blue-100 transition-colors" 
+                        data-id="${item.id}">
+                        <i class="fas fa-info-circle mr-1"></i> Detail
+                    </button>
+                    <button class="edit-btn px-4 py-2 bg-yellow-50 text-yellow-600 rounded-lg text-xs font-bold hover:bg-yellow-100 transition-colors" 
+                        data-id="${item.id}">
+                        <i class="fas fa-edit"></i>
+                    </button>
                 </div>
-            </div>
             </div>
         `;
         cardContainer.append(card);
@@ -223,9 +258,9 @@ function loadData(query = '', page = 1) {
             }
 
             renderTable(data);
-            // renderCards(data);
+            renderCards(data);
             renderPagination(res.last_page, query);
-            // renderPaginationMobile(res.last_page, query);
+            renderPaginationMobile(res.last_page, query);
 
             let start = (res.current_page - 1) * rowsPerPage + 1;
             let end = start + data.length - 1;

@@ -32,8 +32,8 @@ function renderTable(data) {
     if (data.length === 0) {
         tableArtikel.append(`
             <tr>
-                <td colspan="5" class="px-6 py-8 text-center text-gray-500">
-                    <i class="fas fa-info-circle text-gray-400 mr-2"></i>
+                <td colspan="5" class="px-6 py-10 text-center text-gray-500">
+                    <i class="fas fa-info-circle text-gray-300 text-4xl mb-3 block"></i>
                     Tidak ada data ditemukan
                 </td>
             </tr>
@@ -42,9 +42,8 @@ function renderTable(data) {
     }
 
     data.forEach((artikel, index) => {
+        // ===== STATUS BADGE =====
         let statusBadge = '';
-
-        // Status Badge
         switch (artikel.status) {
             case 'pending':
                 statusBadge = `<span class="px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-700 border border-yellow-300">Pending</span>`;
@@ -59,58 +58,69 @@ function renderTable(data) {
                 statusBadge = `<span class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-700 border border-gray-300">Unknown</span>`;
         }
 
+        // ===== ACTION BUTTONS =====
         let actionButtons = '';
 
         if (artikel.role === 9) {
             actionButtons = `
-                <span class="inline-flex items-center px-3 py-1 text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed" 
+                <span class="inline-flex items-center px-3 py-1.5 text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed shadow-sm" 
                     title="Data terkunci untuk role 9">
-                    <i class="fas fa-lock mr-1"></i> Terkunci
+                    <i class="fas fa-lock mr-1.5"></i> Terkunci
                 </span>
             `;
         } else {
             const approveButton = !artikel.has_biodata
-                ? `<button class="approve-btn px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all" 
+                ? `<button class="approve-btn inline-flex items-center px-3 py-1.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all shadow-sm mr-2" 
                         data-id="${artikel.id}" title="Approve">
-                        <i class="fas fa-check"></i>
+                        <i class="fas fa-check mr-1.5"></i> Approve
                 </button>`
                 : '';
 
             actionButtons = `
                 ${approveButton}
-                <button class="edit-btn px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all" 
+                <button class="edit-btn inline-flex items-center px-3 py-1.5 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all shadow-sm mr-2" 
                         data-id="${artikel.id}" data-name="${artikel.nama}">
-                    <i class="fas fa-edit"></i>
+                    <i class="fas fa-edit mr-1.5"></i> Edit
                 </button>
-                <button class="delete-btn px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all" 
+                <button class="delete-btn inline-flex items-center px-3 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-sm" 
                         data-id="${artikel.id}" data-name="${artikel.nama}">
-                    <i class="fas fa-trash"></i>
+                    <i class="fas fa-trash mr-1.5"></i> Hapus
                 </button>
             `;
         }
 
+        const namaArtikel = artikel.nama || '-';
+        const avatarChar = namaArtikel.charAt(0).toUpperCase();
+
         const row = `
-            <tr class="hover:bg-gray-50 transition-colors duration-200">
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
+            <tr class="hover:bg-gray-50 transition-colors duration-200 border-b border-gray-100">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    ${index + 1}
+                </td>
+
                 <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center">
                         <div class="flex-shrink-0 h-10 w-10">
-                            <div class="h-10 w-10 rounded-full bg-gradient-to-r gradient-bg to-blue-light flex items-center justify-center text-white font-semibold">
-                                ${artikel.nama.charAt(0)}
+                            <div class="h-10 w-10 rounded-full bg-gradient-to-r from-blue-600 to-blue-400 flex items-center justify-center text-white font-bold shadow-sm">
+                                ${avatarChar}
                             </div>
                         </div>
                         <div class="ml-4">
-                            <div class="text-sm font-medium text-gray-900">${artikel.nama}</div>
+                            <div class="text-sm font-semibold text-gray-900">${namaArtikel}</div>
+                            <div class="text-xs text-gray-500">Artikel</div>
                         </div>
                     </div>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+
+                <td class="px-6 py-4 text-sm text-gray-700">
                     ${artikel.deskripsi || '-'}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
                     ${statusBadge}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm">
+
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     ${actionButtons}
                 </td>
             </tr>
@@ -118,7 +128,6 @@ function renderTable(data) {
 
         tableArtikel.append(row);
     });
-
 }
 
 // Render mobile cards khusus role (hanya name + aksi edit/hapus)
@@ -128,37 +137,79 @@ function renderCards(data) {
 
     if (data.length === 0) {
         cardContainer.append(`
-            <div class="p-6 text-center text-gray-500">
-                <i class="fas fa-info-circle text-gray-400 mr-2"></i>
-                Tidak ada data ditemukan
+            <div class="p-10 text-center text-gray-500">
+                <i class="fas fa-info-circle text-gray-300 text-4xl mb-3 block"></i>
+                Tidak ada artikel ditemukan
             </div>
         `);
         return;
     }
 
     data.forEach((artikel) => {
+        // ===== LOGIKA STATUS BADGE =====
+        let statusBadge = '';
+        switch (artikel.status) {
+            case 'pending':
+                statusBadge = `<span class="px-3 py-1 text-[10px] font-bold rounded-full bg-yellow-100 text-yellow-700 border border-yellow-300 uppercase">Pending</span>`;
+                break;
+            case 'approved':
+                statusBadge = `<span class="px-3 py-1 text-[10px] font-bold rounded-full bg-green-100 text-green-700 border border-green-300 uppercase">Approved</span>`;
+                break;
+            case 'rejected':
+                statusBadge = `<span class="px-3 py-1 text-[10px] font-bold rounded-full bg-red-100 text-red-700 border border-red-300 uppercase">Rejected</span>`;
+                break;
+            default:
+                statusBadge = `<span class="px-3 py-1 text-[10px] font-bold rounded-full bg-gray-100 text-gray-700 border border-gray-300 uppercase">Unknown</span>`;
+        }
+
+        // ===== LOGIKA ACTION BUTTONS (Handle Role 9) =====
+        let actionButtons = '';
+        if (artikel.role === 9) {
+            actionButtons = `
+                <div class="w-full text-center py-2 bg-gray-100 text-gray-400 rounded-lg text-xs font-bold border border-gray-200">
+                    <i class="fas fa-lock mr-1"></i> DATA TERKUNCI
+                </div>
+            `;
+        } else {
+            actionButtons = `
+                <button class="edit-btn flex-1 py-2.5 bg-yellow-50 text-yellow-600 rounded-xl text-xs font-bold hover:bg-yellow-100 transition-all active:scale-95" 
+                    data-id="${artikel.id}" data-name="${artikel.nama}">
+                    <i class="fas fa-edit mr-1"></i> EDIT
+                </button>
+                <button class="delete-btn flex-1 py-2.5 bg-red-50 text-red-600 rounded-xl text-xs font-bold hover:bg-red-100 transition-all active:scale-95" 
+                    data-id="${artikel.id}" data-name="${artikel.nama}">
+                    <i class="fas fa-trash mr-1"></i> HAPUS
+                </button>
+            `;
+        }
+
+        const avatarChar = artikel.nama ? artikel.nama.charAt(0).toUpperCase() : '?';
+
         const card = `
-            <div class="p-4 border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
-            <div class="flex items-start space-x-3">
-                <div class="flex-shrink-0 h-12 w-12 rounded-full bg-gradient-to-r gradient-bg to-blue-light flex items-center justify-center text-white font-semibold text-lg">
-                ${artikel.nama.charAt(0)}
-                </div>
-                <div class="flex-1 min-w-0">
-                <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-lg font-semibold text-gray-900 truncate">${artikel.nama}</h3>
-                </div>
-                <div class="space-y-1 text-sm text-gray-600">
-                    <div class="flex mt-4 space-x-2">
-                    <button class="edit-btn flex-1 px-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all" data-id="${artikel.id}">
-                        <i class="fas fa-edit"></i> Edit
-                    </button>
-                    <button class="delete-btn flex-1 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all" data-id="${artikel.id}" data-name="${artikel.nama}">
-                        <i class="fas fa-trash"></i> Hapus
-                    </button>
+            <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm mb-4 transition-all hover:shadow-md">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="h-11 w-11 rounded-full bg-gradient-to-br from-blue-600 to-indigo-500 flex items-center justify-center text-white font-bold shadow-sm">
+                            ${avatarChar}
+                        </div>
+                        <div class="max-w-[150px]">
+                            <h3 class="text-sm font-extrabold text-gray-900 truncate uppercase tracking-tight">${artikel.nama || '-'}</h3>
+                            <p class="text-[11px] text-gray-400 font-medium">Kategori: Artikel</p>
+                        </div>
                     </div>
+                    ${statusBadge}
                 </div>
+
+                <div class="bg-gray-50 rounded-xl p-3 mb-4">
+                    <p class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Deskripsi Singkat</p>
+                    <p class="text-xs text-gray-600 line-clamp-2 leading-relaxed italic">
+                        "${artikel.deskripsi || 'Tidak ada deskripsi.'}"
+                    </p>
                 </div>
-            </div>
+
+                <div class="flex space-x-2">
+                    ${actionButtons}
+                </div>
             </div>
         `;
         cardContainer.append(card);

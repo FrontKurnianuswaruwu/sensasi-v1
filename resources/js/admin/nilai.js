@@ -32,8 +32,8 @@ function renderTable(data) {
     if (data.length === 0) {
         tableNilai.append(`
             <tr>
-                <td colspan="5" class="px-6 py-8 text-center text-gray-500">
-                    <i class="fas fa-info-circle text-gray-400 mr-2"></i>
+                <td colspan="5" class="px-6 py-10 text-center text-gray-500">
+                    <i class="fas fa-info-circle text-gray-300 text-4xl mb-3 block"></i>
                     Tidak ada data ditemukan
                 </td>
             </tr>
@@ -42,41 +42,46 @@ function renderTable(data) {
     }
 
     data.forEach((nilai, index) => {
-        const getSemesterLabel = (semester) => {
-            const semesterNum = parseInt(semester);
-            if (semesterNum >= 1 && semesterNum <= 8) {
-            return `Semester ${semesterNum}`;
-            }
-            return semester || '-';
-        };
+        // Samakan dengan gaya label di pengajuan dana
+        const semesterLabel = nilai.semester ? `Semester ${nilai.semester}` : '-';
+        const tahunAkademik = nilai.tahunakademik?.tahun_akademik || '-';
 
         const row = `
-            <tr class="hover:bg-gray-50 transition-colors duration-200">
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 h-10 w-10">
-                            <div class="h-10 w-10 rounded-full bg-gradient-to-r gradient-bg to-blue-light flex items-center justify-center text-white font-semibold">
-                            ${nilai.tahunakademik.tahun_akademik.charAt(0)}
-                            </div>
-                            </div>
-                            <div class="ml-4">
-                            <div class="text-sm font-medium text-gray-900">${nilai.tahunakademik.tahun_akademik}</div>
+            <tr class="hover:bg-gray-50 transition-colors duration-200 border-b border-gray-100">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${index + 1}</td>
+                
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 h-10 w-10">
+                            <div class="h-10 w-10 rounded-full bg-gradient-to-r from-blue-600 to-blue-400 flex items-center justify-center text-white font-bold shadow-sm">
+                                ${tahunAkademik.charAt(0)}
                             </div>
                         </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        ${getSemesterLabel(nilai.semester)}
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        ${nilai.ip_semester || '-'}
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        <button class="edit-btn px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all mr-2" data-id="${nilai.id}">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                    <button class="delete-btn px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all" data-id="${nilai.id}" data-name="${nilai.semester}">
-                        <i class="fas fa-trash"></i>
+                        <div class="ml-4">
+                            <div class="text-sm font-semibold text-gray-900">${tahunAkademik}</div>
+                            <div class="text-xs text-gray-500">Tahun Akademik</div>
+                        </div>
+                    </div>
+                </td>
+
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-medium">
+                    ${semesterLabel}
+                </td>
+
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                    <span class="px-2 py-1 bg-gray-100 text-gray-700 font-bold rounded border border-gray-200">
+                        ${nilai.ip_semester || '0.00'}
+                    </span>
+                </td>
+
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <button class="edit-btn inline-flex items-center px-3 py-1.5 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all shadow-sm mr-2" 
+                        data-id="${nilai.id}">
+                        <i class="fas fa-edit mr-1.5"></i> Edit
+                    </button>
+                    <button class="delete-btn inline-flex items-center px-3 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-sm" 
+                        data-id="${nilai.id}" data-name="${semesterLabel}">
+                        <i class="fas fa-trash mr-1.5"></i> Hapus
                     </button>
                 </td>
             </tr>
@@ -92,8 +97,8 @@ function renderCards(data) {
 
     if (data.length === 0) {
         cardContainer.append(`
-            <div class="p-6 text-center text-gray-500">
-                <i class="fas fa-info-circle text-gray-400 mr-2"></i>
+            <div class="p-8 text-center text-gray-500">
+                <i class="fas fa-info-circle text-gray-400 text-2xl mb-2 block"></i>
                 Tidak ada data ditemukan
             </div>
         `);
@@ -103,35 +108,38 @@ function renderCards(data) {
     data.forEach((nilai) => {
         const getSemesterLabel = (semester) => {
             const semesterNum = parseInt(semester);
-            if (semesterNum >= 1 && semesterNum <= 8) {
-            return `Semester ${semesterNum}`;
-            }
-            return semester || '-';
+            return (semesterNum >= 1 && semesterNum <= 8) ? `Semester ${semesterNum}` : (semester || '-');
         };
+
         const card = `
-            <div class="p-4 border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
-                <div class="flex items-start space-x-3">
-                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-gradient-to-r gradient-bg to-blue-light flex items-center justify-center text-white font-semibold text-lg">
-                        ${nilai.semester.charAt(0)}
+            <div class="p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200">
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-gradient-to-r from-blue-600 to-blue-400 flex items-center justify-center text-white font-bold text-lg shadow-sm">
+                        ${nilai.semester.toString().charAt(0)}
                     </div>
+                    
                     <div class="flex-1 min-w-0">
-                        <div class="flex items-center justify-between mb-2">
-                            <h3 class="text-lg font-semibold text-gray-900 truncate">${getSemesterLabel(nilai.semester)}</h3>
-                            <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full">
-                                ${nilai.ip_semester || '-'}
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="text-base font-bold text-gray-900 truncate">
+                                ${getSemesterLabel(nilai.semester)}
+                            </h3>
+                            <span class="px-2.5 py-0.5 text-xs font-bold rounded-full bg-blue-100 text-blue-700 border border-blue-200">
+                                IP ${nilai.ip_semester || '0.00'}
                             </span>
                         </div>
-                        <div class="space-y-1 text-sm text-gray-600">
-                            <div class="flex items-center">
-                                <i class="fas fa-calendar-alt w-4 mr-2 text-orange-primary"></i>
-                                <span>${nilai.tahunakademik.tahun_akademik}</span>
+                        
+                        <div class="space-y-2">
+                            <div class="flex items-center text-sm text-gray-600">
+                                <i class="fas fa-calendar-alt w-4 mr-2 text-blue-500"></i>
+                                <span>Tahun: ${nilai.tahunakademik?.tahun_akademik || '-'}</span>
                             </div>
-                            <div class="flex mt-4 space-x-2">
-                                <button class="edit-btn flex-1 px-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all" data-id="${nilai.id}">
-                                    <i class="fas fa-edit"></i> Edit
+                            
+                            <div class="flex space-x-2 pt-2">
+                                <button class="edit-btn flex-1 py-2 bg-yellow-500 text-white rounded-lg text-sm font-semibold hover:bg-yellow-600 transition-all shadow-sm" data-id="${nilai.id}">
+                                    <i class="fas fa-edit mr-1"></i> Edit
                                 </button>
-                                <button class="delete-btn flex-1 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all" data-id="${nilai.id}" data-name="${nilai.semester}">
-                                    <i class="fas fa-trash"></i> Hapus
+                                <button class="delete-btn flex-1 py-2 bg-red-500 text-white rounded-lg text-sm font-semibold hover:bg-red-600 transition-all shadow-sm" data-id="${nilai.id}" data-name="${nilai.semester}">
+                                    <i class="fas fa-trash mr-1"></i> Hapus
                                 </button>
                             </div>
                         </div>
