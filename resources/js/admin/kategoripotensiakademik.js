@@ -20,8 +20,8 @@ function renderTable(data) {
     if (data.length === 0) {
         tableKategorisoal.append(`
             <tr>
-                <td colspan="5" class="px-6 py-8 text-center text-gray-500">
-                    <i class="fas fa-info-circle text-gray-400 mr-2"></i>
+                <td colspan="5" class="px-6 py-10 text-center text-gray-500">
+                    <i class="fas fa-info-circle text-gray-300 text-4xl mb-3 block"></i>
                     Tidak ada data ditemukan
                 </td>
             </tr>
@@ -52,36 +52,74 @@ function renderTable(data) {
         let actionButton = '';
 
         if (sudahSelesai) {
-            statusKategori = `<span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full"><i class="fas fa-check-circle mr-1"></i> Selesai </span>`;
-            actionButton = `<span class="inline-flex items-center gap-2 px-4 py-2 bg-gray-300 text-gray-600 rounded-lg cursor-not-allowed" title="Anda sudah menyelesaikan kategori ini"><i class="fas fa-lock"></i> Terkunci</span>`;
-        } else if (adaKategoriSelesai) { 
-            statusKategori = `<span class="px-2 py-1 bg-gray-100 text-gray-500 text-xs font-semibold rounded-full"><i class="fas fa-lock mr-1"></i> Terkunci</span>`;
-            actionButton = `<span class="inline-flex items-center gap-2 px-4 py-2 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed" title="Kategori terkunci karena sudah menyelesaikan kategori lain"><i class="fas fa-lock"></i> Terkunci</span>`;
-        } else if (kategorisoal.is_active == 1) {
-            statusKategori = `<span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full"><i class="fas fa-play-circle mr-1"></i> Aktif</span>`;
-            actionButton = `<a href="/admin/potensiakademik/soal?kategori_id=${kategorisoal.id}" class="inline-flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all" title="Kerjakan soal kategori ${kategorisoal.name}"><i class="fas fa-play"></i> Kerjakan</a>`;
-        } else {
-            statusKategori = `<span class="px-2 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded-full"><i class="fas fa-ban mr-1"></i> Tidak Aktif</span>`;
-            actionButton = `<span class="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-500 rounded-lg cursor-not-allowed"><i class="fas fa-ban"></i> Tidak tersedia</span>`;
+            statusKategori = `<span class="px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-700 border border-blue-300">Selesai</span>`;
+            actionButton = `
+                <span class="inline-flex items-center px-3 py-1.5 bg-gray-100 text-gray-400 border border-gray-300 rounded-lg cursor-not-allowed shadow-sm">
+                    <i class="fas fa-lock mr-1.5"></i> Terkunci
+                </span>`;
+        } 
+        else if (adaKategoriSelesai) { 
+            statusKategori = `<span class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-700 border border-gray-300">Terkunci</span>`;
+            actionButton = `
+                <span class="inline-flex items-center px-3 py-1.5 bg-gray-100 text-gray-400 border border-gray-300 rounded-lg cursor-not-allowed shadow-sm">
+                    <i class="fas fa-lock mr-1.5"></i> Terkunci
+                </span>`;
+        } 
+        else if (kategorisoal.is_active == 1) {
+            statusKategori = `<span class="px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700 border border-green-300">Aktif</span>`;
+            actionButton = `
+                <a href="/admin/potensiakademik/soal?kategori_id=${kategorisoal.id}" 
+                   class="inline-flex items-center px-3 py-1.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all shadow-sm">
+                    <i class="fas fa-play mr-1.5"></i> Kerjakan
+                </a>`;
+        } 
+        else {
+            statusKategori = `<span class="px-3 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-700 border border-red-300">Tidak Aktif</span>`;
+            actionButton = `
+                <span class="inline-flex items-center px-3 py-1.5 bg-gray-100 text-gray-400 border border-gray-300 rounded-lg cursor-not-allowed shadow-sm">
+                    <i class="fas fa-ban mr-1.5"></i> Tidak tersedia
+                </span>`;
         }
 
+        const avatarChar = kategorisoal.name ? kategorisoal.name.charAt(0).toUpperCase() : '-';
+
         const row = `
-            <tr class="hover:bg-gray-50 transition-colors duration-200">
-                <td class="px-6 py-4 text-sm text-gray-900">${index + 1}</td>
-                <td class="px-6 py-4 text-sm font-medium text-gray-900">${kategorisoal.name}</td>
-                <td class="px-6 py-4 text-sm text-gray-900">${kategorisoal.waktu_pengerjaan} menit</td>
-                <td class="px-6 py-4 text-sm">${statusKategori}</td>
-                <td class="px-6 py-4 text-sm">${actionButton}</td>
+            <tr class="hover:bg-gray-50 transition-colors duration-200 border-b border-gray-100">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    ${index + 1}
+                </td>
+
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 h-10 w-10">
+                            <div class="h-10 w-10 rounded-full bg-gradient-to-r from-blue-600 to-blue-400 flex items-center justify-center text-white font-bold shadow-sm">
+                                ${avatarChar}
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <div class="text-sm font-semibold text-gray-900">${kategorisoal.name}</div>
+                            <div class="text-xs text-gray-500">Kategori Soal</div>
+                        </div>
+                    </div>
+                </td>
+
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-medium">
+                    ${kategorisoal.waktu_pengerjaan} menit
+                </td>
+
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                    ${statusKategori}
+                </td>
+
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    ${actionButton}
+                </td>
             </tr>
         `;
 
         tableKategorisoal.append(row);
     });
-
 }
-
-
-
 
 // Render mobile cards khusus kategorisoal (hanya name + aksi edit/hapus)
 function renderCards(data) {
@@ -90,32 +128,78 @@ function renderCards(data) {
 
     if (data.length === 0) {
         cardContainer.append(`
-            <div class="p-6 text-center text-gray-500">
-                <i class="fas fa-info-circle text-gray-400 mr-2"></i>
-                Tidak ada data ditemukan
+            <div class="p-10 text-center text-gray-500 bg-white rounded-2xl border border-dashed border-gray-300">
+                <i class="fas fa-folder-open text-gray-300 text-4xl mb-3 block"></i>
+                Tidak ada kategori soal ditemukan
             </div>
         `);
         return;
     }
 
+    // ===== CEK APAKAH SUDAH ADA KATEGORI SELESAI =====
+    const adaKategoriSelesai = data.some(k => 
+        k.hasil_ujians && k.hasil_ujians.length > 0 && k.hasil_ujians[0].status === 'selesai'
+    );
+
     data.forEach((kategorisoal) => {
+        const userId = CURRENT_USER_ID; 
+        const loginRole = CURRENT_USER_ROLE;
+        let sudahSelesai = false;
+
+        // Logika pengecekan status (Sama dengan tabel)
+        if (kategorisoal.hasil_ujians && kategorisoal.hasil_ujians.length > 0) {
+            if (loginRole == 9) {
+                sudahSelesai = kategorisoal.hasil_ujians[0].status === 'selesai';
+            } else {
+                sudahSelesai = kategorisoal.hasil_ujians.some(hasil => hasil.mahasiswa_id === userId && hasil.status === 'selesai');
+            }
+        }
+
+        let statusBadge = '';
+        let actionButton = '';
+
+        if (sudahSelesai) {
+            statusBadge = `<span class="px-2.5 py-1 text-[10px] font-bold rounded-lg bg-blue-100 text-blue-700 border border-blue-200 uppercase">Selesai</span>`;
+            actionButton = `<button disabled class="w-full py-2.5 bg-gray-100 text-gray-400 rounded-xl text-xs font-bold border border-gray-200 cursor-not-allowed uppercase"><i class="fas fa-lock mr-1"></i> Terkunci</button>`;
+        } 
+        else if (adaKategoriSelesai) { 
+            statusBadge = `<span class="px-2.5 py-1 text-[10px] font-bold rounded-lg bg-gray-100 text-gray-600 border border-gray-200 uppercase">Terkunci</span>`;
+            actionButton = `<button disabled class="w-full py-2.5 bg-gray-100 text-gray-400 rounded-xl text-xs font-bold border border-gray-200 cursor-not-allowed uppercase"><i class="fas fa-lock mr-1"></i> Terkunci</button>`;
+        } 
+        else if (kategorisoal.is_active == 1) {
+            statusBadge = `<span class="px-2.5 py-1 text-[10px] font-bold rounded-lg bg-green-100 text-green-700 border border-green-200 uppercase">Aktif</span>`;
+            actionButton = `
+                <a href="/admin/potensiakademik/soal?kategori_id=${kategorisoal.id}" 
+                   class="block w-full text-center py-2.5 bg-green-500 text-white rounded-xl text-xs font-bold hover:bg-green-600 shadow-md shadow-green-100 transition-all active:scale-95 uppercase">
+                    <i class="fas fa-play mr-1"></i> Kerjakan
+                </a>`;
+        } 
+        else {
+            statusBadge = `<span class="px-2.5 py-1 text-[10px] font-bold rounded-lg bg-red-100 text-red-700 border border-red-200 uppercase">Non-Aktif</span>`;
+            actionButton = `<button disabled class="w-full py-2.5 bg-gray-50 text-gray-300 rounded-xl text-xs font-bold border border-gray-100 cursor-not-allowed uppercase">Tidak Tersedia</button>`;
+        }
+
+        const avatarChar = kategorisoal.name ? kategorisoal.name.charAt(0).toUpperCase() : '?';
+
         const card = `
-            <div class="p-4 border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
-                <div class="flex items-center space-x-3">
-                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-gradient-to-r gradient-bg to-blue-light flex items-center justify-center text-white font-semibold text-lg">
-                        ${kategorisoal.name.charAt(0)}
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <h3 class="text-lg font-semibold text-gray-900 truncate mb-2">${kategorisoal.name}</h3>
-                        <div class="flex mt-4 space-x-2">
-                            <button class="edit-btn flex-1 px-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all" data-id="${kategorisoal.id}">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="delete-btn flex-1 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all" data-id="${kategorisoal.id}" data-name="${kategorisoal.name}">
-                                <i class="fas fa-trash"></i> Hapus
-                            </button>
+            <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm mb-4 transition-all hover:shadow-md">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center text-white font-bold shadow-sm transform -rotate-3 text-lg">
+                            ${avatarChar}
+                        </div>
+                        <div class="max-w-[160px]">
+                            <h3 class="text-sm font-extrabold text-gray-900 truncate uppercase tracking-tight">${kategorisoal.name}</h3>
+                            <div class="flex items-center text-[11px] text-gray-400 font-medium mt-0.5">
+                                <i class="far fa-clock mr-1"></i> ${kategorisoal.waktu_pengerjaan} Menit
+                            </div>
                         </div>
                     </div>
+                    ${statusBadge}
+                </div>
+
+                <div class="flex space-x-2 mt-2">
+                    ${actionButton}
                 </div>
             </div>
         `;
