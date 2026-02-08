@@ -53,7 +53,7 @@
     ]
   },
   "resources/js/admin/alumniadmin.js": {
-    "file": "assets/alumniadmin-B4FsnDo0.js",
+    "file": "assets/alumniadmin-DPae5GQy.js",
     "name": "alumniadmin",
     "src": "resources/js/admin/alumniadmin.js",
     "isEntry": true,
@@ -179,7 +179,7 @@
     ]
   },
   "resources/js/admin/pbsaktif.js": {
-    "file": "assets/pbsaktif-ZQvxKEGv.js",
+    "file": "assets/pbsaktif-BCR0m1VO.js",
     "name": "pbsaktif",
     "src": "resources/js/admin/pbsaktif.js",
     "isEntry": true,
@@ -188,7 +188,7 @@
     ]
   },
   "resources/js/admin/pendaftaranpbs.js": {
-    "file": "assets/pendaftaranpbs-BUAMJh3q.js",
+    "file": "assets/pendaftaranpbs-C5--M4Zg.js",
     "name": "pendaftaranpbs",
     "src": "resources/js/admin/pendaftaranpbs.js",
     "isEntry": true,

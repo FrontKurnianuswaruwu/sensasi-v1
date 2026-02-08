@@ -1,16 +1,4 @@
 import $ from 'jquery';
-tailwind.config = {
-    theme: {
-        extend: {
-            colors: {
-                'orange-primary': '#FF6B35',
-                'orange-light': '#FF8A65',
-                'blue-primary': '#1E40AF',
-                'blue-light': '#3B82F6'
-            }
-        }
-    }
-}
 $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

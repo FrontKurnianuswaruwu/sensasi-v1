@@ -104,7 +104,7 @@
 
         </div>
     </div>
-
+</div>
     <div id="alumniModal" class="fixed inset-0 z-50 hidden">
         <div class="modal-overlay absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
             <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-md">
@@ -378,7 +378,6 @@
         window.defaultAvatar = "{{ asset('img/default-avatar.jpg') }}";
     </script>
 
-</main>
 @vite(['resources/css/user.css','resources/js/admin/pbsaktif.js'])
 
 @endsection

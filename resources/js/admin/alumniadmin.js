@@ -1,16 +1,4 @@
 import $ from 'jquery';
-tailwind.config = {
-    theme: {
-        extend: {
-            colors: {
-                'orange-primary': '#FF6B35',
-                'orange-light': '#FF8A65',
-                'blue-primary': '#1E40AF',
-                'blue-light': '#3B82F6'
-            }
-        }
-    }
-}
 $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -20,6 +8,31 @@ $.ajaxSetup({
 
 let currentPage = 1;
 const rowsPerPage = 10;
+
+function formatTanggal(dateStr) {
+    if (!dateStr) return '-';
+    const bulan = [
+    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+    const d = new Date(dateStr);
+    if (isNaN(d)) return '-';
+    return `${d.getDate()} ${bulan[d.getMonth()]} ${d.getFullYear()}`;
+}
+function formatRupiah(angka) {
+    if (!angka) return '';
+    let numberString = angka.toString().replace(/[^,\d]/g, '');
+    let split = numberString.split(',');
+    let sisa = split[0].length % 3;
+    let rupiah = split[0].substr(0, sisa);
+    let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+    if (ribuan) {
+        let separator = sisa ? '.' : '';
+        rupiah += separator + ribuan.join('.');
+    }
+    rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+    return 'Rp ' + rupiah;
+}
 
 // Render desktop table
 function renderTable(data) {
