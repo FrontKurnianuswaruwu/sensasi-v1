@@ -104,7 +104,7 @@
 
         <!-- Footer -->
         <div class="text-center mt-6 text-white/60 text-xs slide-in" style="animation-delay: 0.4s;">
-            <p>&copy; 2024 SENSASI Dashboard. Semua hak dilindungi.</p>
+            <p>&copy; 2026 SENSASI Dashboard. Semua hak dilindungi.</p>
         </div>
     </div>
 
