@@ -81,7 +81,7 @@
 
                     <a href="{{ route('user.kreatif.index') }}" 
                     class="nav-link font-medium {{ Route::is('user.kreatif.index') ? 'text-sky-600' : 'text-gray-700 hover:text-sky-600' }}">
-                    Kolom Creative
+                    Kolom Kreativitas
                     </a>
 
                     <a href="{{ route('user.kontak.index') }}" 
@@ -109,7 +109,7 @@
                     <a href="{{ route('user.mitra.index') }}" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Mitra</a>
                     <a href="{{ route('user.berita.index') }}" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Berita</a>
                     <a href="{{ route('user.sensasiclub.index') }}" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Sensasi Club</a>
-                    <a href="{{ route('user.kreatif.index') }}" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Kolom Creative</a>
+                    <a href="{{ route('user.kreatif.index') }}" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Kolom Kreativitas</a>
                     <a href="{{ route('user.kontak.index') }}" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Kontak</a>
                 </div>
             </div>
@@ -137,7 +137,7 @@
                     <h4 class="font-bold text-lg mb-4">Program</h4>
                     <ul class="space-y-2 text-gray-400">
                         <li><a href="#club" class="hover:text-white transition">Sensasi Club</a></li>
-                        <li><a href="#creative" class="hover:text-white transition">Kolom Creative</a></li>
+                        <li><a href="#creative" class="hover:text-white transition">Kolom Kreativitas</a></li>
                     </ul>
                 </div>
                 <div>
