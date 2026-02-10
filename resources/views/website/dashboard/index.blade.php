@@ -470,7 +470,7 @@
     </div>
 </section>
 
-<!-- Kolom Creative Section -->
+<!-- Kolom Kreativitas Section -->
 <section id="creative" class="py-20 px-4 bg-white">
     <div class="max-w-7xl mx-auto">
         <div class="text-center mb-16">
