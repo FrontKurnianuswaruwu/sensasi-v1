@@ -265,62 +265,74 @@
         </div>
 
         <!-- Featured News -->
-        <div class="mb-12">
-            @foreach ($databerita->take(1) as $berita )
-                <div class="card-hover bg-white rounded-2xl shadow-xl overflow-hidden grid md:grid-cols-2 gap-0">
-                    <div class="bg-gray-200 aspect-video w-full overflow-hidden">
-                        <img src="{{ $berita->foto }}" loading="lazy" alt="Foto" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-8 flex flex-col h-full">
-                        <span class="inline-block w-fit self-start bg-sky-100 text-sky-800 text-xs font-semibold px-3 py-1 rounded-full mb-4">
-                            {{ $berita->ketegori }}
-                        </span>
-                        <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4">{{ $berita->judul }}</h3>
-                        <p class="text-gray-600 mb-6">{{ Str::limit(strip_tags($berita->deskripsi), 80, '...') }}</p>
-                        <div class="flex items-center justify-between mt-auto">
-                            <div class="text-sm text-gray-500">
-                                <i class="fas fa-calendar mr-2"></i>{{ $berita->created_at->format('d M Y') }}
-                                <i class="fas fa-clock ml-4 mr-2"></i>{{ $berita->created_at->format('H:i') }}
+        @if($databerita->count() > 0)
+            <div class="mb-12">
+                @foreach ($databerita->take(1) as $berita )
+                    <div class="card-hover bg-white rounded-2xl shadow-xl overflow-hidden grid md:grid-cols-2 gap-0">
+                        <div class="bg-gray-200 aspect-video w-full overflow-hidden">
+                            <img src="{{ $berita->foto }}" loading="lazy" alt="Foto" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-8 flex flex-col h-full">
+                            <span class="inline-block w-fit self-start bg-sky-100 text-sky-800 text-xs font-semibold px-3 py-1 rounded-full mb-4">
+                                {{ $berita->ketegori }}
+                            </span>
+                            <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4">{{ $berita->judul }}</h3>
+                            <p class="text-gray-600 mb-6">{{ Str::limit(strip_tags($berita->deskripsi), 80, '...') }}</p>
+                            <div class="flex items-center justify-between mt-auto">
+                                <div class="text-sm text-gray-500">
+                                    <i class="fas fa-calendar mr-2"></i>{{ $berita->created_at->format('d M Y') }}
+                                    <i class="fas fa-clock ml-4 mr-2"></i>{{ $berita->created_at->format('H:i') }}
+                                </div>
+                                <a href="{{ route('user.berita.detail', $berita->id) }}" class="text-sky-800 hover:text-sky-700 font-semibold">
+                                    Baca Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
+                                </a>
                             </div>
-                            <a href="{{ route('user.berita.detail', $berita->id) }}" class="text-sky-800 hover:text-sky-700 font-semibold">
-                                Baca Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <!-- News Grid -->
+            <div class="flex flex-wrap justify-center gap-8">
+                @foreach ($databerita->slice(1) as $berita )
+                    <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden w-full md:w-[calc(50%-2rem)] lg:w-[calc(33.333%-2rem)] min-w-[300px]">
+                        <div class="bg-gray-200 h-48 flex items-center justify-center">
+                            <img src="{{ $berita->foto }}" alt="Foto" loading="lazy" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-6">
+                            <span class="inline-block bg-sky-100 text-sky-800 text-xs font-semibold px-3 py-1 rounded-full mb-3">
+                                {{ $berita->ketegori }}
+                            </span>
+                            <h4 class="font-bold text-lg text-gray-800 mb-3">{{ $berita->judul }}</h4>
+                            <p class="text-gray-600 text-sm mb-4">{{ Str::limit(strip_tags($berita->deskripsi), 80, '...') }}</p>
+                            <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
+                                <span><i class="fas fa-calendar mr-1"></i>{{ $berita->created_at->format('d M Y') }}</span>
+                                <span><i class="fas fa-clock mr-1"></i>{{ $berita->created_at->format('H:i') }}</span>
+                            </div>
+                            <a href="{{ route('user.berita.detail', $berita->id) }}" class="text-sky-600 hover:text-sky-700 font-medium text-sm">
+                                Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
                             </a>
                         </div>
                     </div>
-                </div>
-            @endforeach
-        </div>
+                @endforeach
+            </div>
 
-        <!-- News Grid -->
-        <div class="flex flex-wrap justify-center gap-8">
-            @foreach ($databerita->slice(1) as $berita )
-                <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden w-full md:w-[calc(50%-2rem)] lg:w-[calc(33.333%-2rem)] min-w-[300px]">
-                    <div class="bg-gray-200 h-48 flex items-center justify-center">
-                        <img src="{{ $berita->foto }}" alt="Foto" loading="lazy" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6">
-                        <span class="inline-block bg-sky-100 text-sky-800 text-xs font-semibold px-3 py-1 rounded-full mb-3">
-                            {{ $berita->ketegori }}
-                        </span>
-                        <h4 class="font-bold text-lg text-gray-800 mb-3">{{ $berita->judul }}</h4>
-                        <p class="text-gray-600 text-sm mb-4">{{ Str::limit(strip_tags($berita->deskripsi), 80, '...') }}</p>
-                        <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
-                            <span><i class="fas fa-calendar mr-1"></i>{{ $berita->created_at->format('d M Y') }}</span>
-                            <span><i class="fas fa-clock mr-1"></i>{{ $berita->created_at->format('H:i') }}</span>
-                        </div>
-                        <a href="{{ route('user.berita.detail', $berita->id) }}" class="text-sky-600 hover:text-sky-700 font-medium text-sm">
-                            Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
-                        </a>
-                    </div>
+            <div class="text-center mt-12">
+                <a href="#" class="inline-block bg-sky-800 text-white px-8 py-3 rounded-full font-semibold hover:bg-sky-700 transition">
+                    Lihat Semua Berita <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        @else
+            <div class="text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-sky-50 rounded-full mb-6">
+                    <i class="fas fa-newspaper text-4xl text-sky-300"></i>
                 </div>
-            @endforeach
-        </div>
-
-        <div class="text-center mt-12">
-            <a href="#" class="inline-block bg-sky-800 text-white px-8 py-3 rounded-full font-semibold hover:bg-sky-700 transition">
-                Lihat Semua Berita <i class="fas fa-arrow-right ml-2"></i>
-            </a>
-        </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Belum Ada Berita</h3>
+                <p class="text-gray-500 max-w-md mx-auto">
+                    Mohon maaf, saat ini belum ada berita atau pembaruan terkini yang tersedia. Silakan cek kembali dalam waktu dekat!
+                </p>
+            </div>
+        @endif
     </div>
 </section>
 
@@ -346,10 +358,10 @@
         <!-- Anggota Tab -->
         <div id="anggota-tab" class="tab-content">
             <div class="flex flex-wrap justify-center gap-8">
-                @foreach ($datasensasiclub as $sensasiclub )
+                @forelse ($datasensasiclub as $sensasiclub)
                     <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden text-center w-full sm:w-[calc(50%-2rem)] lg:w-[calc(25%-2rem)] min-w-[250px]">
                         <div class="bg-gray-200 h-48 flex items-center justify-center">
-                        <img src="{{ $sensasiclub->mahasiswa->foto }}" loading="lazy" alt="Foto" class="w-full h-full object-cover">
+                            <img src="{{ $sensasiclub->mahasiswa->foto }}" loading="lazy" alt="Foto" class="w-full h-full object-cover">
                         </div>
                         <div class="p-6">
                             <h4 class="font-bold text-lg text-gray-800 mb-1">{{ $sensasiclub->mahasiswa->user->name ?? '-' }}</h4>
@@ -359,12 +371,25 @@
                             </a>
                         </div>
                     </div>
-                @endforeach
+                @empty
+                    {{-- Tampilan Cantik saat Anggota Kosong --}}
+                    <div class="w-full py-16 px-4 text-center">
+                        <div class="inline-flex items-center justify-center w-24 h-24 bg-gray-100 rounded-full mb-6">
+                            <i class="fas fa-users text-4xl text-gray-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Belum Ada Anggota</h3>
+                        <p class="text-gray-500 max-w-sm mx-auto">
+                            Daftar anggota Sensasi Club belum tersedia untuk saat ini. Tetap pantau untuk pembaruan selanjutnya!
+                        </p>
+                    </div>
+                @endforelse
             </div>
 
             @if ($datasensasiclubcount > 4)
-                <div class="mt-6 text-center"> <a href="#" class="text-sky-800 hover:text-sky-700 font-semibold">
-                        Lihat Lainnya <i class="fas fa-arrow-right ml-2"></i>
+                <div class="mt-10 text-center"> 
+                    <a href="#" class="inline-flex items-center text-sky-800 hover:text-sky-700 font-semibold group">
+                        Lihat Lainnya 
+                        <i class="fas fa-arrow-right ml-2 transition-transform group-hover:translate-x-1"></i>
                     </a>
                 </div>
             @endif
@@ -434,6 +459,12 @@
                             </a>
                     </div>
                 @endif
+                @if($datasensasiclubkaryawan->isEmpty() && $datasensasiclubartikel->isEmpty())
+                    <div class="text-center py-20">
+                        <img src="https://illustrations.popsy.co/amber/no-data.svg" class="w-48 mx-auto mb-4" alt="Empty">
+                        <p class="text-gray-500 font-medium">Wah, belum ada karya yang dipajang di sini.</p>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -443,11 +474,11 @@
 <section id="creative" class="py-20 px-4 bg-white">
     <div class="max-w-7xl mx-auto">
         <div class="text-center mb-16">
-            <h2 class="section-title text-4xl md:text-5xl font-bold text-gray-800 mb-4">Kolom Creative</h2>
+            <h2 class="section-title text-4xl md:text-5xl font-bold text-gray-800 mb-4">Kreativitas</h2>
         </div>
 
         <div class="flex flex-wrap justify-center gap-8">
-            @foreach ($datakreative as $kreative )
+            @forelse($datakreative as $kreative )
                 <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden w-full md:w-[calc(50%-2rem)] lg:w-[calc(33.333%-2rem)] min-w-[300px]">
                     <a href="{{ route('user.kreatif.detail', $kreative->id) }}">
                         <div class="bg-gradient-to-br from-sky-100 via-yellow-200 to-sky-100 h-64 flex items-center justify-center relative overflow-hidden">
@@ -474,7 +505,17 @@
                         </a>
                     </div>
                 </div>
-            @endforeach
+            @empty
+                <div class="w-full py-20 flex flex-col items-center justify-center bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+                    <div class="bg-sky-100 p-6 rounded-full mb-4">
+                        <i class="fas fa-folder-open text-5xl text-sky-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800">Belum Ada Karya Kreatif</h3>
+                    <p class="text-gray-500 mt-2 text-center max-w-sm">
+                        Sepertinya belum ada artikel atau karya yang diunggah saat ini. Silakan cek kembali nanti!
+                    </p>
+                </div>
+            @endforelse
         </div>
     </div>
 </section>
