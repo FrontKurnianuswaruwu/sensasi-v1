@@ -411,7 +411,7 @@ $(document).on('click', '.edit-btn', function() {
         success: function(pilihan) {
             $('#pilihanId').val(pilihan.id);
             $('#pilihan').val(pilihan.teks);
-            $('#status').val(pilihan.is_true ? '1' : '0');
+            $('#status').val((pilihan.is_true == 1 || pilihan.is_true === true) ? '1' : '0');
             showModal('pilihanModal');
         },
         error: function(xhr) {
