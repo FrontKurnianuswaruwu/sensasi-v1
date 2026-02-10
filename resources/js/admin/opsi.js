@@ -30,7 +30,7 @@ function renderTable(data) {
     }
 
     data.forEach((pilihan, index) => {
-        let statusPilihan = pilihan.is_true
+        let statusPilihan = (pilihan.is_true == 1 || pilihan.is_true === true) 
             ? '<span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">Benar</span>'
             : '<span class="px-2 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded-full">Salah</span>';
         const row = `
