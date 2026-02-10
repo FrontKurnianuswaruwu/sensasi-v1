@@ -15,7 +15,7 @@
         </div>
 
         <div class="flex flex-wrap justify-center gap-8">
-            @foreach ($datakreative as $kreative )
+            @forelse($datakreative as $kreative )
                 <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden w-full md:w-[calc(50%-2rem)] lg:w-[calc(33.333%-2rem)] min-w-[300px]">
                     <a href="{{ route('user.kreatif.detail', $kreative->id) }}">
                         <div class="bg-gradient-to-br from-sky-100 via-yellow-200 to-sky-100 h-64 flex items-center justify-center relative overflow-hidden">
@@ -42,7 +42,17 @@
                         </a>
                     </div>
                 </div>
-            @endforeach
+            @empty
+                <div class="w-full py-20 flex flex-col items-center justify-center bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+                    <div class="bg-sky-100 p-6 rounded-full mb-4">
+                        <i class="fas fa-folder-open text-5xl text-sky-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800">Belum Ada Karya Kreatif</h3>
+                    <p class="text-gray-500 mt-2 text-center max-w-sm">
+                        Sepertinya belum ada artikel atau karya yang diunggah saat ini. Silakan cek kembali nanti!
+                    </p>
+                </div>
+            @endforelse
         </div>
 
     </div>

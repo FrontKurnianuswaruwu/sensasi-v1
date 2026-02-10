@@ -40,15 +40,33 @@ class DashboardController extends Controller
         $userid = $user->id;
         $userstatus = $user->status_user;
         $countalumni = Alumni::count();
+        $countmitra = Mitra::count();
+        $countprogram = Program::count();
+
         if ($userrole == 19) {
             $mitraId = $user->mitra_id;
             $countalumni = Alumni::where('mitra_id', $mitraId)->count();
+
+            $countpbsaktif = BiodataMahasiswa::whereHas('user', function($query) use ($mitraId) {
+                $query->where('status_user', 'Aktif')
+                      ->where('mitra_id', $mitraId);
+            })->count();
+
+            $countbiodata = BiodataMahasiswa::whereHas('user', function($query) use ($mitraId) {
+                $query->where('status_user', 'Tidak Aktif')
+                      ->where('mitra_id', $mitraId);
+            })->count();
+            
+        } else {
+            $countpbsaktif = BiodataMahasiswa::whereHas('user', function($query) {
+                $query->where('status_user', 'Aktif');
+            })->count();
+
+            $countbiodata = BiodataMahasiswa::whereHas('user', function($query) {
+                $query->where('status_user', 'Tidak Aktif');
+            })->count();
         }
-        $countmitra = Mitra::count();
-        $countprogram = Program::count();
-        $countpbsaktif = BiodataMahasiswa::whereHas('user', function($query) {
-            $query->where('status_user', 'Aktif');
-        })->count();
+            
         $countpendaftarpbs = BiodataMahasiswa::whereHas('user', function($query) {
             $query->where('status_user', 'Verifikasi');
         })->count();
@@ -68,13 +86,23 @@ class DashboardController extends Controller
         // total count pengajuan dana yang statusnya approved
         $countpengajuandana = Pengajuandana::where('status', 'approved')
             ->when($userrole == 9, function($query) use ($idmahasiswa) {
-                $query->where('mahasiswa_id', $idmahasiswa->id ?? 0);
+            $query->where('mahasiswa_id', $idmahasiswa->id ?? 0);
+            })
+            ->when($userrole == 19, function($query) use ($mitraId) {
+            $query->whereHas('mahasiswa.user', function($subquery) use ($mitraId) {
+                $subquery->where('mitra_id', $mitraId);
+            });
             })
             ->count();
 
         $countpengajuandanaproses = Pengajuandana::where('status', 'pending')
             ->when($userrole == 9, function($query) use ($idmahasiswa) {
-                $query->where('mahasiswa_id', $idmahasiswa->id ?? 0);
+            $query->where('mahasiswa_id', $idmahasiswa->id ?? 0);
+            })
+            ->when($userrole == 19, function($query) use ($mitraId) {
+            $query->whereHas('mahasiswa.user', function($subquery) use ($mitraId) {
+                $subquery->where('mitra_id', $mitraId);
+            });
             })
             ->count();
 

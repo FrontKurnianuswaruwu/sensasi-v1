@@ -26,7 +26,7 @@
 
         <div id="anggota-tab" class="tab-content animate-fade-in">
             <div class="flex flex-wrap justify-center gap-8">
-                @foreach ($datasensasiclub as $sensasiclub )
+                @forelse ($datasensasiclub as $sensasiclub)
                     <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden text-center w-full sm:w-[calc(50%-2rem)] lg:w-[calc(25%-2rem)] min-w-[250px]">
                         <div class="bg-gray-200 h-48 flex items-center justify-center">
                         <img src="{{ $sensasiclub->mahasiswa->foto }}" loading="lazy" alt="Foto" class="w-full h-full object-cover">
@@ -39,7 +39,18 @@
                             </a>
                         </div>
                     </div>
-                @endforeach
+                @empty
+                    {{-- Tampilan Cantik saat Anggota Kosong --}}
+                    <div class="w-full py-16 px-4 text-center">
+                        <div class="inline-flex items-center justify-center w-24 h-24 bg-gray-100 rounded-full mb-6">
+                            <i class="fas fa-users text-4xl text-gray-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Belum Ada Anggota</h3>
+                        <p class="text-gray-500 max-w-sm mx-auto">
+                            Daftar anggota Sensasi Club belum tersedia untuk saat ini. Tetap pantau untuk pembaruan selanjutnya!
+                        </p>
+                    </div>
+                @endforelse
             </div>
         </div>
 
@@ -99,6 +110,12 @@
                         </div>
                     @endforeach
                 </div>
+                @if($datasensasiclubkaryawan->isEmpty() && $datasensasiclubartikel->isEmpty())
+                    <div class="text-center py-20">
+                        <img src="https://illustrations.popsy.co/amber/no-data.svg" class="w-48 mx-auto mb-4" alt="Empty">
+                        <p class="text-gray-500 font-medium">Wah, belum ada karya yang dipajang di sini.</p>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

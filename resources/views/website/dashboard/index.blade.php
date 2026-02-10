@@ -200,7 +200,7 @@
         </div>
 
         @if ($countmitra > 3)
-            <div class="mt-6 text-center"> <a href="#" class="text-sky-800 hover:text-sky-700 font-semibold">
+            <div class="mt-6 text-center"> <a href="{{ route('user.mitra.index') }}" class="text-sky-800 hover:text-sky-700 font-semibold">
                     Lihat Lainnya <i class="fas fa-arrow-right ml-2"></i>
                 </a>
             </div>
