@@ -481,7 +481,15 @@ function checkSequentialValidation() {
         let isComplete = true;
 
         const $fieldsToCheck = $currentContent.find('[required]:not([type="file"])');
-
+        
+        if (currentTab === 'biodata') {
+            const photoInput = document.getElementById('foto');
+            // Jika input foto ada dan masih kosong, maka dianggap belum lengkap
+            if (photoInput && photoInput.files.length === 0) {
+                isComplete = false;
+                console.warn("Validation: Foto profil wajib diunggah.");
+            }
+        }
         $fieldsToCheck.each(function() {
             const value = $(this).val();
             

@@ -87,7 +87,7 @@
                                         Gunakan foto formal format <span class="text-white font-bold">JPG/PNG</span> (Maks. 500KB).
                                     </p>
 
-                                    <input type="file" id="foto" name="foto" accept="image/*" class="hidden" required>
+                                    <input type="file" id="foto" name="foto" accept="image/*" class="hidden">
 
                                     <div class="flex items-center gap-3 pt-2">
                                         <div class="px-3 py-1.5 bg-white/10 border border-white/20 rounded-xl flex items-center gap-2">
