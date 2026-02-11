@@ -61,23 +61,15 @@
                             <div class="relative flex flex-col md:flex-row items-center gap-8 px-10 py-8">
                                 <div class="relative group">
                                     <div class="absolute -inset-1 bg-gradient-to-r from-white to-blue-400 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-                                    <div class="relative w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl bg-gray-50 group">
+                                    <div class="relative w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl bg-gray-50">
                                         <img id="fotoPreview"
                                             src="https://ui-avatars.com/api/?name=Mahasiswa&background=random"
-                                            class="w-full h-full object-cover transform transition duration-500"
+                                            class="w-full h-full object-cover transform transition duration-500 group-hover:scale-110"
                                             alt="Foto Mahasiswa">
                                     </div>
-
-                                    {{-- @if($userstatus == 'Biodata') --}}
-                                        <label for="foto" class="absolute bottom-1 right-1 w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center border-4 border-white cursor-pointer hover:bg-orange-600 transition-all shadow-lg">
-                                            <i class="fas fa-camera text-sm"></i>
-                                        </label>
-                                        <input type="file" id="foto" name="foto" class="hidden" accept="image/*">
-                                    {{-- @else
-                                        <div class="absolute bottom-1 right-1 w-8 h-8 bg-gray-400 text-white rounded-full flex items-center justify-center border-2 border-white shadow-lg">
-                                            <i class="fas fa-lock text-xs"></i>
-                                        </div>
-                                    @endif --}}
+                                    <label for="foto" class="absolute bottom-1 right-1 w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center border-4 border-white cursor-pointer hover:bg-orange-600 transition-all shadow-lg">
+                                        <i class="fas fa-camera text-sm"></i>
+                                    </label>
                                 </div>
 
                                 <div class="space-y-2 flex-1"> 
