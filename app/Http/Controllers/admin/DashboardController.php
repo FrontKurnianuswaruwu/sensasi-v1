@@ -42,9 +42,9 @@ class DashboardController extends Controller
         $countalumni = Alumni::count();
         $countmitra = Mitra::count();
         $countprogram = Program::count();
+        $mitraId = $user->mitra_id;
 
         if ($userrole == 19) {
-            $mitraId = $user->mitra_id;
             $countalumni = Alumni::where('mitra_id', $mitraId)->count();
 
             $countpbsaktif = BiodataMahasiswa::whereHas('user', function($query) use ($mitraId) {
