@@ -178,21 +178,40 @@ class BiodatamahasiswaController extends Controller
         }
 
         $akademik = AkademikMahasiswa::where('user_id', $id)->first();
+        $user = User::find($id);
+        $biodata = BiodataMahasiswa::where('user_id', $id)->first();
+
+        //cek kalo ada nim yang sama maka gak boleh tapi kalo nim dia sama nggak apa apa
+        if ($request->nim) {
+            $cekNim = BiodataMahasiswa::where('nim', trim($request->nim))
+                ->where('user_id', '!=', $id)
+                ->whereNotNull('nim')
+                ->first();
+            if ($cekNim) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'NIM sudah digunakan oleh mahasiswa lain'
+                ], 400);
+            }
+        }
+
+
         $isNew = false;
         if (!$akademik) {
             $akademik = new AkademikMahasiswa();
             $akademik->user_id = $id;
             $isNew = true;
         }
-
         $akademik->tahun_akademik_id = $request->tahun_akademik;
         $akademik->mitra_id = $request->universitas;
         $akademik->fakultas = $request->fakultas;
         $akademik->program_studi = $request->program_studi;
         $akademik->semester = $request->semester;
         $akademik->ip_terakhir = $request->ip_terakhir;
+        $biodata->nim = $request->nim;
 
         $akademik->save();
+        $biodata->save();
 
         return response()->json([
             'status' => 'success',
@@ -229,14 +248,7 @@ class BiodatamahasiswaController extends Controller
         $orangtua->jumlah_tanggungan = $request->jumlah_tanggungan;
         $orangtua->no_wa_ortu = $request->no_wa_ortu;
 
-        $orangtua->save();
-
-        // update status_user jadi Potensi Akademik
-        $user = User::find($id);
-        if ($user->status_user == 'Biodata') {
-            $user->status_user = 'Potensi Akademik';
-            $user->save();
-        }
+        $orangtua->save();    
 
         return response()->json([
             'status' => 'success',
@@ -308,6 +320,12 @@ class BiodatamahasiswaController extends Controller
                 $file->move($destinationPath, $filename);
                 $dokumen->$field = $folder.$filename;
             }
+        }
+
+        $user = User::find($id);
+        if ($user->status_user == 'Biodata') {
+            $user->status_user = 'Potensi Akademik';
+            $user->save();
         }
 
         $dokumen->save();

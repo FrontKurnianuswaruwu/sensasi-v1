@@ -33,19 +33,19 @@
             
 
             <div class="flex flex-wrap border-b border-gray-200">
-                <button class="tab-btn w-1/2 sm:w-auto py-3 px-4 text-blue-primary font-medium border-b-4 border-blue-light flex items-center gap-2" data-tab="biodata">
+                <button class="tab-btn active w-1/2 sm:w-auto py-3 px-4 text-blue-primary font-medium border-b-4 border-blue-light flex items-center gap-2" data-tab="biodata">
                     <i class="fas fa-user"></i> Data Pribadi
                 </button>
 
-                <button class="tab-btn w-1/2 sm:w-auto py-3 px-4 text-gray-600 hover:text-blue-primary flex items-center gap-2" data-tab="akademik">
+                <button class="tab-btn opacity-50 cursor-not-allowed w-1/2 sm:w-auto py-3 px-4 text-gray-600 hover:text-blue-primary flex items-center gap-2" data-tab="akademik">
                     <i class="fas fa-graduation-cap"></i> Akademik
                 </button>
 
-                <button class="tab-btn w-1/2 sm:w-auto py-3 px-4 text-gray-600 hover:text-blue-primary flex items-center gap-2" data-tab="orangtua">
+                <button class="tab-btn opacity-50 cursor-not-allowed w-1/2 sm:w-auto py-3 px-4 text-gray-600 hover:text-blue-primary flex items-center gap-2" data-tab="orangtua">
                     <i class="fas fa-users"></i> Orang Tua
                 </button>
 
-                <button class="tab-btn w-1/2 sm:w-auto py-3 px-4 text-gray-600 hover:text-blue-primary flex items-center gap-2" data-tab="dokumen">
+                <button class="tab-btn opacity-50 cursor-not-allowed w-1/2 sm:w-auto py-3 px-4 text-gray-600 hover:text-blue-primary flex items-center gap-2" data-tab="dokumen">
                     <i class="fas fa-file-alt"></i> Dokumen
                 </button>
             </div>
@@ -61,15 +61,23 @@
                             <div class="relative flex flex-col md:flex-row items-center gap-8 px-10 py-8">
                                 <div class="relative group">
                                     <div class="absolute -inset-1 bg-gradient-to-r from-white to-blue-400 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-                                    <div class="relative w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl bg-gray-50">
+                                    <div class="relative w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl bg-gray-50 group">
                                         <img id="fotoPreview"
                                             src="https://ui-avatars.com/api/?name=Mahasiswa&background=random"
-                                            class="w-full h-full object-cover transform transition duration-500 group-hover:scale-110"
+                                            class="w-full h-full object-cover transform transition duration-500 {{ $userstatus == 'Biodata' ? 'group-hover:scale-110' : '' }}"
                                             alt="Foto Mahasiswa">
                                     </div>
-                                    <label for="foto" class="absolute bottom-1 right-1 w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center border-4 border-white cursor-pointer hover:bg-orange-600 transition-all shadow-lg">
-                                        <i class="fas fa-camera text-sm"></i>
-                                    </label>
+
+                                    @if($userstatus == 'Biodata')
+                                        <label for="foto" class="absolute bottom-1 right-1 w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center border-4 border-white cursor-pointer hover:bg-orange-600 transition-all shadow-lg">
+                                            <i class="fas fa-camera text-sm"></i>
+                                        </label>
+                                        <input type="file" id="foto" name="foto" class="hidden" accept="image/*">
+                                    @else
+                                        <div class="absolute bottom-1 right-1 w-8 h-8 bg-gray-400 text-white rounded-full flex items-center justify-center border-2 border-white shadow-lg">
+                                            <i class="fas fa-lock text-xs"></i>
+                                        </div>
+                                    @endif
                                 </div>
 
                                 <div class="space-y-2 flex-1"> 
@@ -79,7 +87,7 @@
                                         Gunakan foto formal format <span class="text-white font-bold">JPG/PNG</span> (Maks. 500KB).
                                     </p>
 
-                                    <input type="file" id="foto" name="foto" accept="image/*" class="hidden">
+                                    <input type="file" id="foto" name="foto" accept="image/*" class="hidden" required>
 
                                     <div class="flex items-center gap-3 pt-2">
                                         <div class="px-3 py-1.5 bg-white/10 border border-white/20 rounded-xl flex items-center gap-2">
@@ -112,7 +120,7 @@
                                         </div>
                                         <input type="text" id="nama" name="nama"
                                             class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-300 text-gray-700 font-medium placeholder:text-gray-300"
-                                            placeholder="Nama sesuai ijazah">
+                                            placeholder="Nama sesuai ijazah" readonly required>
                                     </div>
                                 </div>
 
@@ -126,7 +134,7 @@
                                         </div>
                                         <input type="number" id="nik" name="nik"
                                             class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-300 text-gray-700 font-medium placeholder:text-gray-300"
-                                            placeholder="16 digit angka">
+                                            placeholder="16 digit angka" {{ $userstatus == 'Biodata' ? '' : 'readonly' }} required>
                                     </div>
                                 </div>
 
@@ -139,7 +147,7 @@
                                             <i class="fas fa-venus-mars text-sm"></i>
                                         </div>
                                         <select id="jenis_kelamin" name="jenis_kelamin" 
-                                            class="w-full pl-11 pr-10 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-300 text-gray-700 font-medium appearance-none cursor-pointer">
+                                            class="w-full pl-11 pr-10 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-300 text-gray-700 font-medium appearance-none cursor-pointer" {{ $userstatus == 'Biodata' ? '' : 'disabled' }} required>
                                             <option value="">Pilih Jenis Kelamin</option>
                                             <option value="Laki-laki">Laki-laki</option>
                                             <option value="Perempuan">Perempuan</option>
@@ -152,12 +160,12 @@
 
                                 <div class="group space-y-2">
                                     <label class="font-bold text-sm text-gray-700">Tempat Lahir</label>
-                                    <input type="text" id="tempat_lahir" name="tempat_lahir" class="w-full px-5 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 transition-all placeholder:text-gray-300" placeholder="Kota kelahiran">
+                                    <input type="text" id="tempat_lahir" name="tempat_lahir" class="w-full px-5 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 transition-all placeholder:text-gray-300" placeholder="Kota kelahiran" {{ $userstatus == 'Biodata' ? '' : 'readonly' }} required>
                                 </div>
 
                                 <div class="group space-y-2">
                                     <label class="font-bold text-sm text-gray-700">Tanggal Lahir</label>
-                                    <input type="date" id="tanggal_lahir" name="tanggal_lahir" class="w-full px-5 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 transition-all">
+                                    <input type="date" id="tanggal_lahir" name="tanggal_lahir" class="w-full px-5 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 transition-all" {{ $userstatus == 'Biodata' ? '' : 'readonly' }} required>
                                 </div>
                             </div>
                         </div>
@@ -173,7 +181,7 @@
                                 <label class="font-bold text-sm text-gray-700">Alamat Lengkap (KTP)</label>
                                 <textarea id="alamat_ktp" name="alamat_ktp" rows="3" 
                                     class="w-full px-5 py-4 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all" 
-                                    placeholder="Jl. Nama Jalan, No. Rumah, RT/RW, Desa/Kelurahan, Kecamatan"></textarea>
+                                    placeholder="Jl. Nama Jalan, No. Rumah, RT/RW, Desa/Kelurahan, Kecamatan" {{ $userstatus == 'Biodata' ? '' : 'readonly' }} required></textarea>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -181,14 +189,14 @@
                                     <label class="font-bold text-sm text-gray-700">WhatsApp</label>
                                     <div class="flex">
                                         <span class="inline-flex items-center px-4 rounded-l-2xl border-2 border-r-0 border-gray-100 bg-gray-100 text-gray-500 font-bold text-sm">+62</span>
-                                        <input type="number" id="no_wa" name="no_wa" class="w-full px-4 py-3.5 bg-white border-2 border-gray-100 rounded-r-2xl focus:border-blue-500 transition-all" placeholder="812xxx">
+                                        <input type="number" id="no_wa" name="no_wa" class="w-full px-4 py-3.5 bg-white border-2 border-gray-100 rounded-r-2xl focus:border-blue-500 transition-all" placeholder="812xxx" {{ $userstatus == 'Biodata' ? '' : 'readonly' }} required>
                                     </div>
                                 </div>
                                 
                                 <div class="space-y-2">
                                     <label class="font-bold text-sm text-gray-700">Agama</label>
                                     <div class="relative">
-                                        <select id="agama" name="agama" class="w-full px-5 py-3.5 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 appearance-none cursor-pointer">
+                                        <select id="agama" name="agama" class="w-full px-5 py-3.5 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 appearance-none cursor-pointer" {{ $userstatus == 'Biodata' ? '' : 'disabled' }} required>
                                             <option value="">Pilih Agama</option>
                                             <option value="Islam">Islam</option>
                                             <option value="Kristen">Kristen</option>
@@ -207,9 +215,9 @@
                                 <div class="space-y-2">
                                     <label class="font-bold text-sm text-gray-700">Status</label>
                                     <div class="relative">
-                                        <select name="status_pernikahan" class="w-full px-5 py-3.5 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 appearance-none cursor-pointer">
-                                            <option>Belum Menikah</option>
-                                            <option>Menikah</option>
+                                        <select name="status_pernikahan" class="w-full px-5 py-3.5 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 appearance-none cursor-pointer" {{ $userstatus == 'Biodata' ? '' : 'disabled' }} required>
+                                            <option value="Belum Menikah">Belum Menikah</option>
+                                            <option value="Menikah">Menikah</option>
                                         </select>
                                         <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-gray-400">
                                             <i class="fas fa-chevron-down text-xs"></i>
@@ -223,11 +231,13 @@
                             <div class="hidden md:block">
                                 <p class="text-xs text-gray-400 italic">* Pastikan semua data sudah benar sebelum menyimpan.</p>
                             </div>
-                            <button type="submit" id="submit"
-                                class="group relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-300 bg-orange-500 rounded-2xl hover:bg-orange-600 focus:ring-4 focus:ring-orange-200 active:scale-95 shadow-lg shadow-orange-500/30">
-                                <span class="mr-2"><i class="fas fa-save group-hover:rotate-12 transition-transform"></i></span>
-                                Simpan Perubahan Biodata
-                            </button>
+                            @if ($userstatus == "Biodata")
+                                <button type="submit" id="submit"
+                                    class="group relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-300 bg-orange-500 rounded-2xl hover:bg-orange-600 focus:ring-4 focus:ring-orange-200 active:scale-95 shadow-lg shadow-orange-500/30">
+                                    <span class="mr-2"><i class="fas fa-save group-hover:rotate-12 transition-transform"></i></span>
+                                    Simpan Perubahan Biodata
+                                </button>
+                            @endif
                         </div>
                     </form>
                 </div>
@@ -262,7 +272,7 @@
                                     <label for="universitas" class="block text-sm font-bold text-gray-700 group-focus-within:text-blue-600 transition-colors">Universitas / Perguruan Tinggi</label>
                                     <div class="relative">
                                         <select id="universitas" name="universitas"
-                                            class="w-full px-5 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all appearance-none cursor-pointer text-gray-600 font-medium">
+                                            class="w-full px-5 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all appearance-none cursor-pointer text-gray-600 font-medium" {{ $userstatus == 'Biodata' ? '' : 'disabled' }} required>
                                             </select>
                                         <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-gray-400">
                                             <i class="fas fa-chevron-down text-xs"></i>
@@ -274,7 +284,7 @@
                                     <label for="tahun_akademik" class="block text-sm font-bold text-gray-700 group-focus-within:text-blue-600 transition-colors">Tahun Akademik Aktif</label>
                                     <div class="relative">
                                         <select id="tahun_akademik" name="tahun_akademik"
-                                            class="w-full px-5 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all appearance-none cursor-pointer text-gray-600 font-medium">
+                                            class="w-full px-5 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all appearance-none cursor-pointer text-gray-600 font-medium" {{ $userstatus == 'Biodata' ? '' : 'disabled' }} required>
                                             </select>
                                         <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-gray-400">
                                             <i class="fas fa-calendar-check text-xs"></i>
@@ -283,17 +293,26 @@
                                 </div>
 
                                 <div class="group space-y-2">
+                                    <label for="nim" class="block text-sm font-bold text-gray-700 group-focus-within:text-blue-600 transition-colors">Nomor Induk Mahasiswa (NIM)</label>
+                                    <div class="relative">
+                                        <input type="text" id="nim" name="nim"
+                                            class="w-full px-5 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 transition-all text-gray-600 font-medium placeholder:text-gray-300"
+                                            placeholder="Contoh: 2010123456" {{ $userstatus == 'Biodata' ? '' : 'readonly' }} required>
+                                    </div>
+                                </div>
+
+                                <div class="group space-y-2">
                                     <label for="fakultas" class="block text-sm font-bold text-gray-700 group-focus-within:text-blue-600">Nama Fakultas</label>
                                     <input type="text" id="fakultas" name="fakultas"
                                         class="w-full px-5 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 transition-all text-gray-600 font-medium placeholder:text-gray-300"
-                                        placeholder="Contoh: Fakultas Ilmu Komputer">
+                                        placeholder="Contoh: Fakultas Ilmu Komputer" {{ $userstatus == 'Biodata' ? '' : 'readonly' }} required>
                                 </div>
 
                                 <div class="group space-y-2">
                                     <label for="program_studi" class="block text-sm font-bold text-gray-700 group-focus-within:text-blue-600">Program Studi</label>
                                     <input type="text" id="program_studi" name="program_studi"
                                         class="w-full px-5 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 transition-all text-gray-600 font-medium placeholder:text-gray-300"
-                                        placeholder="Contoh: Teknik Informatika">
+                                        placeholder="Contoh: Teknik Informatika" {{ $userstatus == 'Biodata' ? '' : 'readonly' }} required>
                                 </div>
                             </div>
                         </div>
@@ -311,7 +330,7 @@
                                     <label for="semester" class="block text-sm font-bold text-gray-700">Semester Saat Ini</label>
                                     <div class="relative">
                                         <select id="semester" name="semester"
-                                            class="w-full px-5 py-4 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 transition-all appearance-none text-gray-600 font-bold">
+                                            class="w-full px-5 py-4 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 transition-all appearance-none text-gray-600 font-bold" {{ $userstatus == 'Biodata' ? '' : 'disabled' }} required>
                                             <option value="">Pilih Semester</option>
                                             @for ($i = 1; $i <= 8; $i++)
                                                 <option value="{{ $i }}">Semester {{ $i }}</option>
@@ -331,7 +350,7 @@
                                         </div>
                                         <input type="number" step="0.01" id="ip_terakhir" name="ip_terakhir" min="0" max="4"
                                             class="w-full pl-12 pr-5 py-4 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 transition-all text-gray-700 font-bold placeholder:text-gray-300"
-                                            placeholder="0.00">
+                                            placeholder="0.00" {{ $userstatus == 'Biodata' ? '' : 'readonly' }} required>
                                     </div>
                                     <p class="text-[10px] text-gray-400 mt-1">* Masukkan IP semester terakhir (bukan IPK akumulatif)</p>
                                 </div>
@@ -344,14 +363,15 @@
                                     <i class="fas fa-info-circle mr-1"></i> Data akademik akan diverifikasi oleh sistem.
                                 </p>
                             </div>
-                            
-                            <button type="submit" id="submitakademik"
-                                class="group relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-300 bg-orange-500 rounded-2xl hover:bg-orange-600 focus:ring-4 focus:ring-orange-200 active:scale-95 shadow-lg shadow-orange-500/30">
-                                <span class="mr-2">
-                                    <i class="fas fa-save group-hover:rotate-12 transition-transform"></i>
-                                </span>
-                                Simpan Data Akademik
-                            </button>
+                            @if ($userstatus == "Biodata")
+                                <button type="submit" id="submitakademik"
+                                    class="group relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-300 bg-orange-500 rounded-2xl hover:bg-orange-600 focus:ring-4 focus:ring-orange-200 active:scale-95 shadow-lg shadow-orange-500/30">
+                                    <span class="mr-2">
+                                        <i class="fas fa-save group-hover:rotate-12 transition-transform"></i>
+                                    </span>
+                                    Simpan Data Akademik
+                                </button>
+                            @endif
                         </div>
                     </form>
                 </div>
@@ -377,21 +397,21 @@
                                         <label class="block text-xs font-bold text-gray-500 mb-2 group-focus-within:text-blue-600 transition-colors">NAMA LENGKAP AYAH</label>
                                         <input type="text" id="nama_ayah" name="nama_ayah"
                                             class="w-full px-5 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-700 font-medium"
-                                            placeholder="Masukkan nama ayah">
+                                            placeholder="Masukkan nama ayah" {{ $userstatus == 'Biodata' ? '' : 'readonly' }} required>
                                     </div>
 
                                     <div class="group">
                                         <label class="block text-xs font-bold text-gray-500 mb-2 group-focus-within:text-blue-600">PEKERJAAN</label>
                                         <input type="text" id="pekerjaan_ayah" name="pekerjaan_ayah"
                                             class="w-full px-5 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 transition-all text-gray-700 font-medium"
-                                            placeholder="Contoh: PNS, Wiraswasta">
+                                            placeholder="Contoh: PNS, Wiraswasta" {{ $userstatus == 'Biodata' ? '' : 'readonly' }} required>
                                     </div>
 
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div class="group">
                                             <label class="block text-xs font-bold text-gray-500 mb-2">PENDIDIKAN</label>
                                             <select id="pendidikan_ayah" name="pendidikan_ayah"
-                                                class="w-full px-4 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:border-blue-500 appearance-none text-gray-600 font-medium">
+                                                class="w-full px-4 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:border-blue-500 appearance-none text-gray-600 font-medium" {{ $userstatus == 'Biodata' ? '' : 'disabled' }} required>
                                                 <option value="">Pilih</option>
                                                 <option value="SD">SD</option>
                                                 <option value="SMP">SMP</option>
@@ -406,7 +426,7 @@
                                             <label class="block text-xs font-bold text-gray-500 mb-2">PENGHASILAN (RP)</label>
                                             <input type="text" id="penghasilan_ayah" name="penghasilan_ayah"
                                                 class="w-full px-4 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:border-blue-500 transition-all text-gray-700 font-bold rupiah-input"
-                                                placeholder="0">
+                                                placeholder="0" {{ $userstatus == 'Biodata' ? '' : 'readonly' }} required>
                                         </div>
                                     </div>
                                 </div>
@@ -428,21 +448,21 @@
                                         <label class="block text-xs font-bold text-gray-500 mb-2 group-focus-within:text-pink-600 transition-colors">NAMA LENGKAP IBU</label>
                                         <input type="text" id="nama_ibu" name="nama_ibu"
                                             class="w-full px-5 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-pink-500 focus:ring-4 focus:ring-pink-500/10 transition-all text-gray-700 font-medium"
-                                            placeholder="Masukkan nama ibu">
+                                            placeholder="Masukkan nama ibu" {{ $userstatus == 'Biodata' ? '' : 'readonly' }} required>
                                     </div>
 
                                     <div class="group">
                                         <label class="block text-xs font-bold text-gray-500 mb-2 group-focus-within:text-pink-600">PEKERJAAN</label>
                                         <input type="text" id="pekerjaan_ibu" name="pekerjaan_ibu"
                                             class="w-full px-5 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-pink-500 transition-all text-gray-700 font-medium"
-                                            placeholder="Contoh: Ibu Rumah Tangga">
+                                            placeholder="Contoh: Ibu Rumah Tangga" {{ $userstatus == 'Biodata' ? '' : 'readonly' }} required>
                                     </div>
 
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div class="group">
                                             <label class="block text-xs font-bold text-gray-500 mb-2">PENDIDIKAN</label>
                                             <select id="pendidikan_ibu" name="pendidikan_ibu"
-                                                class="w-full px-4 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:border-pink-500 appearance-none text-gray-600 font-medium">
+                                                class="w-full px-4 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:border-pink-500 appearance-none text-gray-600 font-medium" {{ $userstatus == 'Biodata' ? '' : 'disabled' }} required>
                                                 <option value="">Pilih</option>
                                                 <option value="SD">SD</option>
                                                 <option value="SMP">SMP</option>
@@ -457,7 +477,7 @@
                                             <label class="block text-xs font-bold text-gray-500 mb-2">PENGHASILAN (RP)</label>
                                             <input type="text" id="penghasilan_ibu" name="penghasilan_ibu"
                                                 class="w-full px-4 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:border-pink-500 transition-all text-gray-700 font-bold rupiah-input"
-                                                placeholder="0">
+                                                placeholder="0" {{ $userstatus == 'Biodata' ? '' : 'readonly' }} required>
                                         </div>
                                     </div>
                                 </div>
@@ -470,25 +490,27 @@
                                     <label class="block text-xs font-bold text-gray-500 mb-2"><i class="fas fa-users mr-2 text-blue-500"></i>JUMLAH TANGGUNGAN</label>
                                     <input type="number" id="jumlah_tanggungan" name="jumlah_tanggungan"
                                         class="w-full px-5 py-3.5 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 transition-all text-gray-700 font-bold"
-                                        placeholder="Jumlah anak yang masih sekolah">
+                                        placeholder="Jumlah anak yang masih sekolah" {{ $userstatus == 'Biodata' ? '' : 'readonly' }} required>
                                 </div>
                                 <div class="group">
                                     <label class="block text-xs font-bold text-gray-500 mb-2"><i class="fab fa-whatsapp mr-2 text-green-500"></i>NO. WA ORANG TUA/WALI</label>
                                     <input type="text" id="no_wa_ortu" name="no_wa_ortu"
                                         class="w-full px-5 py-3.5 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 transition-all text-gray-700 font-bold"
-                                        placeholder="08123456789">
+                                        placeholder="08123456789" {{ $userstatus == 'Biodata' ? '' : 'readonly' }} required>
                                 </div>
                             </div>
                         </div>
-
+                        
                         <div class="flex items-center justify-end pt-4">
-                            <button type="submit" id="submitorangtua"
-                                class="group relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-300 bg-orange-500 rounded-2xl hover:bg-orange-600 focus:ring-4 focus:ring-orange-200 active:scale-95 shadow-lg shadow-orange-500/30">
-                                <span class="mr-2">
-                                    <i class="fas fa-save group-hover:rotate-12 transition-transform"></i>
-                                </span>
-                                Simpan Data Orang Tua
-                            </button>
+                            @if ($userstatus == "Biodata")
+                                <button type="submit" id="submitorangtua"
+                                    class="group relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-300 bg-orange-500 rounded-2xl hover:bg-orange-600 focus:ring-4 focus:ring-orange-200 active:scale-95 shadow-lg shadow-orange-500/30">
+                                    <span class="mr-2">
+                                        <i class="fas fa-save group-hover:rotate-12 transition-transform"></i>
+                                        </span>
+                                        Simpan Data Orang Tua
+                                </button>
+                            @endif
                         </div>
                     </form>
                 </div>
@@ -514,7 +536,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="file" id="scan_ktp" name="scan_ktp" accept="application/pdf"
-                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer">
+                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" {{ $userstatus == 'Biodata' ? '' : 'disabled' }} required>
                                     <div class="p-4 border-2 border-dashed border-gray-200 rounded-xl group-hover:border-orange-400 bg-white transition-all flex items-center justify-between shadow-sm">
                                         <div class="flex items-center gap-3 overflow-hidden">
                                             <i class="fas fa-file-pdf text-gray-300 text-xl group-hover:text-orange-500"></i>
@@ -531,7 +553,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="file" id="scan_kartu_mahasiswa" name="scan_kartu_mahasiswa" accept="application/pdf"
-                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer">
+                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" {{ $userstatus == 'Biodata' ? '' : 'disabled' }} required>
                                     <div class="p-4 border-2 border-dashed border-gray-200 rounded-xl group-hover:border-orange-400 bg-white transition-all flex items-center justify-between shadow-sm">
                                         <div class="flex items-center gap-3 overflow-hidden">
                                             <i class="fas fa-id-badge text-gray-300 text-xl group-hover:text-orange-500"></i>
@@ -548,7 +570,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="file" id="scan_kk" name="scan_kk" accept="application/pdf"
-                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer">
+                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" {{ $userstatus == 'Biodata' ? '' : 'disabled' }} required>
                                     <div class="p-4 border-2 border-dashed border-gray-200 rounded-xl group-hover:border-orange-400 bg-white transition-all flex items-center justify-between shadow-sm">
                                         <div class="flex items-center gap-3 overflow-hidden">
                                             <i class="fas fa-users text-gray-300 text-xl group-hover:text-orange-500"></i>
@@ -565,7 +587,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="file" id="transkrip_nilai" name="transkrip_nilai" accept="application/pdf"
-                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer">
+                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" {{ $userstatus == 'Biodata' ? '' : 'disabled' }} required>
                                     <div class="p-4 border-2 border-dashed border-gray-200 rounded-xl group-hover:border-orange-400 bg-white transition-all flex items-center justify-between shadow-sm">
                                         <div class="flex items-center gap-3 overflow-hidden">
                                             <i class="fas fa-graduation-cap text-gray-300 text-xl group-hover:text-orange-500"></i>
@@ -582,7 +604,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="file" id="surat_keterangan_aktif" name="surat_keterangan_aktif" accept="application/pdf"
-                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer">
+                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" {{ $userstatus == 'Biodata' ? '' : 'disabled' }} required>
                                     <div class="p-4 border-2 border-dashed border-gray-200 rounded-xl group-hover:border-orange-400 bg-white transition-all flex items-center justify-between shadow-sm">
                                         <div class="flex items-center gap-3 overflow-hidden">
                                             <i class="fas fa-file-contract text-gray-300 text-xl group-hover:text-orange-500"></i>
@@ -599,7 +621,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="file" id="foto_profil" name="foto_profil" accept="image/*"
-                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer">
+                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" {{ $userstatus == 'Biodata' ? '' : 'disabled' }} required>
                                     <div class="p-4 border-2 border-dashed border-gray-200 rounded-xl group-hover:border-orange-400 bg-white transition-all flex items-center justify-between shadow-sm">
                                         <div class="flex items-center gap-3 overflow-hidden">
                                             <i class="fas fa-camera text-gray-300 text-xl group-hover:text-orange-500"></i>
@@ -616,7 +638,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="file" id="essay_motivasi" name="essay_motivasi" accept="application/pdf"
-                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer">
+                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" {{ $userstatus == 'Biodata' ? '' : 'disabled' }} required>
                                     <div class="p-4 border-2 border-dashed border-gray-200 rounded-xl group-hover:border-orange-400 bg-white transition-all flex items-center justify-between shadow-sm">
                                         <div class="flex items-center gap-3 overflow-hidden">
                                             <i class="fas fa-pen-nib text-gray-300 text-xl group-hover:text-orange-500"></i>
@@ -633,7 +655,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="file" id="sertifikat_prestasi" name="sertifikat_prestasi" accept="application/pdf"
-                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer">
+                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" {{ $userstatus == 'Biodata' ? '' : 'disabled' }} required>
                                     <div class="p-4 border-2 border-dashed border-gray-200 rounded-xl group-hover:border-orange-400 bg-white transition-all flex items-center justify-between shadow-sm">
                                         <div class="flex items-center gap-3 overflow-hidden">
                                             <i class="fas fa-medal text-gray-300 text-xl group-hover:text-orange-500"></i>
@@ -646,10 +668,12 @@
                         </div>
 
                         <div class="flex justify-start pt-6 border-t border-gray-200">
-                            <button type="submit" id="submitdokumen"
-                                class="px-8 py-4 text-white bg-orange-500 border border-orange-500 rounded-xl hover:bg-orange-600 focus:ring-4 focus:ring-orange-200 transition-all duration-300 font-bold shadow-lg shadow-orange-500/30">
-                                <i class="fas fa-save mr-2"></i>Simpan Dokumen
-                            </button>
+                            @if ($userstatus == "Biodata")
+                                <button type="submit" id="submitdokumen"
+                                    class="px-8 py-4 text-white bg-orange-500 border border-orange-500 rounded-xl hover:bg-orange-600 focus:ring-4 focus:ring-orange-200 transition-all duration-300 font-bold shadow-lg shadow-orange-500/30">
+                                    <i class="fas fa-save mr-2"></i>Simpan Dokumen
+                                </button>
+                            @endif
                         </div>
                     </form>
                 </div>    

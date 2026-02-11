@@ -11,32 +11,26 @@ $(function() {
 });
 
 function loadTahunAkademik(selectedType = '') {
-    $.get('/admin/biodata/gettahunakademik', function(response) {
+    // Tambahkan return agar loadData tahu kapan ini selesai
+    return $.get('/admin/biodata/gettahunakademik', function(response) {
         const tahunakademiks = Array.isArray(response.data) ? response.data : [];
-        $('#tahun_akademik').empty();
-        $('#tahun_akademik').append('<option value="">Pilih Tahun Akademik</option>');
-
+        $('#tahun_akademik').empty().append('<option value="">Pilih Tahun Akademik</option>');
         tahunakademiks.forEach(function(tahunakademik) {
             var selected = tahunakademik.id == selectedType ? 'selected' : '';
             $('#tahun_akademik').append(`<option value="${tahunakademik.id}" ${selected}>${tahunakademik.tahun_akademik}</option>`);
         });
-    }).fail(function() {
-        alert('Gagal mengambil data tahun akademik. Pastikan API berjalan dengan benar.');
     });
 }
 
 function loadMitra(selectedType = '') {
-    $.get('/admin/biodata/getmitra', function(response) {
+    // Tambahkan return
+    return $.get('/admin/getmitra', function(response) {
         const mitras = Array.isArray(response.data) ? response.data : [];
-        $('#universitas').empty();
-        $('#universitas').append('<option value="">Pilih Universitas</option>');
-
+        $('#universitas').empty().append('<option value="">Pilih Universitas</option>');
         mitras.forEach(function(mitra) {
             var selected = mitra.id == selectedType ? 'selected' : '';
             $('#universitas').append(`<option value="${mitra.id}" ${selected}>${mitra.nama_mitra}</option>`);
         });
-    }).fail(function() {
-        alert('Gagal mengambil data tahun akademik. Pastikan API berjalan dengan benar.');
     });
 }
 
@@ -47,6 +41,8 @@ function loadData() {
         dataType: "json",
         success: function(res) {
             const user = res.data;
+            const biodata = user.biodata_mahasiswa;
+
             console.log("Data biodata mahasiswa diterima:", user);
 
             if (!user || !user.biodata_mahasiswa) {
@@ -54,7 +50,6 @@ function loadData() {
                 return;
             }
 
-            const biodata = user.biodata_mahasiswa;
 
             // 🧩 Isi otomatis semua input form
             $('#user_id').val(biodata.user_id);
@@ -77,37 +72,29 @@ function loadData() {
                 $('#fotoPreview').attr('src', '/img/default-avatar.jpg');
             }
 
-            // Tambahan (kalau kamu punya data akademik/orangtua/dokumen)
-            if (user.akademik) fillAkademik(user.akademik);
+            let promises = [];
+            if (user.akademik) {
+                promises.push(loadTahunAkademik(user.akademik.tahun_akademik_id));
+                promises.push(loadMitra(user.akademik.mitra_id));
+                
+                $('#fakultas').val(user.akademik.fakultas);
+                $('#program_studi').val(user.akademik.program_studi);
+                $('#semester').val(user.akademik.semester);
+                $('#ip_terakhir').val(user.akademik.ip_terakhir);
+                $('#tahun_akademik_id').val(user.akademik.tahun_akademik_id);
+            }
             if (user.orangtua) fillOrangtua(user.orangtua);
             if (user.dokumen) fillDokumen(user.dokumen);
+            Promise.all(promises).then(() => {
+                console.log("Semua data (termasuk dropdown) sudah siap!");
+                checkSequentialValidation();
+            });
         },
         error: function(xhr, status, error) {
             console.error("Gagal ambil data:", error, xhr.responseText);
         }
     });
 }
-
-const rupiahInputs = ['#penghasilan_ibu', '#penghasilan_ayah'];
-
-rupiahInputs.forEach(selector => {
-    $(document).on('input', selector, function () {
-        let cursorPos = this.selectionStart;
-        let value = $(this).val();
-
-        // ambil angka saja
-        let number = value.replace(/[^0-9]/g, '');
-
-        // format rupiah
-        let formatted = formatRupiah(number);
-
-        $(this).val(formatted);
-
-        // kembalikan posisi kursor
-        let diff = formatted.length - value.length;
-        this.setSelectionRange(cursorPos + diff, cursorPos + diff);
-    });
-});
 
 function formatRupiah(angka) {
     if (!angka) return '';
@@ -122,18 +109,6 @@ function formatRupiah(angka) {
     }
 
     return 'Rp ' + rupiah;
-}
-
-
-// Fungsi isi form akademik
-function fillAkademik(a) {
-    $('#fakultas').val(a.fakultas);
-    $('#program_studi').val(a.program_studi);
-    $('#semester').val(a.semester);
-    $('#ip_terakhir').val(a.ip_terakhir);
-    $('#tahun_akademik_id').val(a.tahun_akademik_id);
-    loadTahunAkademik(a.tahun_akademik_id);
-    loadMitra(a.mitra_id);
 }
 
 // Fungsi isi form orangtua
@@ -161,6 +136,26 @@ function fillDokumen(d) {
     toggleDokumenPreview('#sertifikat_prestasi', d.sertifikat_prestasi);
 }
 
+const rupiahInputs = ['#penghasilan_ibu', '#penghasilan_ayah'];
+
+rupiahInputs.forEach(selector => {
+    $(document).on('input', selector, function () {
+        let cursorPos = this.selectionStart;
+        let value = $(this).val();
+
+        // ambil angka saja
+        let number = value.replace(/[^0-9]/g, '');
+
+        // format rupiah
+        let formatted = formatRupiah(number);
+
+        $(this).val(formatted);
+
+        // kembalikan posisi kursor
+        let diff = formatted.length - value.length;
+        this.setSelectionRange(cursorPos + diff, cursorPos + diff);
+    });
+});
 
 // Fungsi bantu untuk tampilkan tombol preview dokumen
 function toggleDokumenPreview(selector, filePath) {
@@ -474,3 +469,42 @@ $('#foto').on('change', function () {
     };
     reader.readAsDataURL(file);
 });
+const tabOrder = ['biodata', 'akademik', 'orangtua', 'dokumen'];
+function checkSequentialValidation() {
+    tabOrder.forEach((currentTab, index) => {
+        const nextTab = tabOrder[index + 1];
+        if (!nextTab) return;
+
+        const $currentContent = $(`#${currentTab}`);
+        const $nextTabBtn = $(`[data-tab="${nextTab}"]`);
+        
+        let isComplete = true;
+
+        const $fieldsToCheck = $currentContent.find('[required]:not([type="file"])');
+
+        $fieldsToCheck.each(function() {
+            const value = $(this).val();
+            
+            if (!value || value.toString().trim() === "") {
+                isComplete = false;
+                console.warn(`Validation: Field ${$(this).attr('name')} masih kosong.`);
+                return false;
+            }
+        });
+
+        if (isComplete) {
+            console.log(`✅ Tab ${currentTab} lengkap, membuka tab ${nextTab}`);
+            $nextTabBtn.prop('disabled', false)
+                       .removeClass('opacity-50 cursor-not-allowed')
+                       .addClass('hover:text-blue-primary');
+        } else {
+            for (let i = index + 1; i < tabOrder.length; i++) {
+                $(`[data-tab="${tabOrder[i]}"]`)
+                    .prop('disabled', true)
+                    .addClass('opacity-50 cursor-not-allowed')
+                    .removeClass('hover:text-blue-primary');
+            }
+        }
+    });
+}
+
