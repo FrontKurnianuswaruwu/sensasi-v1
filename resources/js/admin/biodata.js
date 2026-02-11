@@ -85,10 +85,10 @@ function loadData() {
             }
             if (user.orangtua) fillOrangtua(user.orangtua);
             if (user.dokumen) fillDokumen(user.dokumen);
-            Promise.all(promises).then(() => {
-                console.log("Semua data (termasuk dropdown) sudah siap!");
-                checkSequentialValidation();
-            });
+            // Promise.all(promises).then(() => {
+            //     console.log("Semua data (termasuk dropdown) sudah siap!");
+            //     checkSequentialValidation();
+            // });
         },
         error: function(xhr, status, error) {
             console.error("Gagal ambil data:", error, xhr.responseText);
@@ -470,49 +470,49 @@ $('#foto').on('change', function () {
     reader.readAsDataURL(file);
 });
 const tabOrder = ['biodata', 'akademik', 'orangtua', 'dokumen'];
-function checkSequentialValidation() {
-    tabOrder.forEach((currentTab, index) => {
-        const nextTab = tabOrder[index + 1];
-        if (!nextTab) return;
+// function checkSequentialValidation() {
+//     tabOrder.forEach((currentTab, index) => {
+//         const nextTab = tabOrder[index + 1];
+//         if (!nextTab) return;
 
-        const $currentContent = $(`#${currentTab}`);
-        const $nextTabBtn = $(`[data-tab="${nextTab}"]`);
+//         const $currentContent = $(`#${currentTab}`);
+//         const $nextTabBtn = $(`[data-tab="${nextTab}"]`);
         
-        let isComplete = true;
+//         let isComplete = true;
 
-        const $fieldsToCheck = $currentContent.find('[required]:not([type="file"])');
+//         const $fieldsToCheck = $currentContent.find('[required]:not([type="file"])');
         
-        if (currentTab === 'biodata') {
-            const photoInput = document.getElementById('foto');
-            // Jika input foto ada dan masih kosong, maka dianggap belum lengkap
-            if (photoInput && photoInput.files.length === 0) {
-                isComplete = false;
-                console.warn("Validation: Foto profil wajib diunggah.");
-            }
-        }
-        $fieldsToCheck.each(function() {
-            const value = $(this).val();
+//         if (currentTab === 'biodata') {
+//             const photoInput = document.getElementById('foto');
+//             // Jika input foto ada dan masih kosong, maka dianggap belum lengkap
+//             if (photoInput && photoInput.files.length === 0) {
+//                 isComplete = false;
+//                 console.warn("Validation: Foto profil wajib diunggah.");
+//             }
+//         }
+//         $fieldsToCheck.each(function() {
+//             const value = $(this).val();
             
-            if (!value || value.toString().trim() === "") {
-                isComplete = false;
-                console.warn(`Validation: Field ${$(this).attr('name')} masih kosong.`);
-                return false;
-            }
-        });
+//             if (!value || value.toString().trim() === "") {
+//                 isComplete = false;
+//                 console.warn(`Validation: Field ${$(this).attr('name')} masih kosong.`);
+//                 return false;
+//             }
+//         });
 
-        if (isComplete) {
-            console.log(`✅ Tab ${currentTab} lengkap, membuka tab ${nextTab}`);
-            $nextTabBtn.prop('disabled', false)
-                       .removeClass('opacity-50 cursor-not-allowed')
-                       .addClass('hover:text-blue-primary');
-        } else {
-            for (let i = index + 1; i < tabOrder.length; i++) {
-                $(`[data-tab="${tabOrder[i]}"]`)
-                    .prop('disabled', true)
-                    .addClass('opacity-50 cursor-not-allowed')
-                    .removeClass('hover:text-blue-primary');
-            }
-        }
-    });
-}
+//         if (isComplete) {
+//             console.log(`✅ Tab ${currentTab} lengkap, membuka tab ${nextTab}`);
+//             $nextTabBtn.prop('disabled', false)
+//                        .removeClass('opacity-50 cursor-not-allowed')
+//                        .addClass('hover:text-blue-primary');
+//         } else {
+//             for (let i = index + 1; i < tabOrder.length; i++) {
+//                 $(`[data-tab="${tabOrder[i]}"]`)
+//                     .prop('disabled', true)
+//                     .addClass('opacity-50 cursor-not-allowed')
+//                     .removeClass('hover:text-blue-primary');
+//             }
+//         }
+//     });
+// }
 
