@@ -537,42 +537,57 @@ function hitungTotalPaket() {
     const sppTetap = parseRupiah($('#sppTetap').val());
     const sppVariabel = parseRupiah($('#sppVariabel').val());
     const praktikum = parseRupiah($('#praktikumPaket').val());
+    
     const total = sppTetap + sppVariabel + praktikum;
     $('#totalPaket').val(formatRupiah(total));
 }
 
-// ======================
-// 4️⃣ Hitung Total SKS
-// ======================
 function hitungTotalSks() {
-    const jumlahSks = parseRupiah($('#jumlahSks').val());
+    // #jumlahSks tidak perlu diparse berlebihan karena isinya hanya angka murni
+    const jumlahSks = parseInt($('#jumlahSks').val()) || 0;
     const nominal = parseRupiah($('#nominal').val());
     const praktikum = parseRupiah($('#praktikumSks').val());
+    
     const total = (jumlahSks * nominal) + praktikum;
     $('#totalSks').val(formatRupiah(total));
 }
 
-// ======================
-// 5️⃣ Event Formatting (Rupiah di semua input angka)
-// ======================
-const rupiahInputs = [
-    '#sppTetap', '#sppVariabel', '#praktikumPaket',
-    '#jumlahSks', '#nominal', '#praktikumSks'
-];
+// ==========================================
+// 3️⃣ Event Listeners (Input Handling)
+// ==========================================
 
-rupiahInputs.forEach(selector => {
-    $(selector).on('input', function () {
-        let value = $(this).val();
-        value = value.replace(/[^0-9]/g, '');
-        $(this).val(formatRupiah(value));
+$(document).ready(function() {
+    
+    // A. Handling Input khusus Rupiah (dengan simbol Rp)
+    const rupiahInputs = [
+        '#sppTetap', '#sppVariabel', '#praktikumPaket', 
+        '#nominal', '#praktikumSks'
+    ];
 
-        // Rehitung otomatis
-        if (selector.includes('Tetap') || selector.includes('Variabel') || selector.includes('Paket')) {
-            hitungTotalPaket();
-        } else {
-            hitungTotalSks();
-        }
+    rupiahInputs.forEach(selector => {
+        $(selector).on('input', function() {
+            let rawValue = $(this).val().replace(/[^0-9]/g, '');
+            $(this).val(formatRupiah(rawValue));
+
+            // Cek harus masuk ke perhitungan Paket atau SKS
+            if (selector.includes('Sks') || selector.includes('nominal')) {
+                hitungTotalSks();
+            } else {
+                hitungTotalPaket();
+            }
+        });
     });
+
+    // B. Handling Input Jumlah SKS (Hanya angka murni)
+    $('#jumlahSks').on('input', function() {
+        // Hapus karakter non-angka tapi jangan beri formatRupiah
+        let value = $(this).val().replace(/[^0-9]/g, '');
+        $(this).val(value); 
+        
+        // Update perhitungan SKS
+        hitungTotalSks();
+    });
+
 });
 
 $('#pengajuandanaSemester').on('change', function () {
