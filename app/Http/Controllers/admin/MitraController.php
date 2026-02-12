@@ -178,4 +178,13 @@ class MitraController extends Controller
             'message' => 'Data Mitra berhasil dihapus'
         ], 200);
     }
+
+    public function getdatauniversitas(Request $request)
+    {
+        $mitras = Mitra::select('id', 'nama_mitra')->get();
+
+        return response()->json([
+            'data' => $mitras
+        ]);
+    }
 }

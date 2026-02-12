@@ -97,6 +97,7 @@ Route::middleware(['check.expired', 'check.permission'])->group(function() {
 
     Route::get('/admin/mitra', [MitraController::class, 'index'])->name('admin.mitra.index');
     Route::get('/admin/getmitra', [MitraController::class, 'getdata'])->name('admin.mitra.getdata');
+    Route::get('/admin/getmitra/universitas', [MitraController::class, 'getdatauniversitas'])->name('admin.mitra.getdata');
     Route::post('/admin/mitra', [MitraController::class, 'store']);
     Route::get('/admin/mitra/{id}', [MitraController::class, 'show']);
     Route::put('/admin/mitra/{id}', [MitraController::class, 'update']);
