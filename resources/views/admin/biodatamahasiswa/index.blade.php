@@ -112,7 +112,7 @@
                                         </div>
                                         <input type="text" id="nama" name="nama"
                                             class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-300 text-gray-700 font-medium placeholder:text-gray-300"
-                                            placeholder="Nama sesuai ijazah" required>
+                                            placeholder="Nama sesuai ijazah" data-required="true">
                                     </div>
                                 </div>
 
@@ -126,7 +126,7 @@
                                         </div>
                                         <input type="number" id="nik" name="nik"
                                             class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-300 text-gray-700 font-medium placeholder:text-gray-300"
-                                            placeholder="16 digit angka" required>
+                                            placeholder="16 digit angka" data-required="true">
                                     </div>
                                 </div>
 
@@ -139,7 +139,7 @@
                                             <i class="fas fa-venus-mars text-sm"></i>
                                         </div>
                                         <select id="jenis_kelamin" name="jenis_kelamin" 
-                                            class="w-full pl-11 pr-10 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-300 text-gray-700 font-medium appearance-none cursor-pointer"  required>
+                                            class="w-full pl-11 pr-10 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-300 text-gray-700 font-medium appearance-none cursor-pointer"  data-required="true">
                                             <option value="">Pilih Jenis Kelamin</option>
                                             <option value="Laki-laki">Laki-laki</option>
                                             <option value="Perempuan">Perempuan</option>
@@ -152,12 +152,12 @@
 
                                 <div class="group space-y-2">
                                     <label class="font-bold text-sm text-gray-700">Tempat Lahir</label>
-                                    <input type="text" id="tempat_lahir" name="tempat_lahir" class="w-full px-5 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 transition-all placeholder:text-gray-300" placeholder="Kota kelahiran" required>
+                                    <input type="text" id="tempat_lahir" name="tempat_lahir" class="w-full px-5 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 transition-all placeholder:text-gray-300" placeholder="Kota kelahiran" data-required="true">
                                 </div>
 
                                 <div class="group space-y-2">
                                     <label class="font-bold text-sm text-gray-700">Tanggal Lahir</label>
-                                    <input type="date" id="tanggal_lahir" name="tanggal_lahir" class="w-full px-5 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 transition-all" required>
+                                    <input type="date" id="tanggal_lahir" name="tanggal_lahir" class="w-full px-5 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 transition-all" data-required="true">
                                 </div>
                             </div>
                         </div>
@@ -173,7 +173,7 @@
                                 <label class="font-bold text-sm text-gray-700">Alamat Lengkap (KTP)</label>
                                 <textarea id="alamat_ktp" name="alamat_ktp" rows="3" 
                                     class="w-full px-5 py-4 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all" 
-                                    placeholder="Jl. Nama Jalan, No. Rumah, RT/RW, Desa/Kelurahan, Kecamatan" required></textarea>
+                                    placeholder="Jl. Nama Jalan, No. Rumah, RT/RW, Desa/Kelurahan, Kecamatan" data-required="true"></textarea>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -181,14 +181,14 @@
                                     <label class="font-bold text-sm text-gray-700">WhatsApp</label>
                                     <div class="flex">
                                         <span class="inline-flex items-center px-4 rounded-l-2xl border-2 border-r-0 border-gray-100 bg-gray-100 text-gray-500 font-bold text-sm">+62</span>
-                                        <input type="number" id="no_wa" name="no_wa" class="w-full px-4 py-3.5 bg-white border-2 border-gray-100 rounded-r-2xl focus:border-blue-500 transition-all" placeholder="812xxx" required>
+                                        <input type="number" id="no_wa" name="no_wa" class="w-full px-4 py-3.5 bg-white border-2 border-gray-100 rounded-r-2xl focus:border-blue-500 transition-all" placeholder="812xxx" data-required="true">
                                     </div>
                                 </div>
                                 
                                 <div class="space-y-2">
                                     <label class="font-bold text-sm text-gray-700">Agama</label>
                                     <div class="relative">
-                                        <select id="agama" name="agama" class="w-full px-5 py-3.5 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 appearance-none cursor-pointer"  required>
+                                        <select id="agama" name="agama" class="w-full px-5 py-3.5 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 appearance-none cursor-pointer" data-required="true">
                                             <option value="">Pilih Agama</option>
                                             <option value="Islam">Islam</option>
                                             <option value="Kristen">Kristen</option>
@@ -207,7 +207,7 @@
                                 <div class="space-y-2">
                                     <label class="font-bold text-sm text-gray-700">Status</label>
                                     <div class="relative">
-                                        <select name="status_pernikahan" class="w-full px-5 py-3.5 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 appearance-none cursor-pointer"  required>
+                                        <select name="status_pernikahan" class="w-full px-5 py-3.5 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 appearance-none cursor-pointer" data-required="true">
                                             <option value="Belum Menikah">Belum Menikah</option>
                                             <option value="Menikah">Menikah</option>
                                         </select>
@@ -264,7 +264,7 @@
                                     <label for="universitas" class="block text-sm font-bold text-gray-700 group-focus-within:text-blue-600 transition-colors">Universitas / Perguruan Tinggi</label>
                                     <div class="relative">
                                         <select id="universitas" name="universitas"
-                                            class="w-full px-5 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all appearance-none cursor-pointer text-gray-600 font-medium"  required>
+                                            class="w-full px-5 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all appearance-none cursor-pointer text-gray-600 font-medium" data-required="true">
                                             </select>
                                         <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-gray-400">
                                             <i class="fas fa-chevron-down text-xs"></i>
@@ -276,7 +276,7 @@
                                     <label for="tahun_akademik" class="block text-sm font-bold text-gray-700 group-focus-within:text-blue-600 transition-colors">Tahun Akademik Aktif</label>
                                     <div class="relative">
                                         <select id="tahun_akademik" name="tahun_akademik"
-                                            class="w-full px-5 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all appearance-none cursor-pointer text-gray-600 font-medium"  required>
+                                            class="w-full px-5 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all appearance-none cursor-pointer text-gray-600 font-medium" data-required="true">
                                             </select>
                                         <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-gray-400">
                                             <i class="fas fa-calendar-check text-xs"></i>
@@ -289,7 +289,7 @@
                                     <div class="relative">
                                         <input type="text" id="nim" name="nim"
                                             class="w-full px-5 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 transition-all text-gray-600 font-medium placeholder:text-gray-300"
-                                            placeholder="Contoh: 2010123456" required>
+                                            placeholder="Contoh: 2010123456" data-required="true">
                                     </div>
                                 </div>
 
@@ -297,14 +297,14 @@
                                     <label for="fakultas" class="block text-sm font-bold text-gray-700 group-focus-within:text-blue-600">Nama Fakultas</label>
                                     <input type="text" id="fakultas" name="fakultas"
                                         class="w-full px-5 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 transition-all text-gray-600 font-medium placeholder:text-gray-300"
-                                        placeholder="Contoh: Fakultas Ilmu Komputer" required>
+                                        placeholder="Contoh: Fakultas Ilmu Komputer" data-required="true">
                                 </div>
 
                                 <div class="group space-y-2">
                                     <label for="program_studi" class="block text-sm font-bold text-gray-700 group-focus-within:text-blue-600">Program Studi</label>
                                     <input type="text" id="program_studi" name="program_studi"
                                         class="w-full px-5 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 transition-all text-gray-600 font-medium placeholder:text-gray-300"
-                                        placeholder="Contoh: Teknik Informatika" required>
+                                        placeholder="Contoh: Teknik Informatika" data-required="true">
                                 </div>
                             </div>
                         </div>
@@ -322,7 +322,7 @@
                                     <label for="semester" class="block text-sm font-bold text-gray-700">Semester Saat Ini</label>
                                     <div class="relative">
                                         <select id="semester" name="semester"
-                                            class="w-full px-5 py-4 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 transition-all appearance-none text-gray-600 font-bold"  required>
+                                            class="w-full px-5 py-4 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 transition-all appearance-none text-gray-600 font-bold" data-required="true">
                                             <option value="">Pilih Semester</option>
                                             @for ($i = 1; $i <= 8; $i++)
                                                 <option value="{{ $i }}">Semester {{ $i }}</option>
@@ -342,7 +342,7 @@
                                         </div>
                                         <input type="number" step="0.01" id="ip_terakhir" name="ip_terakhir" min="0" max="4"
                                             class="w-full pl-12 pr-5 py-4 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 transition-all text-gray-700 font-bold placeholder:text-gray-300"
-                                            placeholder="0.00" required>
+                                            placeholder="0.00" data-required="true">
                                     </div>
                                     <p class="text-[10px] text-gray-400 mt-1">* Masukkan IP semester terakhir (bukan IPK akumulatif)</p>
                                 </div>
@@ -389,21 +389,21 @@
                                         <label class="block text-xs font-bold text-gray-500 mb-2 group-focus-within:text-blue-600 transition-colors">NAMA LENGKAP AYAH</label>
                                         <input type="text" id="nama_ayah" name="nama_ayah"
                                             class="w-full px-5 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-700 font-medium"
-                                            placeholder="Masukkan nama ayah" required>
+                                            placeholder="Masukkan nama ayah" data-required="true">
                                     </div>
 
                                     <div class="group">
                                         <label class="block text-xs font-bold text-gray-500 mb-2 group-focus-within:text-blue-600">PEKERJAAN</label>
                                         <input type="text" id="pekerjaan_ayah" name="pekerjaan_ayah"
                                             class="w-full px-5 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 transition-all text-gray-700 font-medium"
-                                            placeholder="Contoh: PNS, Wiraswasta" required>
+                                            placeholder="Contoh: PNS, Wiraswasta" data-required="true">
                                     </div>
 
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div class="group">
                                             <label class="block text-xs font-bold text-gray-500 mb-2">PENDIDIKAN</label>
                                             <select id="pendidikan_ayah" name="pendidikan_ayah"
-                                                class="w-full px-4 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:border-blue-500 appearance-none text-gray-600 font-medium"  required>
+                                                class="w-full px-4 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:border-blue-500 appearance-none text-gray-600 font-medium" data-required="true">
                                                 <option value="">Pilih</option>
                                                 <option value="SD">SD</option>
                                                 <option value="SMP">SMP</option>
@@ -418,7 +418,7 @@
                                             <label class="block text-xs font-bold text-gray-500 mb-2">PENGHASILAN (RP)</label>
                                             <input type="text" id="penghasilan_ayah" name="penghasilan_ayah"
                                                 class="w-full px-4 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:border-blue-500 transition-all text-gray-700 font-bold rupiah-input"
-                                                placeholder="0" required>
+                                                placeholder="0" >
                                         </div>
                                     </div>
                                 </div>
@@ -440,21 +440,21 @@
                                         <label class="block text-xs font-bold text-gray-500 mb-2 group-focus-within:text-pink-600 transition-colors">NAMA LENGKAP IBU</label>
                                         <input type="text" id="nama_ibu" name="nama_ibu"
                                             class="w-full px-5 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-pink-500 focus:ring-4 focus:ring-pink-500/10 transition-all text-gray-700 font-medium"
-                                            placeholder="Masukkan nama ibu" required>
+                                            placeholder="Masukkan nama ibu" data-required="true">
                                     </div>
 
                                     <div class="group">
                                         <label class="block text-xs font-bold text-gray-500 mb-2 group-focus-within:text-pink-600">PEKERJAAN</label>
                                         <input type="text" id="pekerjaan_ibu" name="pekerjaan_ibu"
                                             class="w-full px-5 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-pink-500 transition-all text-gray-700 font-medium"
-                                            placeholder="Contoh: Ibu Rumah Tangga" required>
+                                            placeholder="Contoh: Ibu Rumah Tangga" data-required="true">
                                     </div>
 
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div class="group">
                                             <label class="block text-xs font-bold text-gray-500 mb-2">PENDIDIKAN</label>
                                             <select id="pendidikan_ibu" name="pendidikan_ibu"
-                                                class="w-full px-4 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:border-pink-500 appearance-none text-gray-600 font-medium"  required>
+                                                class="w-full px-4 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:border-pink-500 appearance-none text-gray-600 font-medium" data-required="true">
                                                 <option value="">Pilih</option>
                                                 <option value="SD">SD</option>
                                                 <option value="SMP">SMP</option>
@@ -469,7 +469,7 @@
                                             <label class="block text-xs font-bold text-gray-500 mb-2">PENGHASILAN (RP)</label>
                                             <input type="text" id="penghasilan_ibu" name="penghasilan_ibu"
                                                 class="w-full px-4 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:border-pink-500 transition-all text-gray-700 font-bold rupiah-input"
-                                                placeholder="0" required>
+                                                placeholder="0" data-required="true">
                                         </div>
                                     </div>
                                 </div>
@@ -482,13 +482,13 @@
                                     <label class="block text-xs font-bold text-gray-500 mb-2"><i class="fas fa-users mr-2 text-blue-500"></i>JUMLAH TANGGUNGAN</label>
                                     <input type="number" id="jumlah_tanggungan" name="jumlah_tanggungan"
                                         class="w-full px-5 py-3.5 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 transition-all text-gray-700 font-bold"
-                                        placeholder="Jumlah anak yang masih sekolah" required>
+                                        placeholder="Jumlah anak yang masih sekolah" data-required="true">
                                 </div>
                                 <div class="group">
                                     <label class="block text-xs font-bold text-gray-500 mb-2"><i class="fab fa-whatsapp mr-2 text-green-500"></i>NO. WA ORANG TUA/WALI</label>
                                     <input type="text" id="no_wa_ortu" name="no_wa_ortu"
                                         class="w-full px-5 py-3.5 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 transition-all text-gray-700 font-bold"
-                                        placeholder="08123456789" required>
+                                        placeholder="08123456789" data-required="true">
                                 </div>
                             </div>
                         </div>
@@ -528,7 +528,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="file" id="scan_ktp" name="scan_ktp" accept="application/pdf"
-                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer"  required>
+                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" data-required="true">
                                     <div class="p-4 border-2 border-dashed border-gray-200 rounded-xl group-hover:border-orange-400 bg-white transition-all flex items-center justify-between shadow-sm">
                                         <div class="flex items-center gap-3 overflow-hidden">
                                             <i class="fas fa-file-pdf text-gray-300 text-xl group-hover:text-orange-500"></i>
@@ -545,7 +545,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="file" id="scan_kartu_mahasiswa" name="scan_kartu_mahasiswa" accept="application/pdf"
-                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer"  required>
+                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" data-required="true">
                                     <div class="p-4 border-2 border-dashed border-gray-200 rounded-xl group-hover:border-orange-400 bg-white transition-all flex items-center justify-between shadow-sm">
                                         <div class="flex items-center gap-3 overflow-hidden">
                                             <i class="fas fa-id-badge text-gray-300 text-xl group-hover:text-orange-500"></i>
@@ -562,7 +562,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="file" id="scan_kk" name="scan_kk" accept="application/pdf"
-                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer"  required>
+                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" data-required="true">
                                     <div class="p-4 border-2 border-dashed border-gray-200 rounded-xl group-hover:border-orange-400 bg-white transition-all flex items-center justify-between shadow-sm">
                                         <div class="flex items-center gap-3 overflow-hidden">
                                             <i class="fas fa-users text-gray-300 text-xl group-hover:text-orange-500"></i>
@@ -579,7 +579,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="file" id="transkrip_nilai" name="transkrip_nilai" accept="application/pdf"
-                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer"  required>
+                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" data-required="true">
                                     <div class="p-4 border-2 border-dashed border-gray-200 rounded-xl group-hover:border-orange-400 bg-white transition-all flex items-center justify-between shadow-sm">
                                         <div class="flex items-center gap-3 overflow-hidden">
                                             <i class="fas fa-graduation-cap text-gray-300 text-xl group-hover:text-orange-500"></i>
@@ -592,11 +592,11 @@
 
                             <div class="space-y-2 group">
                                 <label for="surat_keterangan_aktif" class="block text-sm font-semibold text-gray-600">
-                                    <i class="fas fa-file-signature mr-2 text-blue-primary"></i>Surat Keterangan Aktif (PDF)
+                                    <i class="fas fa-file-signature mr-2 text-blue-primary"></i>Surat Keterangan Aktif Kuliah(PDF)
                                 </label>
                                 <div class="relative">
                                     <input type="file" id="surat_keterangan_aktif" name="surat_keterangan_aktif" accept="application/pdf"
-                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer"  required>
+                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" data-required="true">
                                     <div class="p-4 border-2 border-dashed border-gray-200 rounded-xl group-hover:border-orange-400 bg-white transition-all flex items-center justify-between shadow-sm">
                                         <div class="flex items-center gap-3 overflow-hidden">
                                             <i class="fas fa-file-contract text-gray-300 text-xl group-hover:text-orange-500"></i>
@@ -613,7 +613,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="file" id="foto_profil" name="foto_profil" accept="image/*"
-                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer"  required>
+                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" data-required="true">
                                     <div class="p-4 border-2 border-dashed border-gray-200 rounded-xl group-hover:border-orange-400 bg-white transition-all flex items-center justify-between shadow-sm">
                                         <div class="flex items-center gap-3 overflow-hidden">
                                             <i class="fas fa-camera text-gray-300 text-xl group-hover:text-orange-500"></i>
@@ -630,7 +630,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="file" id="essay_motivasi" name="essay_motivasi" accept="application/pdf"
-                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer"  required>
+                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" data-required="true">
                                     <div class="p-4 border-2 border-dashed border-gray-200 rounded-xl group-hover:border-orange-400 bg-white transition-all flex items-center justify-between shadow-sm">
                                         <div class="flex items-center gap-3 overflow-hidden">
                                             <i class="fas fa-pen-nib text-gray-300 text-xl group-hover:text-orange-500"></i>
@@ -647,7 +647,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="file" id="sertifikat_prestasi" name="sertifikat_prestasi" accept="application/pdf"
-                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer"  required>
+                                        class="file-input absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" data-required="true">
                                     <div class="p-4 border-2 border-dashed border-gray-200 rounded-xl group-hover:border-orange-400 bg-white transition-all flex items-center justify-between shadow-sm">
                                         <div class="flex items-center gap-3 overflow-hidden">
                                             <i class="fas fa-medal text-gray-300 text-xl group-hover:text-orange-500"></i>

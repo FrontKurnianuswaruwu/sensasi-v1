@@ -12,6 +12,7 @@ use App\Models\TahunAkademik;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class BiodatamahasiswaController extends Controller
 {
@@ -349,5 +350,23 @@ class BiodatamahasiswaController extends Controller
         }
 
         return response()->json($biodata);
+    }
+
+    public function downloadPdf($id)
+    {
+        $biodata = BiodataMahasiswa::with(['user', 'user.akademik', 'user.orangtua', 'mitra', 'hasilujian.kategoriSoal'])->where('id', $id)->first();
+
+        if (!$biodata) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Data mahasiswa tidak ditemukan.'
+            ], 404);
+        }
+
+        $pdf = Pdf::loadView('pdf.mahasiswa', compact('biodata'));
+
+        $fileName = "Biodata_{$biodata->id}.pdf";
+
+        return $pdf->download($fileName);
     }
 }

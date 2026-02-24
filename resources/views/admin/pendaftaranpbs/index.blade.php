@@ -197,25 +197,25 @@
                 <div class="flex-1 overflow-y-auto p-6 space-y-6 bg-white">
                     
                     <div id="tab-biodata" class="tab-content">
-                        <h4 class="text-blue-primary font-bold mb-6 border-b pb-2 flex items-center">
-                            <i class="fas fa-user-circle mr-2"></i> Data Pribadi
-                        </h4>
-                        
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+
+                            <!-- NIK -->
                             <div class="p-4 rounded-xl bg-gray-50 border border-gray-100 hover:bg-white hover:shadow-md transition-all">
                                 <p class="text-[10px] text-gray-400 uppercase tracking-widest font-black mb-1 flex items-center">
-                                    <i class="fas fa-venus-mars mr-2 text-blue-primary"></i> Jenis Kelamin
+                                    <i class="fas fa-id-card mr-2 text-blue-primary"></i> NIK
                                 </p>
-                                <p id="det_jk" class="text-gray-900 font-bold text-sm md:text-base leading-tight">-</p>
+                                <p id="det_nik" class="text-gray-900 font-bold text-sm md:text-base leading-tight">-</p>
                             </div>
 
+                            <!-- Tempat Lahir -->
                             <div class="p-4 rounded-xl bg-gray-50 border border-gray-100 hover:bg-white hover:shadow-md transition-all">
                                 <p class="text-[10px] text-gray-400 uppercase tracking-widest font-black mb-1 flex items-center">
-                                    <i class="fas fa-praying-hands mr-2 text-blue-primary"></i> Agama
+                                    <i class="fas fa-map-pin mr-2 text-blue-primary"></i> Tempat Lahir
                                 </p>
-                                <p id="det_agama" class="text-gray-900 font-bold text-sm md:text-base leading-tight">-</p>
+                                <p id="det_tempatlahir" class="text-gray-900 font-bold text-sm md:text-base leading-tight">-</p>
                             </div>
 
+                            <!-- Tanggal Lahir -->
                             <div class="p-4 rounded-xl bg-gray-50 border border-gray-100 hover:bg-white hover:shadow-md transition-all">
                                 <p class="text-[10px] text-gray-400 uppercase tracking-widest font-black mb-1 flex items-center">
                                     <i class="fas fa-calendar-alt mr-2 text-blue-primary"></i> Tanggal Lahir
@@ -223,6 +223,31 @@
                                 <p id="det_tgllahir" class="text-gray-900 font-bold text-sm md:text-base leading-tight">-</p>
                             </div>
 
+                            <!-- Jenis Kelamin -->
+                            <div class="p-4 rounded-xl bg-gray-50 border border-gray-100 hover:bg-white hover:shadow-md transition-all">
+                                <p class="text-[10px] text-gray-400 uppercase tracking-widest font-black mb-1 flex items-center">
+                                    <i class="fas fa-venus-mars mr-2 text-blue-primary"></i> Jenis Kelamin
+                                </p>
+                                <p id="det_jk" class="text-gray-900 font-bold text-sm md:text-base leading-tight">-</p>
+                            </div>
+
+                            <!-- Agama -->
+                            <div class="p-4 rounded-xl bg-gray-50 border border-gray-100 hover:bg-white hover:shadow-md transition-all">
+                                <p class="text-[10px] text-gray-400 uppercase tracking-widest font-black mb-1 flex items-center">
+                                    <i class="fas fa-praying-hands mr-2 text-blue-primary"></i> Agama
+                                </p>
+                                <p id="det_agama" class="text-gray-900 font-bold text-sm md:text-base leading-tight">-</p>
+                            </div>
+
+                            <!-- Status Perkawinan -->
+                            <div class="p-4 rounded-xl bg-gray-50 border border-gray-100 hover:bg-white hover:shadow-md transition-all">
+                                <p class="text-[10px] text-gray-400 uppercase tracking-widest font-black mb-1 flex items-center">
+                                    <i class="fas fa-ring mr-2 text-blue-primary"></i> Status Perkawinan
+                                </p>
+                                <p id="det_statusperkawinan" class="text-gray-900 font-bold text-sm md:text-base leading-tight">-</p>
+                            </div>
+
+                            <!-- Email -->
                             <div class="p-4 rounded-xl bg-gray-50 border border-gray-100 hover:bg-white hover:shadow-md transition-all">
                                 <p class="text-[10px] text-gray-400 uppercase tracking-widest font-black mb-1 flex items-center">
                                     <i class="fas fa-envelope mr-2 text-blue-primary"></i> Email
@@ -230,6 +255,7 @@
                                 <p id="det_email" class="text-gray-900 font-bold text-sm md:text-base break-all leading-tight">-</p>
                             </div>
 
+                            <!-- Telepon -->
                             <div class="p-4 rounded-xl bg-gray-50 border border-gray-100 hover:bg-white hover:shadow-md transition-all">
                                 <p class="text-[10px] text-gray-400 uppercase tracking-widest font-black mb-1 flex items-center">
                                     <i class="fas fa-phone mr-2 text-blue-primary"></i> Telepon
@@ -237,15 +263,32 @@
                                 <p id="det_telp" class="text-gray-900 font-bold text-sm md:text-base leading-tight">-</p>
                             </div>
 
+                            <!-- Alamat KTP -->
                             <div class="p-4 rounded-xl bg-gray-50 border border-gray-100 hover:bg-white hover:shadow-md transition-all md:col-span-3">
                                 <p class="text-[10px] text-gray-400 uppercase tracking-widest font-black mb-1 flex items-center">
-                                    <i class="fas fa-map-marker-alt mr-2 text-blue-primary"></i> Alamat Lengkap
+                                    <i class="fas fa-home mr-2 text-blue-primary"></i> Alamat KTP
                                 </p>
-                                <p id="det_alamat" class="text-gray-900 font-bold text-sm md:text-base leading-relaxed">-</p>
+                                <p id="det_alamatktp" class="text-gray-900 font-bold text-sm md:text-base leading-relaxed">-</p>
                             </div>
+
+                            <!-- Jumlah Saudara -->
+                            <div class="p-4 rounded-xl bg-gray-50 border border-gray-100 hover:bg-white hover:shadow-md transition-all">
+                                <p class="text-[10px] text-gray-400 uppercase tracking-widest font-black mb-1 flex items-center">
+                                    <i class="fas fa-users mr-2 text-blue-primary"></i> Jumlah Saudara
+                                </p>
+                                <p id="det_jumlahsaudara" class="text-gray-900 font-bold text-sm md:text-base leading-tight">-</p>
+                            </div>
+
+                            <!-- Anak Ke -->
+                            <div class="p-4 rounded-xl bg-gray-50 border border-gray-100 hover:bg-white hover:shadow-md transition-all">
+                                <p class="text-[10px] text-gray-400 uppercase tracking-widest font-black mb-1 flex items-center">
+                                    <i class="fas fa-child mr-2 text-blue-primary"></i> Anak Ke
+                                </p>
+                                <p id="det_anakke" class="text-gray-900 font-bold text-sm md:text-base leading-tight">-</p>
+                            </div>
+
                         </div>
                     </div>
-
                     <div id="tab-akademik" class="tab-content hidden">
                         <h4 class="text-blue-primary font-bold mb-4 border-b pb-2">Informasi Kampus</h4>
                         
@@ -281,6 +324,8 @@
                         <h4 class="text-blue-primary font-bold mb-4 border-b pb-2">Informasi Keluarga</h4>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                            <!-- Data Ayah -->
                             <div class="p-5 rounded-2xl border-2 border-blue-50 bg-white hover:border-blue-200 transition-all">
                                 <div class="flex items-center mb-4 text-blue-700">
                                     <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
@@ -297,6 +342,11 @@
                                         <span class="text-xs text-gray-500 font-semibold uppercase">Pekerjaan</span>
                                         <span id="det_ayah_kerja" class="text-sm font-bold text-gray-800">-</span>
                                     </div>
+                                    <!-- Tambahkan Pendidikan Ayah -->
+                                    <div class="flex justify-between border-b border-gray-50 pb-2">
+                                        <span class="text-xs text-gray-500 font-semibold uppercase">Pendidikan</span>
+                                        <span id="det_ayah_pendidikan" class="text-sm font-bold text-gray-800">-</span>
+                                    </div>
                                     <div class="flex justify-between border-b border-gray-50 pb-2">
                                         <span class="text-xs text-gray-500 font-semibold uppercase">Penghasilan</span>
                                         <span id="det_ayah_gaji" class="text-sm font-bold text-green-600">-</span>
@@ -304,6 +354,7 @@
                                 </div>
                             </div>
 
+                            <!-- Data Ibu -->
                             <div class="p-5 rounded-2xl border-2 border-pink-50 bg-white hover:border-pink-200 transition-all">
                                 <div class="flex items-center mb-4 text-pink-700">
                                     <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center mr-3">
@@ -320,6 +371,11 @@
                                         <span class="text-xs text-gray-500 font-semibold uppercase">Pekerjaan</span>
                                         <span id="det_ibu_kerja" class="text-sm font-bold text-gray-800">-</span>
                                     </div>
+                                    <!-- Tambahkan Pendidikan Ibu -->
+                                    <div class="flex justify-between border-b border-gray-50 pb-2">
+                                        <span class="text-xs text-gray-500 font-semibold uppercase">Pendidikan</span>
+                                        <span id="det_ibu_pendidikan" class="text-sm font-bold text-gray-800">-</span>
+                                    </div>
                                     <div class="flex justify-between border-b border-gray-50 pb-2">
                                         <span class="text-xs text-gray-500 font-semibold uppercase">Penghasilan</span>
                                         <span id="det_ibu_gaji" class="text-sm font-bold text-green-600">-</span>
@@ -327,6 +383,7 @@
                                 </div>
                             </div>
 
+                            <!-- No Telp & Jumlah Tanggungan -->
                             <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-xl border border-gray-200">
                                 <div class="flex items-center p-3 bg-white rounded-lg shadow-sm">
                                     <i class="fas fa-phone-alt text-blue-500 mr-3"></i>
@@ -343,6 +400,7 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
 

@@ -284,4 +284,15 @@ class PengajuandanaController extends Controller
         ], 200);
     }
 
+    public function detailPengajuanDana($id)
+    {
+        $pengajuandana = Pengajuandana::find($id);
+        if (!$pengajuandana) {
+            return response()->json(['message' => 'Pengajuan dana tidak ditemukan'], 404);
+        }
+
+        return response()->json($pengajuandana);
+    }
+    
+
 }

@@ -112,7 +112,7 @@ function renderTable(data, isMahasiswa) {
             if (pengajuandana.status === 'approved' || pengajuandana.status === 'rejected') {
                 actionButtons = `
                     <button class="detail-btn inline-flex items-center px-3 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all shadow-sm mr-2" 
-                        data-id="${pengajuandana.mahasiswa_id}" title="Lihat Detail">
+                        data-id="${pengajuandana.id}" title="Lihat Detail">
                         <i class="fas fa-eye mr-1.5"></i> Detail
                     </button>
                     <i class="fas fa-lock text-gray-400" title="Aksi tidak tersedia"></i>
@@ -120,7 +120,7 @@ function renderTable(data, isMahasiswa) {
             } else {
                 actionButtons = `
                     <button class="detail-btn inline-flex items-center px-3 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all shadow-sm mr-2" 
-                        data-id="${pengajuandana.mahasiswa_id}" title="Lihat Detail">
+                        data-id="${pengajuandana.id}" title="Lihat Detail">
                         <i class="fas fa-eye mr-1.5"></i> Detail
                     </button>
                     <button class="approve-btn inline-flex items-center px-3 py-1.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all shadow-sm mr-2" 
@@ -252,7 +252,7 @@ function renderCards(data, isMahasiswa) {
                             <button class="delete-btn flex-1 py-2.5 bg-red-500 text-white rounded-lg text-sm font-bold shadow-sm" data-id="${pengajuandana.id}" data-name="${semesterText}"><i class="fas fa-trash mr-1"></i> Hapus</button>
                         `
                     ) : `
-                        <button class="detail-btn flex-1 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-bold shadow-sm" data-id="${pengajuandana.mahasiswa_id}"><i class="fas fa-eye mr-1"></i> Detail</button>
+                        <button class="detail-btn flex-1 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-bold shadow-sm" data-id="${pengajuandana.id}"><i class="fas fa-eye mr-1"></i> Detail</button>
                         ${(status === 'pending' || status === '1') ? `
                             <button class="approve-btn flex-1 py-2.5 bg-green-500 text-white rounded-lg text-sm font-bold shadow-sm" data-id="${pengajuandana.id}"><i class="fas fa-check"></i></button>
                             <button class="reject-btn flex-1 py-2.5 bg-gray-600 text-white rounded-lg text-sm font-bold shadow-sm" data-id="${pengajuandana.id}"><i class="fas fa-times"></i></button>
@@ -395,9 +395,13 @@ $('#cancelMahasiswaBtn').on('click', function() {
 $('#cancelRejectBtn').on('click', function() {
     hideModalEnhanced('rejectModal');
 });
+$('#tutupDetailBtn').on('click', function() {
+    hideModalEnhanced('detailpengajuandanaModal');
+});
 
 $('#closeModal, #cancelBtn').on('click', function() {
     hideModalEnhanced('pengajuandanaModal');
+    hideModalEnhanced('detailpengajuandanaModal');
 });
 
 function hideModalEnhanced(modalId) {
@@ -432,8 +436,8 @@ $('.modal-overlay').on('click', function(e) {
             hideModalEnhanced('approveModal');
         } else if ($(this).closest('#rejectModal').length) {
             hideModalEnhanced('rejectModal');
-        } else if ($(this).closest('#detailMahasiswaModal').length) {
-            hideModalEnhanced('detailMahasiswaModal');
+        } else if ($(this).closest('#detailpengajuandanaModal').length) {
+            hideModalEnhanced('detailpengajuandanaModal');
         }
     }
 });
@@ -534,22 +538,21 @@ $('#pengajuandanaPengajuandana').on('change', function () {
 // 3️⃣ Hitung Total Paket
 // ======================
 function hitungTotalPaket() {
-    const sppTetap = parseRupiah($('#sppTetap').val());
-    const sppVariabel = parseRupiah($('#sppVariabel').val());
-    const praktikum = parseRupiah($('#praktikumPaket').val());
+    const sppTetap = parseRupiah($('#det_spp_tetap').text());
+    const sppVariabel = parseRupiah($('#det_spp_variabel').text());
+    const praktikum = parseRupiah($('#det_praktikum_paket').text());
     
     const total = sppTetap + sppVariabel + praktikum;
-    $('#totalPaket').val(formatRupiah(total));
+    $('#det_total_paket').text(formatRupiah(total));
 }
 
 function hitungTotalSks() {
-    // #jumlahSks tidak perlu diparse berlebihan karena isinya hanya angka murni
-    const jumlahSks = parseInt($('#jumlahSks').val()) || 0;
-    const nominal = parseRupiah($('#nominal').val());
-    const praktikum = parseRupiah($('#praktikumSks').val());
+    const jumlahSks = parseInt($('#det_jml_sks').text()) || 0;
+    const nominal = parseRupiah($('#det_nominal').text());
+    const praktikum = parseRupiah($('#det_praktikum_sks').text());
     
     const total = (jumlahSks * nominal) + praktikum;
-    $('#totalSks').val(formatRupiah(total));
+    $('#det_total_sks').text(formatRupiah(total));
 }
 
 // ==========================================
@@ -906,88 +909,33 @@ function resetApproveModal() {
 $(document).on('click', '.detail-btn', function() {
     const mahasiswaId = $(this).data('id');
     
-    showModalEnhanced('detailMahasiswaModal');
+    showModalEnhanced('detailpengajuandanaModal');
 
     $.ajax({
-        url: `/admin/mahasiswa/detail/${mahasiswaId}`,
+        url: `/admin/mahasiswa/pengajuandanadetail/${mahasiswaId}`,
         type: 'GET',
         success: function(res) {
-            $('#detail_nama_mahasiswa').text(res.user.name);
-            $('#detail_nim').text('NIM: ' + res.nim);
-            $('#det_jk').text(res.jenis_kelamin);
-            $('#det_email').text(res.user.email);
-            $('#det_agama').text(res.agama);
-            $('#det_telp').text(res.no_wa);
-            $('#det_alamat').text(res.alamat_ktp);
-            $('#det_semester').text(res.user.akademik.semester);
-            $('#det_ipk').text(res.user.akademik.ip_terakhir);
-            $('#det_status').text(res.user.status_user);
-            $('#det_ayah_nama').text(res.user.orangtua.nama_ayah);
-            $('#det_ayah_kerja').text(res.user.orangtua.pekerjaan_ayah);
-            $('#det_ibu_nama').text(res.user.orangtua.nama_ibu);
-            $('#det_ibu_kerja').text(res.user.orangtua.pekerjaan_ibu);
-            $('#det_tgllahir').text(formatTanggal(res.tanggal_lahir));
-            $('#det_universitas').text(res.mitra.nama_mitra);
-            $('#det_ayah_gaji').text(formatRupiah(res.user.orangtua.penghasilan_ayah));
-            $('#det_ibu_gaji').text(formatRupiah(res.user.orangtua.penghasilan_ibu));
-            $('#det_ortu_telp').text(res.user.orangtua.no_wa_ortu);
-            $('#det_tanggungan').text(res.user.orangtua.jumlah_tanggungan);
+            $('#det_semester').text(`Semester ${res.semester}`);
+            $('#det_ip').text(res.ip_semester);
+            $('#det_tipe').text(res.tipe === 1 ? 'Paket' : 'SKS');
 
-            const fotoProfilElement = $('#detail_foto_profil');
-    
-            // Ambil dari variabel window yang kita buat di Blade
-            const defaultFoto = window.defaultAvatar; 
+            $('#detailPaket').addClass('hidden');
+            $('#detailSks').addClass('hidden');
 
-            fotoProfilElement.off('error'); 
-
-            if (res.foto) {
-                // Gabungkan origin dengan path dari database
-                const fotoUrl = window.location.origin + '/' + res.foto;
-
-                fotoProfilElement.one('error', function() {
-                    $(this).attr('src', defaultFoto);
-                }).attr('src', fotoUrl);
-            } else {
-                fotoProfilElement.attr('src', defaultFoto);
+            if (res.tipe === 1) {
+                $('#detailPaket').removeClass('hidden');
+                $('#det_spp_tetap').text(formatRupiah(res.spp_tetap));
+                $('#det_spp_variabel').text(formatRupiah(res.spp_variabel));
+                $('#det_praktikum_paket').text(formatRupiah(res.praktikum));
+                hitungTotalPaket();
+            } else if (res.tipe === 2) {
+                $('#detailSks').removeClass('hidden');
+                $('#det_jml_sks').text(formatRupiah(res.jml_sks));
+                $('#det_nominal').text(formatRupiah(res.nominal));
+                $('#det_praktikum_sks').text(formatRupiah(res.praktikum));
+                hitungTotalSks();
             }
-
-            const docContainer = $('#document-list');
-            docContainer.empty();
-
-            const docFields = [
-                { field: 'scan_ktp', label: 'Scan KTP' },
-                { field: 'scan_kartu_mahasiswa', label: 'Kartu Mahasiswa' },
-                { field: 'scan_kk', label: 'Kartu Keluarga' },
-                { field: 'transkrip_nilai', label: 'Transkrip Nilai' },
-                { field: 'surat_keterangan_aktif', label: 'Surat Aktif' },
-                { field: 'essay_motivasi', label: 'Essay Motivasi' }
-            ];
-
-            const dokumen = res.user.dokumen;    
-
-            if (dokumen) {
-                docFields.forEach(item => {
-                    const filePath = dokumen[item.field];
-                    if (filePath) {
-                        const fullUrl = window.location.origin + '/' + filePath;
-                        
-                        const docHtml = `
-                            <a href="${fullUrl}" target="_blank" class="flex items-center p-3 border-2 border-gray-100 rounded-xl hover:bg-gray-50 transition group">
-                                <div class="w-10 h-10 bg-red-100 text-red-600 rounded-lg flex items-center justify-center mr-3 group-hover:bg-red-600 group-hover:text-white transition">
-                                    <i class="fas fa-file-pdf"></i>
-                                </div>
-                                <div class="flex flex-col">
-                                    <span class="text-xs text-gray-400 uppercase font-bold">${item.label}</span>
-                                    <span class="text-sm font-medium text-gray-700 truncate max-w-[150px]">Lihat Dokumen</span>
-                                </div>
-                            </a>
-                        `;
-                        docContainer.append(docHtml);
-                    }
-                });
-            } else {
-                docContainer.append('<p class="text-gray-500 italic text-sm">Belum ada dokumen yang diunggah.</p>');
-            }
+            
         },
         error: function() {
             showNotification('Gagal mengambil data detail', 'error');

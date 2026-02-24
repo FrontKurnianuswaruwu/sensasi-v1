@@ -39,67 +39,81 @@ function renderTable(data) {
     const tableBody = $('#tableBody');
     tableBody.empty();
 
-    if (data.length === 0) {
+    if (!data || data.length === 0) {
         tableBody.append(`
             <tr>
-                <td colspan="5" class="px-6 py-8 text-center text-gray-500">
-                    <i class="fas fa-info-circle text-gray-400 mr-2"></i>
-                    Tidak ada data ditemukan
+                <td colspan="6" class="px-6 py-10 text-center text-gray-500">
+                    <div class="flex flex-col items-center">
+                        <i class="fas fa-folder-open text-4xl text-gray-300 mb-3"></i>
+                        <p>Tidak ada data alumni ditemukan</p>
+                    </div>
                 </td>
             </tr>
         `);
         return;
     }
 
-    data.forEach((employee, index) => {
-        let status = employee.user?.status_user;
+    data.forEach((item, index) => {
+        const isResmi = item.sumber_data === 'resmi';
+        
+        // Identitas Data
+        const name  = isResmi ? item.nama_lengkap : item.user?.name;
+        const subId = isResmi ? `Lulus: ${item.tahun_lulus}` : `NIM: ${item.nim}`;
+        const mitra = isResmi ? item.mitra?.nama_mitra : item.user?.akademik?.mitra?.nama_mitra;
+        const info  = isResmi ? (item.program_studi || '-') : (item.user?.email || '-');
 
-        if (status === 'Tidak Aktif') {
-            status = 'Alumni';
-        }
-        const statusClass = status === 'Aktif'
-            ? 'bg-green-100 text-green-800'
-            : 'bg-blue-100 text-blue-800';
+        // Styling Badge
+        const badgeClass = isResmi 
+            ? 'bg-purple-100 text-purple-700 border-purple-200' 
+            : 'bg-blue-100 text-blue-700 border-blue-200';
+        
+        const badgeLabel = isResmi ? 'Alumni Resmi' : 'Alumni (Transisi)';
+        const iconLabel  = isResmi ? 'fa-graduation-cap' : 'fa-user-clock';
 
         const row = `
-            <tr class="hover:bg-gray-50 transition-colors duration-200">
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
-                <td class="px-6 py-4 whitespace-nowrap">
+            <tr class="hover:bg-blue-50/30 transition-all duration-200 border-b border-gray-100">
+                <td class="px-6 py-4 text-sm text-gray-500">${index + 1}</td>
+                <td class="px-6 py-4">
                     <div class="flex items-center">
                         <div class="flex-shrink-0 h-10 w-10">
-                            <div class="h-10 w-10 rounded-full bg-gradient-to-r gradient-bg to-blue-light flex items-center justify-center text-white font-semibold">
-                                ${employee.user?.name.charAt(0)}
-                            </div>
+                            ${isResmi && item.foto 
+                                ? `<img class="h-10 w-10 rounded-full object-cover border" src="/storage/${item.foto}">`
+                                : `<div class="h-10 w-10 rounded-full bg-gradient-to-br ${isResmi ? 'from-purple-600 to-indigo-600' : 'from-blue-600 to-cyan-500'} flex items-center justify-center text-white font-bold shadow-sm">
+                                    ${name ? name.charAt(0).toUpperCase() : '?'}
+                                   </div>`
+                            }
                         </div>
                         <div class="ml-4">
-                            <div class="text-sm font-medium text-gray-900">${employee.user?.name}</div>
+                            <div class="text-sm font-bold text-gray-900">${name || '-'}</div>
+                            <div class="text-xs text-gray-500 font-medium">${subId}</div>
                         </div>
                     </div>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${employee.user?.akademik?.mitra?.nama_mitra || '-'}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${employee.user?.email}</td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">
-                        ${status ?? '-'}
+                <td class="px-6 py-4 text-sm text-gray-700">${mitra || '-'}</td>
+                <td class="px-6 py-4 text-sm text-gray-600">${info}</td>
+                <td class="px-6 py-4">
+                    <span class="px-3 py-1 inline-flex items-center text-xs font-bold rounded-full border ${badgeClass}">
+                        <i class="fas ${iconLabel} mr-1.5"></i> ${badgeLabel}
                     </span>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                    ${
-                        employee.user.status_user !== 'Aktif'
-                        ? `
-                            <button class="detail-btn px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all mr-2" 
-                                data-id="${employee.id}" title="Lihat Detail">
-                                <i class="fas fa-eye"></i>
+                <td class="px-6 py-4 text-sm font-medium">
+                    <div class="flex space-x-2">
+                        <button class="detail-btn p-2 bg-white border border-gray-200 text-blue-600 rounded-md hover:shadow-md transition-all" 
+                            data-id="${item.id}" data-type="${item.sumber_data}" title="Lihat Profil">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        
+                        ${!isResmi ? `
+                            <button class="aktif-btn p-2 bg-white border border-gray-200 text-green-600 rounded-md hover:bg-green-50 transition-all"
+                                data-id="${item.user?.id}" data-name="${name}">
+                                <i class="fas fa-undo-alt"></i>
                             </button>
-                            <button class="aktif-btn px-3 py-1 text-green-600 hover:text-green-800 transition-all"
-                                title="Set PBS Aktif" data-id="${employee.user?.id}" data-name="${employee.user.name}">
-                                <i class="fa-solid fa-circle-check text-xl"></i>
+                        ` : `
+                            <button class="p-2 bg-gray-50 text-gray-300 rounded-md cursor-not-allowed border border-gray-100" title="Arsip Permanen">
+                                <i class="fas fa-check-double"></i>
                             </button>
-                        `
-                        : `
-                            <i class="fas fa-lock text-gray-400 text-xl" title="Aksi tidak tersedia"></i>
-                        `
-                    }
+                        `}
+                    </div>
                 </td>
             </tr>
         `;

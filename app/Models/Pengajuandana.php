@@ -9,7 +9,7 @@ class Pengajuandana extends Model
     protected $table = 'pengajuan_dana';
 
     protected $fillable = [
-    'mahasiswa_id',
+        'mahasiswa_id',
         'semester',
         'ip_semester',
         'spp_tetap',

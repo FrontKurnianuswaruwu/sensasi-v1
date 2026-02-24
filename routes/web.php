@@ -264,5 +264,7 @@ Route::middleware(['check.expired', 'check.permission'])->group(function() {
     Route::post('/permission-role/store', [PermissionController::class, 'store']);
 
     Route::get('/admin/mahasiswa/detail/{id}', [BiodatamahasiswaController::class, 'detailMahasiswa'])->name('admin.mahasiswa.detail');
+    Route::get('//admin/mahasiswa/pengajuandanadetail/{id}', [PengajuandanaController::class, 'detailPengajuanDana'])->name('admin.mahasiswa.pengajuandana.detail');
+    Route::get('/admin/mahasiswa/pdf/{id}', [BiodatamahasiswaController::class, 'downloadPdf'])->name('admin.mahasiswa.pengajuandana.pdf');
     });
 

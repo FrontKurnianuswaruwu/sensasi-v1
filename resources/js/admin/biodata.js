@@ -24,7 +24,7 @@ function loadTahunAkademik(selectedType = '') {
 
 function loadMitra(selectedType = '') {
     // Tambahkan return
-    return $.get('/admin/getmitra', function(response) {
+    return $.get('/admin/getmitra/universitas', function(response) {
         const mitras = Array.isArray(response.data) ? response.data : [];
         $('#universitas').empty().append('<option value="">Pilih Universitas</option>');
         mitras.forEach(function(mitra) {
@@ -85,10 +85,10 @@ function loadData() {
             }
             if (user.orangtua) fillOrangtua(user.orangtua);
             if (user.dokumen) fillDokumen(user.dokumen);
-            // Promise.all(promises).then(() => {
-            //     console.log("Semua data (termasuk dropdown) sudah siap!");
-            //     checkSequentialValidation();
-            // });
+            Promise.all(promises).then(() => {
+                console.log("Semua data (termasuk dropdown) sudah siap!");
+                checkSequentialValidation();
+            });
         },
         error: function(xhr, status, error) {
             console.error("Gagal ambil data:", error, xhr.responseText);
@@ -224,6 +224,47 @@ function showNotification(message, type = 'info') {
 $("#biodataForm").on("submit", function (e) {
     e.preventDefault();
 
+    const requiredFields = {
+        'nama': 'Nama Lengkap',
+        'nik': 'NIK',
+        'jenis_kelamin': 'Jenis Kelamin',
+        'tempat_lahir': 'Tempat Lahir',
+        'tanggal_lahir': 'Tanggal Lahir',
+        'alamat_ktp': 'Alamat KTP',
+        'no_wa': 'Nomor WhatsApp',
+        'agama': 'Agama',
+        'status_pernikahan': 'Status'
+    };
+
+    let emptyFields = [];
+    let firstEmptyInput = null;
+
+    for (const [name, label] of Object.entries(requiredFields)) {
+        const input = $(`[name="${name}"]`);
+        
+        if (!input.val() || input.val().trim() === "") {
+            emptyFields.push(label);
+            
+            input.addClass('border-red-500 bg-red-50');
+            
+            if (!firstEmptyInput) firstEmptyInput = input;
+        } else {
+            input.removeClass('border-red-500 bg-red-50');
+        }
+    }
+
+    if (emptyFields.length > 0) {
+        showNotification(
+            `Mohon lengkapi data berikut: <br><ul class="text-left ml-4 list-disc"><li>${emptyFields.join('</li><li>')}</li></ul>`, 
+            'error'
+        );
+        
+        if (firstEmptyInput) firstEmptyInput.focus();
+        
+        return false;
+    }
+
+
     const submit = $('#submit');
     const originalText = submit.html();
     submit.html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...').prop('disabled', true);
@@ -291,6 +332,49 @@ $('#ip_terakhir').on('input', function() {
 $("#akademikForm").on("submit", function (e) {
     e.preventDefault();
 
+    const requiredFields = {
+        'universitas': 'Universitas / Perguruan Tinggi',
+        'tahun_akademik': 'Tahun Akademik Aktif',
+        'nim': 'Nomor Induk Mahasiswa (NIM)',
+        'fakultas': 'Nama Fakultas',
+        'program_studi': 'Program Studi',
+        'semester': 'Semester Saat Ini',
+        'ip_terakhir': 'Indeks Prestasi (IP) Terakhir'
+    };
+
+    let emptyFields = [];
+    let firstEmptyInput = null;
+
+    for (const [name, label] of Object.entries(requiredFields)) {
+        const input = $(`[name="${name}"]`);
+        const value = input.val();
+
+        if (!value || value.toString().trim() === "") {
+            emptyFields.push(label);
+            input.addClass('border-red-500 bg-red-50');
+            
+            if (!firstEmptyInput) firstEmptyInput = input;
+        } else {
+            input.removeClass('border-red-500 bg-red-50');
+        }
+    }
+
+    const ipInput = $('[name="ip_terakhir"]');
+    if (ipInput.val() > 4 || ipInput.val() < 0) {
+        showNotification('Nilai IP tidak valid! Harus di antara 0.00 - 4.00', 'error');
+        ipInput.addClass('border-red-500 bg-red-50').focus();
+        return false;
+    }
+
+    if (emptyFields.length > 0) {
+        showNotification(
+            `Harap isi bidang berikut: <br><ul class="text-left ml-4 list-disc mt-2"><li>${emptyFields.join('</li><li>')}</li></ul>`, 
+            'error'
+        );
+        if (firstEmptyInput) firstEmptyInput.focus();
+        return false; 
+    }
+
     const submit = $('#submitakademik');
     const originalText = submit.html();
     submit.html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...').prop('disabled', true);
@@ -334,14 +418,53 @@ $("#akademikForm").on("submit", function (e) {
 $("#orangtuaForm").on("submit", function (e) {
     e.preventDefault();
 
+    const requiredFields = {
+        'nama_ayah': 'Nama Lengkap Ayah',
+        'pekerjaan_ayah': 'Pekerjaan Ayah',
+        'pendidikan_ayah': 'Pendidikan Ayah',
+        'penghasilan_ayah': 'Penghasilan Ayah',
+        'nama_ibu': 'Nama Lengkap Ibu',
+        'pekerjaan_ibu': 'Pekerjaan Ibu',
+        'pendidikan_ibu': 'Pendidikan Ibu',
+        'penghasilan_ibu': 'Penghasilan Ibu',
+        'jumlah_tanggungan': 'Jumlah Tanggungan',
+        'no_wa_ortu': 'No. WA Orang Tua'
+    };
+
+    let emptyFields = [];
+    let firstEmptyInput = null;
+
+    for (const [name, label] of Object.entries(requiredFields)) {
+        const input = $(`[name="${name}"]`);
+        if (!input.val() || input.val().toString().trim() === "") {
+            emptyFields.push(label);
+            input.addClass('border-red-500 bg-red-50');
+            if (!firstEmptyInput) firstEmptyInput = input;
+        } else {
+            input.removeClass('border-red-500 bg-red-50');
+        }
+    }
+
+    if (emptyFields.length > 0) {
+        showNotification(
+            `Data belum lengkap: <br><ul class="text-left ml-4 list-disc mt-2"><li>${emptyFields.join('</li><li>')}</li></ul>`, 
+            'error'
+        );
+        if (firstEmptyInput) firstEmptyInput.focus();
+        return false;
+    }
+
     const submit = $('#submitorangtua');
     const originalText = submit.html();
-    submit.html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...').prop('disabled', true);
+    
     const backupValues = {};
     $('.rupiah-input').each(function () {
+        backupValues[this.id] = $(this).val();
         const cleanValue = $(this).val().replace(/[^0-9]/g, '');
-        $(this).val(cleanValue || 0); // pastikan tidak kosong
+        $(this).val(cleanValue || 0); 
     });
+
+    submit.html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...').prop('disabled', true);
     const formData = $(this).serialize();
 
     $('.rupiah-input').each(function () {
@@ -418,9 +541,53 @@ $('input[type="file"]').on('change', function() {
 $("#dokumenForm").on("submit", function (e) {
     e.preventDefault();
 
+    const requiredDocs = {
+        'scan_ktp': 'Scan KTP',
+        'scan_kartu_mahasiswa': 'Scan Kartu Mahasiswa',
+        'scan_kk': 'Scan Kartu Keluarga',
+        'transkrip_nilai': 'Transkrip Nilai',
+        'surat_keterangan_aktif': 'Surat Keterangan Aktif',
+        'foto_profil': 'Foto Profil',
+        'essay_motivasi': 'Essay Motivasi',
+        'sertifikat_prestasi': 'Sertifikat Prestasi'
+    };
+
+    let missingDocs = [];
+    let firstError = null;
+
+    for (const [id, label] of Object.entries(requiredDocs)) {
+        const input = $(`#${id}`);
+        const container = input.next('div'); 
+
+        if (input[0].files.length === 0) {
+            missingDocs.push(label);
+            
+            container.addClass('border-red-500 bg-red-50').removeClass('border-gray-200');
+            
+            if (!firstError) firstError = input;
+        } else {
+            container.removeClass('border-red-500 bg-red-50').addClass('border-green-500');
+        }
+    }
+
+    if (missingDocs.length > 0) {
+        showNotification(
+            `Semua dokumen wajib diunggah ulang: <br><ul class="text-left ml-4 list-disc mt-2"><li>${missingDocs.join('</li><li>')}</li></ul>`, 
+            'error'
+        );
+        
+        if (firstError) {
+            $('html, body').animate({
+                scrollTop: firstError.offset().top - 150
+            }, 500);
+        }
+        return false;
+    }
+
     const submit = $('#submitdokumen');
     const originalText = submit.html();
-    submit.html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...').prop('disabled', true);
+    
+    submit.html('<i class="fas fa-spinner fa-spin mr-2"></i>Sedang Mengunggah...').prop('disabled', true);
 
     const formData = new FormData(this);
 
@@ -469,50 +636,48 @@ $('#foto').on('change', function () {
     };
     reader.readAsDataURL(file);
 });
+
 const tabOrder = ['biodata', 'akademik', 'orangtua', 'dokumen'];
-// function checkSequentialValidation() {
-//     tabOrder.forEach((currentTab, index) => {
-//         const nextTab = tabOrder[index + 1];
-//         if (!nextTab) return;
 
-//         const $currentContent = $(`#${currentTab}`);
-//         const $nextTabBtn = $(`[data-tab="${nextTab}"]`);
-        
-//         let isComplete = true;
+function checkSequentialValidation() {
+    tabOrder.forEach((currentTab, index) => {
+        const nextTab = tabOrder[index + 1];
+        if (!nextTab) return;
 
-//         const $fieldsToCheck = $currentContent.find('[required]:not([type="file"])');
-        
-//         if (currentTab === 'biodata') {
-//             const photoInput = document.getElementById('foto');
-//             // Jika input foto ada dan masih kosong, maka dianggap belum lengkap
-//             if (photoInput && photoInput.files.length === 0) {
-//                 isComplete = false;
-//                 console.warn("Validation: Foto profil wajib diunggah.");
-//             }
-//         }
-//         $fieldsToCheck.each(function() {
-//             const value = $(this).val();
-            
-//             if (!value || value.toString().trim() === "") {
-//                 isComplete = false;
-//                 console.warn(`Validation: Field ${$(this).attr('name')} masih kosong.`);
-//                 return false;
-//             }
-//         });
+        const $currentContent = $(`#${currentTab}`);
+        const $nextTabBtn = $(`[data-tab="${nextTab}"]`);
 
-//         if (isComplete) {
-//             console.log(`✅ Tab ${currentTab} lengkap, membuka tab ${nextTab}`);
-//             $nextTabBtn.prop('disabled', false)
-//                        .removeClass('opacity-50 cursor-not-allowed')
-//                        .addClass('hover:text-blue-primary');
-//         } else {
-//             for (let i = index + 1; i < tabOrder.length; i++) {
-//                 $(`[data-tab="${tabOrder[i]}"]`)
-//                     .prop('disabled', true)
-//                     .addClass('opacity-50 cursor-not-allowed')
-//                     .removeClass('hover:text-blue-primary');
-//             }
-//         }
-//     });
-// }
+        let isComplete = true;
+
+        const $fieldsToCheck = $currentContent.find('[data-required="true"]');
+
+        $fieldsToCheck.each(function() {
+            if ($(this).attr('type') === 'file') {
+                if (this.files.length === 0) {
+                    isComplete = false;
+                    return false;
+                }
+            } else {
+                const value = $(this).val();
+                if (!value || value.toString().trim() === "") {
+                    isComplete = false;
+                    return false;
+                }
+            }
+        });
+
+        if (isComplete) {
+            $nextTabBtn.prop('disabled', false)
+                       .removeClass('opacity-50 cursor-not-allowed')
+                       .addClass('hover:text-blue-primary');
+        } else {
+            for (let i = index + 1; i < tabOrder.length; i++) {
+                $(`[data-tab="${tabOrder[i]}"]`)
+                    .prop('disabled', true)
+                    .addClass('opacity-50 cursor-not-allowed')
+                    .removeClass('hover:text-blue-primary');
+            }
+        }
+    });
+}
 

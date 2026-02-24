@@ -91,6 +91,10 @@ function renderTable(data) {
                                 data-id="${employee.id}" title="Lihat Detail">
                                 <i class="fas fa-eye"></i>
                             </button>
+                            <button class="download-pdf-btn inline-flex items-center px-3 py-1.5 bg-blue-300 text-white rounded-lg hover:bg-blue-400 transition-all shadow-sm mr-2" 
+                                data-id="${employee.id}" title="Download PDF">
+                                <i class="fas fa-download"></i>
+                            </button>
                             <button class="aktif-btn px-3 py-1 text-green-600 hover:text-green-800 transition-all"
                                 title="Set PBS Aktif" data-id="${employee.user?.id}" data-name="${employee.user.name}">
                                 <i class="fa-solid fa-circle-check text-xl"></i>
@@ -169,6 +173,10 @@ function renderCards(data) {
                                 <button class="detail-btn flex-1 flex items-center justify-center px-3 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-all" 
                                     data-id="${employee.id}">
                                     <i class="fas fa-eye mr-2"></i> Detail
+                                </button>
+                                <button class="download-pdf-btn inline-flex items-center px-3 py-1.5 bg-blue-300 text-white rounded-lg hover:bg-blue-400 transition-all shadow-sm mr-2" 
+                                    data-id="${employee.id}" title="Download PDF">
+                                    <i class="fas fa-download"></i>
                                 </button>
                                 <button class="aktif-btn flex-1 flex items-center justify-center px-3 py-2 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-600 transition-all"
                                     data-id="${employee.user?.id}" data-name="${employee.user?.name}">
@@ -467,7 +475,12 @@ $(document).on('click', '.detail-btn', function() {
             $('#det_email').text(res.user.email);
             $('#det_agama').text(res.agama);
             $('#det_telp').text(res.no_wa);
-            $('#det_alamat').text(res.alamat_ktp);
+            $('#det_alamatktp').text(res.alamat_ktp);
+            $('#det_tempatlahir').text(res.tempat_lahir);
+            $('#det_nik').text(res.nik);
+            $('#det_statusperkawinan').text(res.status_perkawinan);
+            $('#det_jumlahsaudara').text(res.jumlah_saudara);
+            $('#det_anakke').text(res.anak_ke);
             $('#det_semester').text(res.user.akademik.semester);
             $('#det_ipk').text(res.user.akademik.ip_terakhir);
             $('#det_status').text(res.user.status_user);
@@ -475,6 +488,8 @@ $(document).on('click', '.detail-btn', function() {
             $('#det_ayah_kerja').text(res.user.orangtua.pekerjaan_ayah);
             $('#det_ibu_nama').text(res.user.orangtua.nama_ibu);
             $('#det_ibu_kerja').text(res.user.orangtua.pekerjaan_ibu);
+            $('#det_ayah_pendidikan').text(res.user.orangtua.pendidikan_ayah);
+            $('#det_ibu_pendidikan').text(res.user.orangtua.pendidikan_ibu);
             $('#det_tgllahir').text(formatTanggal(res.tanggal_lahir));
             $('#det_universitas').text(res.mitra.nama_mitra);
             $('#det_ayah_gaji').text(formatRupiah(res.user.orangtua.penghasilan_ayah));
@@ -563,4 +578,25 @@ $(document).on('click', '.tab-btn', function() {
 
 $(document).on('click', '.detail-btn', function() {
     $('.tab-btn[data-tab="tab-biodata"]').trigger('click');
+});
+
+$(document).on('click', '.download-pdf-btn', function() {
+    const mahasiswaId = $(this).data('id');
+    if (!mahasiswaId) return;
+
+    fetch(`/admin/mahasiswa/pdf/${mahasiswaId}`, {
+        method: 'GET',
+    })
+    .then(response => response.blob())
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Biodata_${mahasiswaId}.pdf`; 
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+    })
+    .catch(() => alert('Gagal download PDF'));
 });

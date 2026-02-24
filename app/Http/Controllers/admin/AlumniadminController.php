@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\BiodataMahasiswa;
+use App\Models\Alumni;
 use Illuminate\Http\Request;
 
 class AlumniadminController extends Controller
@@ -22,50 +23,63 @@ class AlumniadminController extends Controller
         return view('admin.alumniadmin.index', compact('nameuser', 'userstatus'));
     }
     public function getdata(Request $request)
-    {
-        $search = $request->input('search');
-        $page   = $request->input('page', 1);
-        $limit  = $request->input('limit', 10);
+{
+    $search = $request->input('search');
+    $page   = $request->input('page', 1);
+    $limit  = $request->input('limit', 10);
 
-        $loginRole = auth()->user()->role;
-        $loginMitraId = auth()->user()->mitra_id;
-        
+    $loginRole = auth()->user()->role;
+    $loginMitraId = auth()->user()->mitra_id;
 
-        $query = BiodataMahasiswa::select('user_id', 'nim', 'id')
-            ->with('user.akademik.mitra')
-            ->whereHas('user', function ($q) {
-                $q->where('status_user', 'Tidak Aktif')
-                ->where('role', 9);
-            });
+    // --- 1. Query Alumni Transisi (Dari BiodataMahasiswa) ---
+    $queryMhs = BiodataMahasiswa::with(['user.akademik.mitra'])
+        ->whereHas('user', function ($q) {
+            $q->where('status_user', 'Tidak Aktif')->where('role', 9);
+        });
 
-        if ($loginRole == 19) {
+    // --- 2. Query Alumni Resmi (Dari Tabel Alumni) ---
+    $queryAlumni = Alumni::with('mitra');
 
-            $query->whereHas('user', function ($q) {
-                $q->where('status_user', 'Tidak Aktif');
-            });
-
-            $query->whereHas('user.akademik', function ($q) use ($loginMitraId) {
-                $q->where('mitra_id', $loginMitraId);
-            });
-        }
-
-        if (!empty($search)) {
-            $query->whereHas('user', function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                ->orWhere('email', 'like', "%{$search}%");
-            });
-        }
-
-        // pagination
-        $users = $query->paginate($limit, ['*'], 'page', $page);
-
-        return response()->json([
-            'data' => $users->items(),
-            'total' => $users->total(),
-            'current_page' => $users->currentPage(),
-            'last_page' => $users->lastPage()
-        ]);
+    // Filter Berdasarkan Mitra (Role 19)
+    if ($loginRole == 19) {
+        $queryMhs->whereHas('user.akademik', function ($q) use ($loginMitraId) {
+            $q->where('mitra_id', $loginMitraId);
+        });
+        $queryAlumni->where('mitra_id', $loginMitraId);
     }
+
+    // Filter Search
+    if (!empty($search)) {
+        $queryMhs->whereHas('user', function($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%");
+        });
+        $queryAlumni->where('nama_lengkap', 'like', "%{$search}%");
+    }
+
+    // Ambil Data & Tandai Sumbernya
+    $dataMhs = $queryMhs->get()->map(function($item) {
+        $item->sumber_data = 'transisi';
+        return $item;
+    });
+
+    $dataAlumni = $queryAlumni->get()->map(function($item) {
+        $item->sumber_data = 'resmi';
+        return $item;
+    });
+
+    // Gabungkan (Merge) dan Bungkus dengan Pagination Manual
+    $combined = $dataMhs->concat($dataAlumni)->sortByDesc('created_at');
+    
+    $total = $combined->count();
+    $items = $combined->forPage($page, $limit)->values();
+
+    return response()->json([
+        'data'         => $items,
+        'total'        => $total,
+        'current_page' => (int)$page,
+        'last_page'    => ceil($total / $limit)
+    ]);
+}
 
     public function confirmpbsaktif($id)
     {
