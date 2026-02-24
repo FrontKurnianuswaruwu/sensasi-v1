@@ -251,13 +251,13 @@
                             <div class="hidden md:block">
                                 <p class="text-xs text-gray-400 italic">* Pastikan semua data sudah benar sebelum menyimpan.</p>
                             </div>
-                            @if ($userstatus == "Biodata")
+                            {{-- @if ($userstatus == "Biodata") --}}
                                 <button type="submit" id="submit"
                                     class="group relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-300 bg-orange-500 rounded-2xl hover:bg-orange-600 focus:ring-4 focus:ring-orange-200 active:scale-95 shadow-lg shadow-orange-500/30">
                                     <span class="mr-2"><i class="fas fa-save group-hover:rotate-12 transition-transform"></i></span>
                                     Simpan Perubahan Biodata
                                 </button>
-                            @endif
+                            {{-- @endif --}}
                         </div>
                     </form>
                 </div>
@@ -383,7 +383,7 @@
                                     <i class="fas fa-info-circle mr-1"></i> Data akademik akan diverifikasi oleh sistem.
                                 </p>
                             </div>
-                            @if ($userstatus == "Biodata")
+                            {{-- @if ($userstatus == "Biodata") --}}
                                 <button type="submit" id="submitakademik"
                                     class="group relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-300 bg-orange-500 rounded-2xl hover:bg-orange-600 focus:ring-4 focus:ring-orange-200 active:scale-95 shadow-lg shadow-orange-500/30">
                                     <span class="mr-2">
@@ -391,7 +391,7 @@
                                     </span>
                                     Simpan Data Akademik
                                 </button>
-                            @endif
+                            {{-- @endif --}}
                         </div>
                     </form>
                 </div>
@@ -522,7 +522,7 @@
                         </div>
                         
                         <div class="flex items-center justify-end pt-4">
-                            @if ($userstatus == "Biodata")
+                            {{-- @if ($userstatus == "Biodata") --}}
                                 <button type="submit" id="submitorangtua"
                                     class="group relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-300 bg-orange-500 rounded-2xl hover:bg-orange-600 focus:ring-4 focus:ring-orange-200 active:scale-95 shadow-lg shadow-orange-500/30">
                                     <span class="mr-2">
@@ -530,7 +530,7 @@
                                         </span>
                                         Simpan Data Orang Tua
                                 </button>
-                            @endif
+                            {{-- @endif --}}
                         </div>
                     </form>
                 </div>
@@ -688,12 +688,12 @@
                         </div>
 
                         <div class="flex justify-start pt-6 border-t border-gray-200">
-                            @if ($userstatus == "Biodata")
+                            {{-- @if ($userstatus == "Biodata") --}}
                                 <button type="submit" id="submitdokumen"
                                     class="px-8 py-4 text-white bg-orange-500 border border-orange-500 rounded-xl hover:bg-orange-600 focus:ring-4 focus:ring-orange-200 transition-all duration-300 font-bold shadow-lg shadow-orange-500/30">
                                     <i class="fas fa-save mr-2"></i>Simpan Dokumen
                                 </button>
-                            @endif
+                            {{-- @endif --}}
                         </div>
                     </form>
                 </div>    
