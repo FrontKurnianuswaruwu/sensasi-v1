@@ -169,7 +169,7 @@
             <div class="field"><span class="label">Pekerjaan</span> <span class="value">{{ optional(optional($biodata->user)->orangtua)->pekerjaan_ibu ?? '-' }}</span></div>
             <div class="field"><span class="label">Pendidikan</span> <span class="value">{{ optional(optional($biodata->user)->orangtua)->pendidikan_ibu ?? '-' }}</span></div>
             <div class="field"><span class="label">Penghasilan</span> 
-                <span class="value">{{ optional(optional($biodata->user)->orangtua)->ibu_penghasilan ? 'Rp ' . number_format(optional($biodata->user)->orangtua->penghasilan_ibu, 0, ',', '.') : '-' }}</span>
+                <span class="value">{{ optional(optional($biodata->user)->orangtua)->penghasilan_ibu ? 'Rp ' . number_format(optional($biodata->user)->orangtua->penghasilan_ibu, 0, ',', '.') : '-' }}</span>
             </div>
         </div>
     </div>
