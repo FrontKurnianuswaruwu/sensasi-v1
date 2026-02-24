@@ -915,20 +915,21 @@ $(document).on('click', '.detail-btn', function() {
         url: `/admin/mahasiswa/pengajuandanadetail/${mahasiswaId}`,
         type: 'GET',
         success: function(res) {
+            const tipe = parseInt(res.tipe);
             $('#det_semester').text(`Semester ${res.semester}`);
             $('#det_ip').text(res.ip_semester);
-            $('#det_tipe').text(res.tipe === 1 ? 'Paket' : 'SKS');
+            $('#det_tipe').text(tipe === 1 ? 'Paket' : 'SKS');
 
             $('#detailPaket').addClass('hidden');
             $('#detailSks').addClass('hidden');
 
-            if (res.tipe === 1) {
+            if (tipe === 1) {
                 $('#detailPaket').removeClass('hidden');
                 $('#det_spp_tetap').text(formatRupiah(res.spp_tetap));
                 $('#det_spp_variabel').text(formatRupiah(res.spp_variabel));
                 $('#det_praktikum_paket').text(formatRupiah(res.praktikum));
                 hitungTotalPaket();
-            } else if (res.tipe === 2) {
+            } else if (tipe === 2) {
                 $('#detailSks').removeClass('hidden');
                 $('#det_jml_sks').text(formatRupiah(res.jml_sks));
                 $('#det_nominal').text(formatRupiah(res.nominal));
