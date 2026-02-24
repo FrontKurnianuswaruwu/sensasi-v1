@@ -53,6 +53,28 @@ class CheckStatus
                 if (!in_array($request->route()->getName(), $allowedRoutes)) {
                     return redirect()->route('admin.potensiakademik.index')->with('error', 'Silakan selesaikan tes potensi akademik Anda terlebih dahulu.');
                 }
+            } elseif ($statusUser == 'Verifikasi') {
+                $allowedRoutes = [
+                    'admin.dashboard.index',
+                    'admin.biodatamahasiswa.index',
+                    'admin.potensiakademik.index',
+                ];
+
+                if (!in_array($request->route()->getName(), $allowedRoutes)) {
+                    return redirect()->route('admin.dashboard.index')->with('error', 'Akun Anda sedang dalam proses verifikasi. Silakan tunggu informasi selanjutnya.');
+                }
+            } elseif (in_array($statusUser, ['Lolos', 'Tidak Lolos'])) {
+                $allowedRoutes = [
+                    'admin.dashboard.index',
+                    'admin.user.aktivasi',
+                    'admin.user.terminate',
+                    'admin.biodatamahasiswa.index',
+                    'admin.potensiakademik.index',
+                ];
+
+                if (!in_array($request->route()->getName(), $allowedRoutes)) {
+                    return redirect()->route('admin.dashboard.index')->with('error', 'Akun Anda sudah selesai diproses. Silakan cek dashboard untuk informasi selanjutnya.');
+                }
             }
         }
         return $next($request);

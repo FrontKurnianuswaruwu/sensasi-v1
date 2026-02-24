@@ -165,5 +165,29 @@ class UserController extends Controller
         ]);
     }
 
+    public function aktivasi()
+    {
+        $user = auth()->user(); 
 
+        if ($user->status_user === 'Lolos') {
+            $user->update([
+                'status_user' => 'Aktif'
+            ]);
+
+            return redirect()->route('admin.dashboard.index')->with('success', 'Akun aktif!');
+        }
+    }
+
+    public function terminate()
+    {
+        $user = auth()->user();
+
+        if ($user->status_user === 'Tidak Lolos') {
+            auth()->logout();
+
+            $user->delete();
+
+            return redirect('/login')->with('info', 'Data Anda telah dihapus.');
+        }
+    }
 }

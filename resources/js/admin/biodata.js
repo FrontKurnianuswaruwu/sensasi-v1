@@ -233,7 +233,9 @@ $("#biodataForm").on("submit", function (e) {
         'alamat_ktp': 'Alamat KTP',
         'no_wa': 'Nomor WhatsApp',
         'agama': 'Agama',
-        'status_pernikahan': 'Status'
+        'status_pernikahan': 'Status',
+        'anak_ke' : 'Anak Ke',
+        'jumlah_saudara' : 'Jumlah Saudara'
     };
 
     let emptyFields = [];
@@ -549,7 +551,7 @@ $("#dokumenForm").on("submit", function (e) {
         'surat_keterangan_aktif': 'Surat Keterangan Aktif',
         'foto_profil': 'Foto Profil',
         'essay_motivasi': 'Essay Motivasi',
-        'sertifikat_prestasi': 'Sertifikat Prestasi'
+        'sertifikat_prestasi': 'Sertifikat Prestasi',
     };
 
     let missingDocs = [];
@@ -601,6 +603,10 @@ $("#dokumenForm").on("submit", function (e) {
             showNotification(response.message, response.status);
             submit.html(originalText).prop('disabled', false);
             loadData();
+            // reload halaman setelah 2 detik untuk update preview dokumen
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
         },
         error: function(xhr) {
             submit.html(originalText).prop('disabled', false);

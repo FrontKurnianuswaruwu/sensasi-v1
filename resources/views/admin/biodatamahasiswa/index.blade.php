@@ -159,8 +159,36 @@
                                     <label class="font-bold text-sm text-gray-700">Tanggal Lahir</label>
                                     <input type="date" id="tanggal_lahir" name="tanggal_lahir" class="w-full px-5 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 transition-all" data-required="true">
                                 </div>
+                                <div class="group space-y-2">
+                                    <label for="anak_ke" class="inline-block text-sm font-bold text-gray-700 transition-colors group-focus-within:text-blue-600">
+                                        Anak Ke- <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500">
+                                            <i class="fas fa-sitemap text-sm"></i>
+                                        </div>
+                                        <input type="number" id="anak_ke" name="anak_ke"
+                                            class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-300 text-gray-700 font-medium placeholder:text-gray-300"
+                                            placeholder="Contoh: 1" data-required="true" min="1">
+                                    </div>
+                                </div>
+
+                                <div class="group space-y-2">
+                                    <label for="jumlah_saudara" class="inline-block text-sm font-bold text-gray-700 transition-colors group-focus-within:text-blue-600">
+                                        Jumlah Saudara <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500">
+                                            <i class="fas fa-users text-sm"></i>
+                                        </div>
+                                        <input type="number" id="jumlah_saudara" name="jumlah_saudara"
+                                            class="w-full pl-11 pr-4 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-300 text-gray-700 font-medium placeholder:text-gray-300"
+                                            placeholder="Total saudara kandung" data-required="true" min="0">
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
 
                         <div class="bg-gray-50/50 rounded-2xl p-6 border border-dashed border-gray-200 space-y-6">
                             <div class="flex justify-between items-center">
@@ -223,13 +251,13 @@
                             <div class="hidden md:block">
                                 <p class="text-xs text-gray-400 italic">* Pastikan semua data sudah benar sebelum menyimpan.</p>
                             </div>
-                            {{-- @if ($userstatus == "Biodata") --}}
+                            @if ($userstatus == "Biodata")
                                 <button type="submit" id="submit"
                                     class="group relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-300 bg-orange-500 rounded-2xl hover:bg-orange-600 focus:ring-4 focus:ring-orange-200 active:scale-95 shadow-lg shadow-orange-500/30">
                                     <span class="mr-2"><i class="fas fa-save group-hover:rotate-12 transition-transform"></i></span>
                                     Simpan Perubahan Biodata
                                 </button>
-                            {{-- @endif --}}
+                            @endif
                         </div>
                     </form>
                 </div>
@@ -355,7 +383,7 @@
                                     <i class="fas fa-info-circle mr-1"></i> Data akademik akan diverifikasi oleh sistem.
                                 </p>
                             </div>
-                            {{-- @if ($userstatus == "Biodata") --}}
+                            @if ($userstatus == "Biodata")
                                 <button type="submit" id="submitakademik"
                                     class="group relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-300 bg-orange-500 rounded-2xl hover:bg-orange-600 focus:ring-4 focus:ring-orange-200 active:scale-95 shadow-lg shadow-orange-500/30">
                                     <span class="mr-2">
@@ -363,7 +391,7 @@
                                     </span>
                                     Simpan Data Akademik
                                 </button>
-                            {{-- @endif --}}
+                            @endif
                         </div>
                     </form>
                 </div>
@@ -494,7 +522,7 @@
                         </div>
                         
                         <div class="flex items-center justify-end pt-4">
-                            {{-- @if ($userstatus == "Biodata") --}}
+                            @if ($userstatus == "Biodata")
                                 <button type="submit" id="submitorangtua"
                                     class="group relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-300 bg-orange-500 rounded-2xl hover:bg-orange-600 focus:ring-4 focus:ring-orange-200 active:scale-95 shadow-lg shadow-orange-500/30">
                                     <span class="mr-2">
@@ -502,7 +530,7 @@
                                         </span>
                                         Simpan Data Orang Tua
                                 </button>
-                            {{-- @endif --}}
+                            @endif
                         </div>
                     </form>
                 </div>
@@ -660,12 +688,12 @@
                         </div>
 
                         <div class="flex justify-start pt-6 border-t border-gray-200">
-                            {{-- @if ($userstatus == "Biodata") --}}
+                            @if ($userstatus == "Biodata")
                                 <button type="submit" id="submitdokumen"
                                     class="px-8 py-4 text-white bg-orange-500 border border-orange-500 rounded-xl hover:bg-orange-600 focus:ring-4 focus:ring-orange-200 transition-all duration-300 font-bold shadow-lg shadow-orange-500/30">
                                     <i class="fas fa-save mr-2"></i>Simpan Dokumen
                                 </button>
-                            {{-- @endif --}}
+                            @endif
                         </div>
                     </form>
                 </div>    

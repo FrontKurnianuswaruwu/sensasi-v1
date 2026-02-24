@@ -94,7 +94,7 @@
             <div class="flex flex-col h-full">
                 @php
                     // Tentukan route yang diizinkan berdasarkan status user
-                    if (in_array($userstatus, ['Biodata', 'Potensi Akademik', 'Verifikasi'])) {
+                    if (in_array($userstatus, ['Biodata', 'Potensi Akademik', 'Verifikasi', 'Lolos', 'Tidak Lolos'])) {
                         $allowedRoutes = [];
 
                         if ($userstatus === 'Biodata') {
@@ -110,6 +110,12 @@
                                 'admin.biodatamahasiswa.index',
                             ];
                         } elseif ($userstatus === 'Verifikasi') {
+                            $allowedRoutes = [
+                                'admin.dashboard.index',
+                                'admin.biodatamahasiswa.index',
+                                'admin.potensiakademik.index',
+                            ];
+                        } elseif ($userstatus === 'Lolos' || $userstatus === 'Tidak Lolos') {
                             $allowedRoutes = [
                                 'admin.dashboard.index',
                                 'admin.biodatamahasiswa.index',
@@ -230,6 +236,7 @@
     @vite(['resources/js/admin/dashboard.js', 'resources/css/admin.css'])
 </body>
 <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 </html>

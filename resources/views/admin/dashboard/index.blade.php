@@ -392,7 +392,7 @@
         @vite(['resources/js/admin/pengajuandana.js', 'resources/js/admin/artikel.js'])
     </div>
     </main>
-@elseif (in_array($userstatus, ['Biodata', 'Potensi Akademik', 'Verifikasi']))
+@elseif (in_array($userstatus, ['Biodata', 'Potensi Akademik', 'Verifikasi', 'Lolos', 'Tidak Lolos']))
     @php
         $statusConfig = [
             'Biodata' => [
@@ -415,7 +415,7 @@
                 'color' => 'yellow',
                 'icon' => 'fa-user-clock',
                 'title' => 'Akun Sedang Diverifikasi',
-                'desc'  => 'Data kamu sudah diterima dan sedang diperiksa oleh admin. Beberapa fitur akan sementara dinonaktifkan.',
+                'desc'  => 'Data kamu sudah diterima. Silakan tunggu wawancara dari admin lembaga atau melalui media sosial SENSASI.',
                 'btnText' => 'Kembali ke Dashboard',
                 'btnLink' => route('admin.dashboard.index'),
             ],
@@ -426,6 +426,24 @@
                 'desc'  => 'Selamat! Kamu sekarang bisa menggunakan semua fitur yang tersedia.',
                 'btnText' => 'Kembali ke Dashboard',
                 'btnLink' => route('admin.dashboard.index'),
+            ],
+            'Lolos' => [
+                'color' => 'green',
+                'icon' => 'fa-trophy',
+                'title' => 'Pengumuman Hasil',
+                'desc'  => 'Hasil seleksi sudah keluar! Silakan cek hasil kamu sekarang.',
+                'btnText' => 'Cek Hasil Seleksi',
+                'btnLink' => '#',
+                'id' => 'btnCekHasil' // ID untuk trigger modal
+            ],
+            'Tidak Lolos' => [
+                'color' => 'red',
+                'icon' => 'fa-times-circle',
+                'title' => 'Pengumuman Hasil',
+                'desc'  => 'Hasil seleksi sudah keluar. Silakan klik tombol di bawah.',
+                'btnText' => 'Cek Hasil Seleksi',
+                'btnLink' => '#',
+                'id' => 'btnCekHasil'
             ],
         ];
 
@@ -474,10 +492,17 @@
 
                 <!-- Action Button -->
                 <div class="mt-8">
-                    <a href="{{ $config['btnLink'] }}"
+                    <a href="{{ $config['btnLink'] }}" 
+                    id="{{ $config['id'] ?? '' }}"
                     class="inline-flex items-center justify-center w-full px-6 py-3 rounded-xl
-                    bg-{{ $config['color'] }}-600 text-white font-semibold hover:bg-{{ $config['color'] }}-500 transition">
-                        <i class="fas fa-arrow-right mr-2"></i>
+                    bg-{{ $config['color'] }}-600 text-white font-semibold hover:bg-{{ $config['color'] }}-500 transition shadow-lg">
+                        
+                        @if(in_array($userstatus, ['Lolos', 'Tidak Lolos']))
+                            <i class="fas fa-search mr-2"></i>
+                        @else
+                            <i class="fas fa-arrow-right mr-2"></i>
+                        @endif
+                        
                         {{ $config['btnText'] }}
                     </a>
                 </div>
@@ -486,6 +511,44 @@
         </div>
     </main>
 
+    <script>
+        function triggerModal() {
+            const status = "{{ $userstatus }}";
+            
+            if (status === 'Lolos') {
+                Swal.fire({
+                    title: 'Selamat! 🎉',
+                    text: 'Anda dinyatakan LOLOS seleksi. Klik OK untuk mengaktifkan akun dan mengakses menu.',
+                    icon: 'success',
+                    confirmButtonColor: '#059669',
+                    confirmButtonText: 'OKE, AKTIFKAN AKUN',
+                    allowOutsideClick: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "{{ route('admin.user.aktivasi') }}";
+                    }
+                });
+            } else if (status === 'Tidak Lolos') {
+                Swal.fire({
+                    title: 'Mohon Maaf...',
+                    text: 'Anda dinyatakan tidak lolos seleksi. Akun Anda akan dihapus dari sistem.',
+                    icon: 'error',
+                    confirmButtonColor: '#dc2626',
+                    confirmButtonText: 'SAYA MENGERTI',
+                    allowOutsideClick: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "{{ route('admin.user.terminate') }}";
+                    }
+                });
+            }
+        }
+
+        document.getElementById('btnCekHasil')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            triggerModal();
+        });
+    </script>
 
 @else
 @endif
