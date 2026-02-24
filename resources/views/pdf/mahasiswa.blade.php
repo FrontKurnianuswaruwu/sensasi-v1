@@ -158,21 +158,23 @@
             <div style="font-weight: bold; margin-bottom: 10px; color: #475569;">Data Ayah</div>
             <div class="field"><span class="label">Nama Ayah</span> <span class="value">{{ optional(optional($biodata->user)->orangtua)->nama_ayah ?? '-' }}</span></div>
             <div class="field"><span class="label">Pekerjaan</span> <span class="value">{{ optional(optional($biodata->user)->orangtua)->pekerjaan_ayah ?? '-' }}</span></div>
+            <div class="field"><span class="label">Pendidikan</span> <span class="value">{{ optional(optional($biodata->user)->orangtua)->pendidikan_ayah ?? '-' }}</span></div>
             <div class="field"><span class="label">Penghasilan</span> 
                 <span class="value">{{ optional(optional($biodata->user)->orangtua)->penghasilan_ayah ? 'Rp ' . number_format(optional($biodata->user)->orangtua->penghasilan_ayah, 0, ',', '.') : '-' }}</span>
             </div>
         </div>
         <div class="col">
             <div style="font-weight: bold; margin-bottom: 10px; color: #475569;">Data Ibu</div>
-            <div class="field"><span class="label">Nama Ibu</span> <span class="value">{{ optional(optional($biodata->user)->orangtua)->ibu_nama ?? '-' }}</span></div>
-            <div class="field"><span class="label">Pekerjaan</span> <span class="value">{{ optional(optional($biodata->user)->orangtua)->ibu_kerja ?? '-' }}</span></div>
+            <div class="field"><span class="label">Nama Ibu</span> <span class="value">{{ optional(optional($biodata->user)->orangtua)->nama_ibu ?? '-' }}</span></div>
+            <div class="field"><span class="label">Pekerjaan</span> <span class="value">{{ optional(optional($biodata->user)->orangtua)->pekerjaan_ibu ?? '-' }}</span></div>
+            <div class="field"><span class="label">Pendidikan</span> <span class="value">{{ optional(optional($biodata->user)->orangtua)->pendidikan_ibu ?? '-' }}</span></div>
             <div class="field"><span class="label">Penghasilan</span> 
-                <span class="value">{{ optional(optional($biodata->user)->orangtua)->ibu_penghasilan ? 'Rp ' . number_format(optional($biodata->user)->orangtua->ibu_penghasilan, 0, ',', '.') : '-' }}</span>
+                <span class="value">{{ optional(optional($biodata->user)->orangtua)->ibu_penghasilan ? 'Rp ' . number_format(optional($biodata->user)->orangtua->penghasilan_ibu, 0, ',', '.') : '-' }}</span>
             </div>
         </div>
     </div>
     <div class="clear"></div>
-    <div class="field" style="margin-top: 10px;"><span class="label">No. Telp Orang Tua</span> <span class="value">{{ optional(optional($biodata->user)->orangtua)->telp ?? '-' }}</span></div>
+    <div class="field" style="margin-top: 10px;"><span class="label">No. Telp Orang Tua</span> <span class="value">{{ optional(optional($biodata->user)->orangtua)->no_wa_ortu ?? '-' }}</span></div>
 
     <div class="clear"></div>
     <div class="keep-together new-page-if-needed">
