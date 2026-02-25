@@ -79,7 +79,7 @@ class MahasiswaExport implements FromCollection, WithHeadings, WithMapping, Shou
             'NAMA AYAH', 'KERJA AYAH', 'PENDIDIKAN AYAH', 'PENGHASILAN AYAH',
             'NAMA IBU', 'KERJA IBU', 'PENDIDIKAN IBU', 'PENGHASILAN IBU',
             'TANGGUNGAN', 'WA ORTU',
-            'KATEGORI UJIAN', 'TOTAL BENAR', 'TOTAL SALAH', 'STATUS'
+            'KATEGORI UJIAN', 'JUMLAH SOAL', 'TOTAL BENAR', 'TOTAL SALAH', 'PERSENTASE (%)', 'STATUS'
         ];
     }
 
@@ -90,14 +90,27 @@ class MahasiswaExport implements FromCollection, WithHeadings, WithMapping, Shou
         $ortu = $user->orangtua;
 
         $daftarKategori = '-';
+        $jumlahSoal = 0;
+        $totalBenar = 0;
+        $totalSalah = 0;
+
         if ($bio && $bio->hasilujian->isNotEmpty()) {
             $daftarKategori = $bio->hasilujian->map(function($item) {
                 return $item->kategoriSoal->name ?? '-';
             })->implode(', ');
+
+            $jumlahSoal = $bio->hasilujian->sum(function($item) {
+                return $item->kategoriSoal->soals->count();
+            });
+
+            $totalBenar = $bio->hasilujian->sum('jumlah_benar');
+            $totalSalah = $bio->hasilujian->sum('jumlah_salah');
         }
-        
-        $totalBenar = $bio ? $bio->hasilujian->sum('jumlah_benar') : 0;
-        $totalSalah = $bio ? $bio->hasilujian->sum('jumlah_salah') : 0;
+
+        $persentase = 0;
+        if ($jumlahSoal > 0) {
+            $persentase = ($totalBenar / $jumlahSoal) * 100;
+        }
 
         return [
             strtoupper($user->name),
@@ -135,8 +148,10 @@ class MahasiswaExport implements FromCollection, WithHeadings, WithMapping, Shou
             $ortu->no_wa_ortu ?? '-',
             
             $daftarKategori,
+            $jumlahSoal,
             $totalBenar,
             $totalSalah,
+            round($persentase, 2) . '%',
             $user->status_user
         ];
     }
