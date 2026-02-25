@@ -13,6 +13,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\MahasiswaExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BiodatamahasiswaController extends Controller
 {
@@ -368,5 +370,11 @@ class BiodatamahasiswaController extends Controller
         $fileName = "Biodata_{$biodata->id}.pdf";
 
         return $pdf->download($fileName);
+    }
+
+    public function exportExcel()
+    {
+        $fileName = 'Data_Lengkap_Mahasiswa_PBS_' . now()->format('Y-m-d_H-i') . '.xlsx';
+        return Excel::download(new MahasiswaExport, $fileName);
     }
 }

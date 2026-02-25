@@ -38,13 +38,20 @@
                         class="w-full pl-12 pr-4 py-4 bg-white border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-primary/20 focus:border-blue-primary transition-all duration-300 text-base placeholder-gray-500" 
                         placeholder="Cari berdasarkan nama, atau email...">
             </div>
-            <div class="mt-4 flex items-center justify-between">
-                <span id="resultCount" class="text-sm text-gray-600 font-medium">
+            
+            <div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <span id="resultCount" class="text-sm text-gray-600 font-medium order-2 sm:order-1">
                     <i class="fas fa-info-circle mr-1"></i>
                     Menampilkan semua data
                 </span>
+                
+                <a href="{{ route('mahasiswa.export') }}" class="order-1 sm:order-2 w-full sm:w-auto flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-5 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-md active:scale-95">
+                    <i class="fas fa-file-excel text-lg"></i>
+                    <span>Download All Data</span>
+                </a>
             </div>
         </div>
+        {{-- Button download all --}}
 
         <!-- Table Container -->
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden fade-in" style="animation-delay: 0.3s;">

@@ -269,5 +269,6 @@ Route::middleware(['check.expired', 'check.permission'])->group(function() {
 
     Route::get('/user/aktivasi', [UserController::class, 'aktivasi'])->name('admin.user.aktivasi');    
     Route::get('/user/terminate', [UserController::class, 'terminate'])->name('admin.user.terminate');
+    Route::get('/admin/mahasiswa/export-excel', [BiodatamahasiswaController::class, 'exportExcel'])->name('mahasiswa.export');
     });
 
