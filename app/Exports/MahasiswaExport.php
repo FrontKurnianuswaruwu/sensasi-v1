@@ -12,6 +12,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Color;
 
 class MahasiswaExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize, WithStyles
 {
@@ -19,7 +20,7 @@ class MahasiswaExport implements FromCollection, WithHeadings, WithMapping, Shou
     {
         return User::where('status_user', 'Verifikasi')
             ->with([
-                'biodataMahasiswa.hasilujian.kategoriSoal', 
+                'biodataMahasiswa.hasilujian.kategoriSoal.soals', 
                 'akademik.mitra', 
                 'orangtua', 
                 'akademik.tahunAkademik'
@@ -31,14 +32,37 @@ class MahasiswaExport implements FromCollection, WithHeadings, WithMapping, Shou
     {
         $lastRow = $sheet->getHighestRow();
         $lastCol = $sheet->getHighestColumn();
-        $range = 'A1:' . $lastCol . $lastRow;
+        $fullRange = 'A1:' . $lastCol . $lastRow;
+
+        $sheet->getRowDimension(1)->setRowHeight(35);
+
+        $sheet->getStyle($fullRange)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        
+        for ($i = 2; $i <= $lastRow; $i++) {
+            $sheet->getRowDimension($i)->setRowHeight(25);
+            
+            if ($i % 2 == 0) {
+                $sheet->getStyle("A$i:$lastCol$i")->getFill()
+                    ->setFillType(Fill::FILL_SOLID)
+                    ->getStartColor()->setARGB('F8FAFC');
+            }
+
+            $percentValue = (float) $sheet->getCell("AG$i")->getValue();
+            if ($percentValue >= 80) {
+                $sheet->getStyle("AG$i")->getFont()->getColor()->setARGB('16A34A'); // Hijau jika > 80%
+                $sheet->getStyle("AG$i")->getFont()->setBold(true);
+            } elseif ($percentValue < 50) {
+                $sheet->getStyle("AG$i")->getFont()->getColor()->setARGB('DC2626'); // Merah jika < 50%
+            }
+        }
 
         return [
             1 => [
                 'font' => [
                     'bold' => true, 
                     'color' => ['argb' => 'FFFFFF'],
-                    'size' => 12
+                    'size' => 11,
+                    'name' => 'Arial'
                 ],
                 'alignment' => [
                     'horizontal' => Alignment::HORIZONTAL_CENTER,
@@ -46,28 +70,23 @@ class MahasiswaExport implements FromCollection, WithHeadings, WithMapping, Shou
                 ],
                 'fill' => [
                     'fillType' => Fill::FILL_SOLID,
-                    'startColor' => ['argb' => '2563EB'],
+                    'startColor' => ['argb' => '1E293B'],
                 ],
             ],
 
-            $range => [
+            $fullRange => [
                 'borders' => [
                     'allBorders' => [
                         'borderStyle' => Border::BORDER_THIN,
-                        'color' => ['argb' => '000000'],
+                        'color' => ['argb' => 'CBD5E1'],
                     ],
-                ],
-                'alignment' => [
-                    'vertical' => Alignment::VERTICAL_CENTER,
                 ],
             ],
         ];
     }
 
-    private function formatRupiah($angka)
-    {
-        if (!$angka || !is_numeric($angka)) return 'Rp 0';
-        return 'Rp ' . number_format($angka, 0, ',', '.');
+    private function formatRupiah($angka) {
+        return 'Rp ' . number_format($angka ?? 0, 0, ',', '.');
     }
 
     public function headings(): array
@@ -95,29 +114,20 @@ class MahasiswaExport implements FromCollection, WithHeadings, WithMapping, Shou
         $totalSalah = 0;
 
         if ($bio && $bio->hasilujian->isNotEmpty()) {
-            $daftarKategori = $bio->hasilujian->map(function($item) {
-                return $item->kategoriSoal->name ?? '-';
-            })->implode(', ');
-
-            $jumlahSoal = $bio->hasilujian->sum(function($item) {
-                return $item->kategoriSoal->soals->count();
-            });
-
+            $daftarKategori = $bio->hasilujian->map(fn($item) => $item->kategoriSoal->name ?? '-')->implode(', ');
+            $jumlahSoal = $bio->hasilujian->sum(fn($item) => $item->kategoriSoal->soals->count());
             $totalBenar = $bio->hasilujian->sum('jumlah_benar');
             $totalSalah = $bio->hasilujian->sum('jumlah_salah');
         }
-
-        $persentase = 0;
-        if ($jumlahSoal > 0) {
-            $persentase = ($totalBenar / $jumlahSoal) * 100;
-        }
+        
+        $persentase = $jumlahSoal > 0 ? round(($totalBenar / $jumlahSoal) * 100, 2) : 0;
 
         return [
             strtoupper($user->name),
             $user->email,
             $bio->nim ?? '-',
             "'" . ($bio->nik ?? '-'),
-            $bio->tempat_lahir ?? '-',
+            strtoupper($bio->tempat_lahir ?? '-'),
             $bio->tanggal_lahir ?? '-',
             $bio->jenis_kelamin ?? '-',
             $bio->no_wa ?? '-',
@@ -126,32 +136,27 @@ class MahasiswaExport implements FromCollection, WithHeadings, WithMapping, Shou
             $bio->anak_ke ?? '-',
             $bio->jumlah_saudara ?? '-',
             $bio->alamat_ktp ?? '-',
-            
             $akad->mitra->nama_mitra ?? '-', 
             $akad->tahunAkademik->tahun ?? '-',
             $akad->fakultas ?? '-',
             $akad->program_studi ?? '-',
             $akad->semester ?? '-',
             $akad->ip_terakhir ?? '-',
-            
             $ortu->nama_ayah ?? '-',
             $ortu->pekerjaan_ayah ?? '-',
             $ortu->pendidikan_ayah ?? '-',
-            $this->formatRupiah($ortu->penghasilan_ayah ?? 0),
-            
+            $this->formatRupiah($ortu?->penghasilan_ayah ?? 0),
             $ortu->nama_ibu ?? '-',
             $ortu->pekerjaan_ibu ?? '-',
             $ortu->pendidikan_ibu ?? '-',
-            $this->formatRupiah($ortu->penghasilan_ibu ?? 0),
-            
+            $this->formatRupiah($ortu?->penghasilan_ibu ?? 0),
             $ortu->jumlah_tanggungan ?? '-',
             $ortu->no_wa_ortu ?? '-',
-            
             $daftarKategori,
             $jumlahSoal,
             $totalBenar,
             $totalSalah,
-            round($persentase, 2) . '%',
+            $persentase, 
             $user->status_user
         ];
     }
