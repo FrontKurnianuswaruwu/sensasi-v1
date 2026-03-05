@@ -149,9 +149,9 @@
                     <!-- Action Buttons -->
                     <div class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-3">
                         <button type="button" 
-                                id="cancelActiveBtn"
-                                class="w-full sm:w-auto px-6 py-3 text-gray-700 bg-gray-100 border border-gray-300 rounded-xl hover:bg-gray-200 focus:ring-4 focus:ring-gray-200 transition-all duration-300 font-medium">
-                            <i class="fas fa-times mr-2"></i>Batal
+                            id="rejectActiveBtn"
+                            class="w-full sm:w-auto px-6 py-3 text-white bg-red-500 border border-red-500 rounded-xl hover:bg-red-600 transition-all duration-300 font-medium">
+                            <i class="fas fa-times mr-2"></i>Tolak
                         </button>
                         <button type="button" 
                                 id="confirmActiveBtn"

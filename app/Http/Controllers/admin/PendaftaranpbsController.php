@@ -69,7 +69,7 @@ class PendaftaranpbsController extends Controller
         ]);
     }
 
-    public function confirmpbsaktif($id)
+    public function confirmpbsaktif(Request $request, $id)
     {
         $user = BiodataMahasiswa::where('user_id', $id)->first();
 
@@ -80,12 +80,12 @@ class PendaftaranpbsController extends Controller
             ], 404);
         }
 
-        $user->user->status_user = 'Aktif';
+        $user->user->status_user = $request->status;
         $user->user->save();
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Berhasil ubah jadi pbsaktif.'
+            'message' => 'Status berhasil diperbarui.'
         ]);
     }
 }

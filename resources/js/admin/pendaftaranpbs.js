@@ -432,17 +432,16 @@ $(document).on("click", ".aktif-btn", function () {
     showModalEnhanced('activeModal');
 });
 
-$(document).on('click', '#confirmActiveBtn', function() {
-    const activeBtn = $(this);
-    const originalText = activeBtn.html();
-    activeBtn.html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...')
-             .prop('disabled', true);
+function updateStatus(status) {
 
     const activeUserId = $('#activeUserId').val();
 
     $.ajax({
         url: `/admin/confirmpbs/${activeUserId}`,
         type: 'PUT',
+        data: {
+            status: status
+        },
         success: function(response) {
             showNotification(response.message , response.status);
             hideModalEnhanced('activeModal');
@@ -453,11 +452,16 @@ $(document).on('click', '#confirmActiveBtn', function() {
                         ? xhr.responseJSON.message 
                         : 'Gagal menyimpan data!';
             showNotification(msg, 'error');
-        },
-        complete: function() {
-            activeBtn.html(originalText).prop('disabled', false);
         }
     });
+}
+
+$(document).on('click', '#confirmActiveBtn', function () {
+    updateStatus('Lolos');
+});
+
+$(document).on('click', '#rejectActiveBtn', function () {
+    updateStatus('Tidak Lolos');
 });
 
 $(document).on('click', '.detail-btn', function() {
