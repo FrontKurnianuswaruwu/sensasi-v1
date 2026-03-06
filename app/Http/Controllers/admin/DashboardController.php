@@ -43,6 +43,8 @@ class DashboardController extends Controller
         $countmitra = Mitra::count();
         $countprogram = Program::count();
         $mitraId = $user->mitra_id;
+        // field foto dibiodatamahasiswa
+        $fotomahasiswa = BiodataMahasiswa::where('user_id', $userid)->first()->foto ?? null;
 
         if ($userrole == 19) {
             $countalumni = Alumni::where('mitra_id', $mitraId)->count();
@@ -125,7 +127,8 @@ class DashboardController extends Controller
             'countmitra',
             'countprogram',
             'countpbsaktif',
-            'countpendaftarpbs'
+            'countpendaftarpbs',
+            'fotomahasiswa'
         ));
     }
 

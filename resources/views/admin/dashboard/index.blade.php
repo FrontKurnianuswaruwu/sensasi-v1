@@ -434,7 +434,7 @@
                 'desc'  => 'Hasil seleksi sudah keluar! Silakan cek hasil kamu sekarang.',
                 'btnText' => 'Cek Hasil Seleksi',
                 'btnLink' => '#',
-                'id' => 'btnCekHasil' // ID untuk trigger modal
+                'id' => 'btnCekHasil' 
             ],
             'Tidak Lolos' => [
                 'color' => 'red',
@@ -510,38 +510,116 @@
 
         </div>
     </main>
-
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
         function triggerModal() {
             const status = "{{ $userstatus }}";
-            
-            if (status === 'Lolos') {
-                Swal.fire({
-                    title: 'Selamat! 🎉',
-                    text: 'Anda dinyatakan LOLOS seleksi. Klik OK untuk mengaktifkan akun dan mengakses menu.',
-                    icon: 'success',
-                    confirmButtonColor: '#059669',
-                    confirmButtonText: 'OKE, AKTIFKAN AKUN',
-                    allowOutsideClick: false
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "{{ route('admin.user.aktivasi') }}";
+            const nama = "{{ $nameuser }}";
+            const foto = "{{ asset($fotomahasiswa) }}"; 
+
+            let timerInterval;
+            Swal.fire({
+                title: `Memproses Seleksi Beasiswa`,
+                html: `
+                    <div class="flex items-center space-x-6 text-left">
+                        <div class="relative flex-shrink-0">
+                            <img src="${foto}" class="w-24 h-24 rounded-full object-cover border-4 border-blue-500 shadow-lg" 
+                                onerror="this.src='https://ui-avatars.com/api/?name=${nama}&background=random'">
+                            <div class="absolute -inset-1 rounded-full border-2 border-blue-400 border-t-transparent animate-spin"></div>
+                        </div>
+                        <div>
+                            <p class="text-base text-gray-600">Mohon tunggu, <b>${nama}</b></p>
+                            <p class="text-sm text-gray-400 italic">Sistem sedang memverifikasi hasil beasiswa SENSASI...</p>
+                            <h1 class="text-3xl font-bold mt-1 countdown-text text-blue-600">15</h1>
+                        </div>
+                    </div>
+                `,
+                timer: 15000,
+                width: '550px', 
+                padding: '1.5rem',
+                timerProgressBar: true,
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                    const b = Swal.getHtmlContainer().querySelector('.countdown-text');
+                    let seconds = 15;
+                    timerInterval = setInterval(() => {
+                        seconds--;
+                        if (b) b.textContent = seconds;
+                    }, 1000);
+                },
+                willClose: () => { clearInterval(timerInterval); },
+                customClass: { popup: 'rounded-2xl shadow-2xl' }
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer) {
+                    if (status === 'Lolos') {
+                        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, zIndex: 9999 });
+
+                        Swal.fire({
+                            html: `
+                                <div class="text-center">
+                                    <div class="relative w-40 h-40 mx-auto mb-3">
+                                        <img src="${foto}" class="w-full h-full rounded-full object-cover border-4 border-green-500 shadow-xl">
+                                        <div class="absolute -bottom-1 -right-1 bg-white rounded-full p-2 shadow-lg">
+                                            <i class="fas fa-check-circle text-green-500 text-3xl"></i>
+                                        </div>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-gray-800 leading-tight">${nama}</h3>
+                                    <p class="text-sm text-gray-500 mt-1">Berdasarkan Hasil Seleksi Program Beasiswa SENSASI, Anda dinyatakan:</p>
+                                    
+                                    <div class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl py-4 px-6 text-center shadow-md my-4">
+                                        <h2 class="text-4xl font-black text-white tracking-widest animate-pulse">LOLOS</h2>
+                                    </div>
+                                    <p class="text-gray-600 text-sm">Selamat! Anda terpilih sebagai penerima beasiswa SENSASI. <br> Silakan aktifkan akun Anda untuk langkah selanjutnya.</p>
+                                </div>
+                            `,
+                            icon: 'success',
+                            width: '650px',
+                            padding: '1.5rem',
+                            confirmButtonColor: '#059669',
+                            confirmButtonText: '<i class="fas fa-check-circle mr-2"></i> OKE, AKTIFKAN AKUN SAYA',
+                            allowOutsideClick: false,
+                            customClass: {
+                                popup: 'rounded-2xl border-t-8 border-green-500 shadow-2xl',
+                                confirmButton: 'w-full py-3 text-lg rounded-xl font-bold transition transform hover:scale-[1.02]'
+                            }
+                        }).then((res) => {
+                            if (res.isConfirmed) { window.location.href = "{{ route('admin.user.aktivasi') }}"; }
+                        });
+                    } else if (status === 'Tidak Lolos') {
+                        Swal.fire({
+                            html: `
+                                <div class="text-center">
+                                    <div class="relative w-40 h-40 mx-auto mb-3 grayscale opacity-70">
+                                        <img src="${foto}" class="w-full h-full rounded-full object-cover border-4 border-gray-300 shadow-lg">
+                                        <div class="absolute -bottom-1 -right-1 bg-white rounded-full p-2 shadow-md">
+                                            <i class="fas fa-times-circle text-red-500 text-3xl"></i>
+                                        </div>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-gray-800 leading-tight">${nama}</h3>
+                                    <p class="text-sm text-gray-500 mt-1">Berdasarkan Hasil Seleksi Program Beasiswa SENSASI, Anda dinyatakan:</p>
+
+                                    <div class="bg-gray-100 border-l-4 border-red-500 rounded-lg p-4 my-4 text-left">
+                                        <h2 class="text-3xl font-bold text-red-600 uppercase">TIDAK LOLOS</h2>
+                                        <p class="text-xs text-gray-500 mt-1 italic">Mohon maaf, Anda belum dapat bergabung pada periode ini.</p>
+                                    </div>
+                                    <p class="text-xs text-gray-400 uppercase tracking-tighter italic font-semibold">Jangan berkecil hati, tetap semangat dan terus mencoba!</p>
+                                </div>
+                            `,
+                            icon: 'error',
+                            width: '600px',
+                            padding: '1.5rem',
+                            confirmButtonColor: '#4b5563',
+                            confirmButtonText: 'SAYA MENGERTI',
+                            allowOutsideClick: false,
+                            customClass: { popup: 'rounded-2xl border-t-8 border-red-600 shadow-2xl' }
+                        }).then((res) => {
+                            if (res.isConfirmed) { window.location.href = "{{ route('admin.user.terminate') }}"; }
+                        });
                     }
-                });
-            } else if (status === 'Tidak Lolos') {
-                Swal.fire({
-                    title: 'Mohon Maaf...',
-                    text: 'Anda dinyatakan tidak lolos seleksi. Akun Anda akan dihapus dari sistem.',
-                    icon: 'error',
-                    confirmButtonColor: '#dc2626',
-                    confirmButtonText: 'SAYA MENGERTI',
-                    allowOutsideClick: false
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "{{ route('admin.user.terminate') }}";
-                    }
-                });
-            }
+                }
+            });
         }
 
         document.getElementById('btnCekHasil')?.addEventListener('click', function(e) {
