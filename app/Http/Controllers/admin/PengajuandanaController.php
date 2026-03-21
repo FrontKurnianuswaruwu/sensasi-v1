@@ -47,14 +47,11 @@ class PengajuandanaController extends Controller
 
         $userId = auth()->id();
 
-        // cek apakah user ini ada di tabel biodata_mahasiswa
         $mahasiswa = BiodataMahasiswa::where('user_id', $userId)->first();
 
-        // base query
         $query = Pengajuandana::select('id', 'semester', 'ip_semester', 'nominal', 'status','total', 'mahasiswa_id', 'catatan')
             ->with(['mahasiswa.user']);
 
-        // jika user punya data biodata_mahasiswa → tampilkan data dia saja
         if ($mahasiswa) {
             $query->where('mahasiswa_id', $mahasiswa->id);
             $query->where('status', '!=', 'approved');
@@ -62,7 +59,10 @@ class PengajuandanaController extends Controller
 
         if (!empty($search)) {
             $query->where(function($q) use ($search) {
-                $q->where('semester', 'like', "%{$search}%");
+                $q->where('semester', 'like', "%{$search}%")
+                  ->orWhereHas('mahasiswa.user', function($subQ) use ($search) {
+                      $subQ->where('name', 'like', "%{$search}%");
+                  });
             });
         }
 
