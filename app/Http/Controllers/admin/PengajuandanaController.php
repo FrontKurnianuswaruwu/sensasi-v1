@@ -50,7 +50,7 @@ class PengajuandanaController extends Controller
         $mahasiswa = BiodataMahasiswa::where('user_id', $userId)->first();
 
         $query = Pengajuandana::select('id', 'semester', 'ip_semester', 'nominal', 'status','total', 'mahasiswa_id', 'catatan')
-            ->with(['mahasiswa.user']);
+            ->with(['mahasiswa.user'])->orderBy('created_at', 'desc');
 
         if ($mahasiswa) {
             $query->where('mahasiswa_id', $mahasiswa->id);
