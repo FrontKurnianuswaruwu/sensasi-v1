@@ -370,7 +370,7 @@ $(document).on('click', '.edit-btn', function () {
             pilihanCount = 0;
 
             if (data.pilihan && data.pilihan.length > 0) {
-                data.pilihan.forEach(p => addPilihanRow(p.teks, !!p.is_true));
+                data.pilihan.forEach(p => addPilihanRow(p.teks, p.is_true == 1));
             } else {
                 addPilihanRow('', true);
                 addPilihanRow('', false);
