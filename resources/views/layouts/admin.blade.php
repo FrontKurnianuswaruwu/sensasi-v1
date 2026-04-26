@@ -88,7 +88,7 @@
         </div>
     </header>
 
-    <div class="flex pt-16">
+    <div class="flex pt-16 overflow-x-hidden">
         <!-- Sidebar -->
         <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-xl flex flex-col pt-16 -translate-x-full lg:translate-x-0 transition-transform">
             <div class="flex flex-col h-full">
@@ -224,7 +224,7 @@
         </aside>
 
         {{-- content --}}
-        <main class="flex-1 ml-0 lg:ml-64">
+        <main class="flex-1 ml-0 lg:ml-64 min-w-0">
         @yield('content')
         </main>
 

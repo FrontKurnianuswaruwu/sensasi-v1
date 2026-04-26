@@ -1,123 +1,232 @@
 import $ from 'jquery';
+
 $(document).ready(function () {
-    let waktuPengerjaan = parseInt($('#waktuPengerjaan').val(), 10) * 60; 
-    const countdown = document.getElementById('countdown');
-    const form = $('#testForm');
-    let submitted = false; 
 
-    function updateTimer() {
-        let minutes = Math.floor(waktuPengerjaan / 60);
-        let seconds = waktuPengerjaan % 60;
-        countdown.textContent = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+    const TOTAL_SOAL  = window.TOTAL_SOAL;
+    let currentIndex  = 0;
+    let submitted     = false;
+    const jawaban     = {};
 
+    const KATEGORI_ID = $('input[name="kategori_id"]').val();
+    const START_KEY   = `potensi_start_${KATEGORI_ID}`; 
+    const waktuAwal   = parseInt($('#waktuPengerjaan').val(), 10) * 60;
+    const countdown   = document.getElementById('countdown');
 
-        if(waktuPengerjaan <= 0 && !submitted){
-            clearInterval(timerInterval);
-            alert("Waktu Habis! Jawaban akan otomatis disubmit.");
-            submitForm();
-        }
-        waktuPengerjaan--;
+    let startTime = sessionStorage.getItem(START_KEY);
+    if (!startTime) {
+        startTime = Date.now();
+        sessionStorage.setItem(START_KEY, startTime);
+    } else {
+        startTime = parseInt(startTime, 10);
     }
 
-    const timerInterval = setInterval(updateTimer, 1000);
-    updateTimer();
+    function getSisaDetik() {
+        const selisihDetik = Math.floor((Date.now() - startTime) / 1000);
+        return Math.max(0, waktuAwal - selisihDetik);
+    }
 
-    const modal = $('#confirmModal');
-    const confirmBtn = $('#confirmSubmit');
-    const cancelBtn = $('#cancelSubmit');
+    function updateCountdown() {
+        const sisa = getSisaDetik();
+        const m    = Math.floor(sisa / 60);
+        const s    = sisa % 60;
+        countdown.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
 
+        if (sisa <= 60) {
+            countdown.classList.add('text-red-500');
+            countdown.classList.remove('text-orange-500');
+        }
 
-    function submitForm() {
+        if (sisa <= 0 && !submitted) {
+            clearInterval(timerInterval);
+            sessionStorage.removeItem(START_KEY);
+            showNotification('Waktu habis! Jawaban otomatis dikumpulkan.', 'error');
+            submitForm(true);
+        }
+    }
 
+    const timerInterval = setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    function showSoal(index) {
+        $('.soal-card').addClass('hidden');
+        $(`.soal-card[data-index="${index}"]`).removeClass('hidden');
+        currentIndex = index;
+        updateUI();
+    }
+
+    function updateUI() {
+        $('#currentSoalNum').text(currentIndex + 1);
+
+        const dijawab = Object.keys(jawaban).length;
+        const persen  = Math.round((dijawab / TOTAL_SOAL) * 100);
+        $('#progressBar').css('width', persen + '%');
+        $('#progressPercent').text(persen + '% terjawab');
+
+        $('.soal-nav-btn').each(function (i) {
+            $(this).removeClass('bg-orange-500 border-orange-500 bg-green-500 border-green-500 bg-white border-gray-200 text-gray-500 text-white');
+
+            const soalId = $(`.soal-card[data-index="${i}"]`).data('soal-id');
+
+            if (i === currentIndex) {
+                $(this).addClass('bg-orange-500 border-orange-500 text-white');
+            } else if (soalId && jawaban[soalId]) {
+                $(this).addClass('bg-green-500 border-green-500 text-white');
+            } else {
+                $(this).addClass('bg-white border-gray-200 text-gray-500');
+            }
+        });
+
+        $('#btnBack').prop('disabled', currentIndex === 0);
+
+        const isLast = currentIndex === TOTAL_SOAL - 1;
+        $('#btnNextText').text(isLast ? 'Kumpulkan' : 'Berikutnya');
+        $('#btnNextIcon').attr('class', isLast
+            ? 'fas fa-paper-plane text-sm'
+            : 'fas fa-arrow-right text-sm'
+        );
+    }
+
+    $(document).on('change', 'input[type="radio"]', function () {
+        const soalId    = this.name.match(/\[(\d+)\]/)[1];
+        jawaban[soalId] = this.value;
+
+        const soalCard = $(this).closest('.soal-card');
+        soalCard.find('.pilihan-label').each(function () {
+            $(this).removeClass('border-orange-400 bg-orange-50');
+            $(this).find('.pilihan-circle')
+                   .removeClass('border-orange-500 bg-orange-500 text-white')
+                   .addClass('border-gray-200 text-gray-400');
+        });
+
+        const label = $(this).closest('.pilihan-label');
+        label.addClass('border-orange-400 bg-orange-50');
+        label.find('.pilihan-circle')
+             .removeClass('border-gray-200 text-gray-400')
+             .addClass('border-orange-500 bg-orange-500 text-white');
+
+        updateUI();
+    });
+
+    $(document).on('click', '.soal-nav-btn', function () {
+        showSoal(parseInt($(this).data('index')));
+    });
+
+    $('#btnNext').on('click', function () {
+        if (currentIndex < TOTAL_SOAL - 1) {
+            showSoal(currentIndex + 1);
+        } else {
+            openConfirmModal();
+        }
+    });
+
+    $('#btnBack').on('click', function () {
+        if (currentIndex > 0) {
+            showSoal(currentIndex - 1);
+        }
+    });
+
+    function openConfirmModal() {
+        const dijawab = Object.keys(jawaban).length;
+        $('#summaryJawab').text(dijawab);
+        $('#warningBelumJawab').toggleClass('hidden', dijawab === TOTAL_SOAL);
+        $('#confirmModal').removeClass('hidden').addClass('flex');
+    }
+
+    $('#cancelSubmit').on('click', function () {
+        $('#confirmModal').addClass('hidden').removeClass('flex');
+    });
+
+    $('#confirmSubmit').on('click', function () {
+        $('#confirmModal').addClass('hidden').removeClass('flex');
+        clearInterval(timerInterval);
+        sessionStorage.removeItem(START_KEY);
+        submitForm(false);
+    });
+
+    $('#confirmModal').on('click', function (e) {
+        if ($(e.target).is('#confirmModal')) {
+            $(this).addClass('hidden').removeClass('flex');
+        }
+    });
+
+    $('#testForm').on('submit', function (e) {
+        e.preventDefault();
+        if (!submitted) openConfirmModal();
+    });
+
+    function submitForm(autoSubmit = false) {
+        if (submitted) return;
         submitted = true;
 
-        const submitBtn = $('#submit');
-        const originalText = submitBtn.html();
+        clearInterval(timerInterval);
+        sessionStorage.removeItem(START_KEY);
 
-        submitBtn
-            .html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...')
-            .prop('disabled', true);
+        $('#btnNext').prop('disabled', true)
+                     .html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...');
 
         $.ajax({
-            url: window.submitRoute,
+            url:  window.submitRoute,
             type: 'POST',
-            data: form.serialize(),
+            data: $('#testForm').serialize(),
             success: function (res) {
                 if (res.status === 'success') {
                     showNotification(res.message, 'success');
                     setTimeout(() => {
                         window.location.href = res.redirect_url;
-                    }, 2000);
+                    }, 1500);
+                } else {
+                    showNotification('Gagal menyimpan jawaban.', 'error');
+                    submitted = false;
+                    $('#btnNext').prop('disabled', false);
+                    updateUI();
                 }
             },
             error: function () {
-                alert('Gagal submit jawaban');
-            },
-            complete: function () {
-                submitBtn.html(originalText).prop('disabled', false);
+                showNotification('Terjadi kesalahan. Coba lagi.', 'error');
+                submitted = false;
+                $('#btnNext').prop('disabled', false);
+                updateUI();
             }
         });
     }
 
-    form.on('submit', function(e){
-        e.preventDefault();
+    updateUI();
 
-        if (!submitted) {
-            modal.removeClass('hidden').addClass('flex');
-        }
-    });
-    cancelBtn.on('click', function () {
-        modal.addClass('hidden').removeClass('flex');
-    });
-    
-    confirmBtn.on('click', function () {
-        modal.addClass('hidden').removeClass('flex');
+    if (getSisaDetik() <= 0) {
         clearInterval(timerInterval);
-        submitForm();
-    });
-
-
+        sessionStorage.removeItem(START_KEY);
+        showNotification('Waktu habis! Jawaban otomatis dikumpulkan.', 'error');
+        submitForm(true);
+    }
 
 });
 
-// Notifikasi
 function showNotification(message, type = 'info') {
-    const bgColor = type === 'success' 
-        ? 'bg-green-500' 
-        : type === 'error' 
-        ? 'bg-red-500' 
-        : 'bg-blue-500';
+    const bgColor = type === 'success' ? 'bg-green-500'
+                  : type === 'error'   ? 'bg-red-500'
+                  :                      'bg-blue-500';
+    const icon    = type === 'success' ? 'fa-check-circle'
+                  : type === 'error'   ? 'fa-exclamation-circle'
+                  :                      'fa-info-circle';
 
-    const icon = type === 'success' 
-        ? 'fa-check-circle' 
-        : type === 'error' 
-        ? 'fa-exclamation-circle' 
-        : 'fa-info-circle';
-
-        const notification = $(`
-            <div class="notification flex items-center space-x-3 ${bgColor} text-white px-6 py-4 rounded-xl shadow-lg transform translate-x-full opacity-0 transition-all duration-300 cursor-pointer">
+    const notif = $(`
+        <div class="notification flex items-center space-x-3 ${bgColor} text-white px-6 py-4
+                    rounded-xl shadow-lg transform translate-x-full opacity-0 transition-all duration-300 cursor-pointer">
             <i class="fas ${icon} text-lg"></i>
             <span class="font-medium">${message}</span>
-            </div>
-            `);
+        </div>
+    `);
 
-            // Append ke wrapper
-    $('#notificationWrapper').append(notification);
-    
-    // Show notification dengan animasi
-    setTimeout(() => {
-        notification.removeClass('translate-x-full opacity-0');
-    }, 100);
+    $('#notificationWrapper').append(notif);
+    setTimeout(() => notif.removeClass('translate-x-full opacity-0'), 100);
 
-    // Hide otomatis setelah 4 detik
-    const hideTimeout = setTimeout(() => {
-        notification.addClass('translate-x-full opacity-0');
-        setTimeout(() => notification.remove(), 300);
+    const timeout = setTimeout(() => {
+        notif.addClass('translate-x-full opacity-0');
+        setTimeout(() => notif.remove(), 300);
     }, 4000);
-    
-    // Klik untuk langsung menutup
-    notification.on('click', function() {
-        clearTimeout(hideTimeout); // stop hide otomatis
+
+    notif.on('click', function () {
+        clearTimeout(timeout);
         $(this).addClass('translate-x-full opacity-0');
         setTimeout(() => $(this).remove(), 300);
     });

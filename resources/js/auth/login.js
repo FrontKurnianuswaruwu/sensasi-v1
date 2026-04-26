@@ -123,8 +123,3 @@ $(function() {
     // Show demo info
     // setTimeout(showInfoToast, 2000);
 });
-
-// Prevent context menu on production
-// $(document).contextmenu(function() {
-//     return false;
-// });

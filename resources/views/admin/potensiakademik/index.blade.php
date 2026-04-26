@@ -238,47 +238,112 @@
 </div>
 
 <!-- Modal Konfirmasi Hapus -->
-    <div id="deleteModal" class="fixed inset-0 z-50 hidden">
-        <div class="modal-overlay absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-            <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-md">
-                <!-- Header -->
-                <div class="bg-red-500 px-6 py-4 rounded-t-2xl">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-exclamation-triangle text-white text-lg"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-white">Konfirmasi Hapus</h3>
+<div id="deleteModal" class="fixed inset-0 z-50 hidden">
+    <div class="modal-overlay absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-md">
+            <!-- Header -->
+            <div class="bg-red-500 px-6 py-4 rounded-t-2xl">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-exclamation-triangle text-white text-lg"></i>
                     </div>
+                    <h3 class="text-xl font-bold text-white">Konfirmasi Hapus</h3>
                 </div>
-                <input type="hidden" id="deletekategorisoalId" name="id">
+            </div>
+            <input type="hidden" id="deletekategorisoalId" name="id">
 
-                <!-- Body -->
-                <div class="p-6">
-                    <div class="text-center mb-6">
-                        <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fas fa-trash-alt text-3xl text-red-500"></i>
-                        </div>
-                        <h4 class="text-lg font-semibold text-gray-900 mb-2">Apakah Anda yakin?</h4>
-                        <p class="text-gray-600">Potensi Akademik <span id="deleteKategorisoalWaktu" class="font-semibold text-gray-900"></span> akan dihapus secara permanen dan tidak dapat dikembalikan.</p>
+            <!-- Body -->
+            <div class="p-6">
+                <div class="text-center mb-6">
+                    <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-trash-alt text-3xl text-red-500"></i>
                     </div>
+                    <h4 class="text-lg font-semibold text-gray-900 mb-2">Apakah Anda yakin?</h4>
+                    <p class="text-gray-600">Potensi Akademik <span id="deleteKategorisoalWaktu" class="font-semibold text-gray-900"></span> akan dihapus secara permanen dan tidak dapat dikembalikan.</p>
+                </div>
 
-                    <!-- Action Buttons -->
-                    <div class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-3">
-                        <button type="button" 
-                                id="cancelDeleteBtn"
-                                class="w-full sm:w-auto px-6 py-3 text-gray-700 bg-gray-100 border border-gray-300 rounded-xl hover:bg-gray-200 focus:ring-4 focus:ring-gray-200 transition-all duration-300 font-medium">
-                            <i class="fas fa-times mr-2"></i>Batal
-                        </button>
-                        <button type="button" 
-                                id="confirmDeleteBtn"
-                                class="w-full sm:w-auto px-6 py-3 text-white bg-red-500 border border-red-500 rounded-xl hover:bg-red-600 focus:ring-4 focus:ring-red-200 transition-all duration-300 font-medium">
-                            <i class="fas fa-trash mr-2"></i>Ya, Hapus
-                        </button>
-                    </div>
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-3">
+                    <button type="button" 
+                            id="cancelDeleteBtn"
+                            class="w-full sm:w-auto px-6 py-3 text-gray-700 bg-gray-100 border border-gray-300 rounded-xl hover:bg-gray-200 focus:ring-4 focus:ring-gray-200 transition-all duration-300 font-medium">
+                        <i class="fas fa-times mr-2"></i>Batal
+                    </button>
+                    <button type="button" 
+                            id="confirmDeleteBtn"
+                            class="w-full sm:w-auto px-6 py-3 text-white bg-red-500 border border-red-500 rounded-xl hover:bg-red-600 focus:ring-4 focus:ring-red-200 transition-all duration-300 font-medium">
+                        <i class="fas fa-trash mr-2"></i>Ya, Hapus
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<!-- Modal Konfirmasi Mulai Ujian -->
+<div id="startModal" class="fixed inset-0 z-50 hidden">
+    <div class="modal-overlay absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-md">
+            <input type="hidden" id="startKategoriId">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-5 rounded-t-2xl">
+                <div class="flex items-center space-x-3">
+                    <div class="w-11 h-11 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-brain text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white">Siap Memulai Ujian?</h3>
+                        <p class="text-green-100 text-xs mt-0.5">Pastikan kamu sudah siap sepenuhnya</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Body -->
+            <div class="p-6">
+                <!-- Info Ujian -->
+                <div class="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 mb-5">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-tags text-blue-500"></i>
+                        <span class="text-sm text-gray-600">Kategori</span>
+                    </div>
+                    <span class="text-sm font-bold text-gray-800" id="startKategoriName"></span>
+                </div>
+                <div class="flex items-center justify-between bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-5">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-clock text-amber-500"></i>
+                        <span class="text-sm text-gray-600">Durasi Pengerjaan</span>
+                    </div>
+                    <span class="text-sm font-bold text-amber-700"><span id="startKategoriWaktu"></span> menit</span>
+                </div>
+
+                <!-- Motivasi -->
+                <div class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl px-4 py-3 mb-6">
+                    <p class="text-sm text-blue-800 font-medium leading-relaxed">
+                        💡 <span class="font-semibold">Tunjukkan kemampuan terbaikmu!</span> Baca setiap soal dengan teliti, kelola waktu dengan baik, dan percayalah pada kemampuanmu sendiri. Kamu pasti bisa!
+                    </p>
+                </div>
+
+                <!-- Peringatan -->
+                <p class="text-xs text-gray-400 text-center mb-5">
+                    <i class="fas fa-exclamation-circle mr-1"></i>
+                    Ujian <span class="font-semibold text-gray-600">hanya dapat dikerjakan satu kali</span>. Pastikan koneksi internet stabil sebelum memulai.
+                </p>
+
+                <!-- Tombol -->
+                <div class="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3">
+                    <button type="button" id="cancelStartBtn"
+                        class="w-full sm:w-auto px-5 py-2.5 text-gray-700 bg-gray-100 border border-gray-300 rounded-xl hover:bg-gray-200 transition-all font-medium text-sm">
+                        Belum Siap
+                    </button>
+                    <button type="button" id="confirmStartBtn"
+                        class="w-full sm:w-auto px-5 py-2.5 text-white bg-green-500 border border-green-500 rounded-xl hover:bg-green-600 transition-all font-medium text-sm shadow-md shadow-green-100">
+                        Ya, Mulai Sekarang!
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     const CURRENT_USER_ID = {{ auth()->id() }};
     const CURRENT_USER_ROLE = {{ auth()->user()->role }};

@@ -68,10 +68,12 @@ function renderTable(data) {
         else if (kategorisoal.is_active == 1) {
             statusKategori = `<span class="px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700 border border-green-300">Aktif</span>`;
             actionButton = `
-                <a href="/admin/potensiakademik/soal?kategori_id=${kategorisoal.id}" 
-                   class="inline-flex items-center px-3 py-1.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all shadow-sm">
+                <button class="start-btn inline-flex items-center px-3 py-1.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all shadow-sm"
+                    data-id="${kategorisoal.id}"
+                    data-name="${kategorisoal.name}"
+                    data-waktu="${kategorisoal.waktu_pengerjaan}">
                     <i class="fas fa-play mr-1.5"></i> Kerjakan
-                </a>`;
+                </button>`;
         } 
         else {
             statusKategori = `<span class="px-3 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-700 border border-red-300">Tidak Aktif</span>`;
@@ -169,10 +171,12 @@ function renderCards(data) {
         else if (kategorisoal.is_active == 1) {
             statusBadge = `<span class="px-2.5 py-1 text-[10px] font-bold rounded-lg bg-green-100 text-green-700 border border-green-200 uppercase">Aktif</span>`;
             actionButton = `
-                <a href="/admin/potensiakademik/soal?kategori_id=${kategorisoal.id}" 
-                   class="block w-full text-center py-2.5 bg-green-500 text-white rounded-xl text-xs font-bold hover:bg-green-600 shadow-md shadow-green-100 transition-all active:scale-95 uppercase">
+                <button class="start-btn block w-full text-center py-2.5 bg-green-500 text-white rounded-xl text-xs font-bold hover:bg-green-600 shadow-md shadow-green-100 transition-all active:scale-95 uppercase"
+                    data-id="${kategorisoal.id}"
+                    data-name="${kategorisoal.name}"
+                    data-waktu="${kategorisoal.waktu_pengerjaan}">
                     <i class="fas fa-play mr-1"></i> Kerjakan
-                </a>`;
+                </button>`;
         } 
         else {
             statusBadge = `<span class="px-2.5 py-1 text-[10px] font-bold rounded-lg bg-red-100 text-red-700 border border-red-200 uppercase">Non-Aktif</span>`;
@@ -561,4 +565,26 @@ $(document).on('click', '#confirmDeleteBtn', function() {
             deleteBtn.html(originalText).prop('disabled', false);
         }
     });
+});
+
+// Event delegation untuk tombol Kerjakan
+$(document).on('click', '.start-btn', function() {
+    const id    = $(this).data('id');
+    const name  = $(this).data('name');
+    const waktu = $(this).data('waktu');
+
+    $('#startKategoriId').val(id);
+    $('#startKategoriName').text(name);
+    $('#startKategoriWaktu').text(waktu);
+
+    showModalEnhanced('startModal');
+});
+
+$('#cancelStartBtn').on('click', function() {
+    hideModalEnhanced('startModal');
+});
+
+$('#confirmStartBtn').on('click', function() {
+    const id = $('#startKategoriId').val();
+    window.location.href = `/admin/potensiakademik/soal?kategori_id=${id}`;
 });

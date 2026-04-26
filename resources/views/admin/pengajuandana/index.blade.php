@@ -38,23 +38,31 @@
                         class="w-full pl-12 pr-4 py-4 bg-white border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-primary/20 focus:border-blue-primary transition-all duration-300 text-base placeholder-gray-500" 
                         placeholder="Cari berdasarkan semester...">
             </div>
-            <div class="mt-4 flex items-center justify-between">
-                <span id="resultCount" class="text-sm text-gray-600 font-medium">
+            <div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <span id="resultCount" class="text-sm text-gray-600 font-medium order-2 sm:order-1">
                     <i class="fas fa-info-circle mr-1"></i>
                     Menampilkan semua data
                 </span>
+                @if (!$is_mahasiswa)
+                    <a href="{{ route('admin.pengajuandana.exportall') }}" 
+                        class="order-1 sm:order-2 w-full sm:w-auto flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-5 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-md active:scale-95">
+                        <i class="fas fa-file-excel"></i>
+                        <span>Download Excel</span>
+                    </a>
+                @endif
             </div>
         </div>
 
-        @if ($is_mahasiswa)
-            <div id="addpengajuandana" class="mb-6 flex justify-start fade-in" style="animation-delay: 0.2s;">
-                <button id="addSubpengajuandanaBtn" 
-                    class="px-5 py-3 bg-blue-primary text-white rounded-xl hover:bg-blue-primary flex items-center space-x-2 transition-all duration-300 shadow-md">
-                    <i class="fas fa-plus"></i>
-                    <span>Tambah Pengajuan dana</span>
-                </button>
-            </div>
-        @endif
+        <div id="addpengajuandana" class="mb-6 flex justify-start fade-in" style="animation-delay: 0.2s;">
+            @if ($is_mahasiswa)
+            <button id="addSubpengajuandanaBtn" 
+                class="px-5 py-3 bg-blue-primary text-white rounded-xl hover:bg-blue-primary flex items-center space-x-2 transition-all duration-300 shadow-md">
+                <i class="fas fa-plus"></i>
+                <span>Tambah Pengajuan dana</span>
+            </button>
+            @endif
+        </div>
+        
 
         <!-- Table Container -->
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden fade-in" style="animation-delay: 0.3s;">

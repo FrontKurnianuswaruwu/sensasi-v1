@@ -18,5 +18,4 @@ class Pilihan extends Model
     {
         return $this->belongsTo(Soal::class, 'soal_id');
     }
-    
 }

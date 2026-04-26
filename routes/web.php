@@ -179,6 +179,8 @@ Route::middleware(['check.expired', 'check.permission'])->group(function() {
     Route::delete('/admin/nilaisemester/{id}', [NilaisemesterController::class, 'delete']);
     Route::post('/nilaisemester/deleteFoto', [NilaisemesterController::class, 'deleteFoto']);
 
+    Route::get('/admin/pengajuandana/exportall', [PengajuandanaController::class, 'exportAll'])->name('admin.pengajuandana.exportall');
+    Route::get('/admin/pengajuandana/exportapproved', [PengajuandanaController::class, 'exportApproved'])->name('admin.pengajuandana.exportapproved');
     Route::get('/admin/pengajuandana', [PengajuandanaController::class, 'index'])->name('admin.pengajuandana.index');
     Route::get('/admin/getpengajuandana', [PengajuandanaController::class, 'getdata'])->name('admin.pengajuandana.getdata');
     Route::get('/admin/get-ip-sebelumnya', [PengajuanDanaController::class, 'getIpSebelumnya']);
@@ -188,6 +190,9 @@ Route::middleware(['check.expired', 'check.permission'])->group(function() {
     Route::delete('/admin/pengajuandana/{id}', [PengajuandanaController::class, 'delete']);
     Route::put('/admin/pengajuandanaapprove/{id}', [PengajuandanaController::class, 'approve']);
     Route::put('/admin/pengajuandanareject/{id}', [PengajuandanaController::class, 'reject']);
+
+    Route::get('/admin/historypengajuandana', [PengajuandanaController::class, 'history'])->name('admin.historypengajuandana.index');
+    Route::get('/admin/gethistorypengajuandana', [PengajuandanaController::class, 'getHistory'])->name('admin.historypengajuandana.getdata');
 
     Route::get('/admin/riwayatpengajuandana', [RiwayatpengajuandanaController::class, 'index'])->name('admin.riwayatpengajuandana.index');
     Route::get('/admin/getriwayatpengajuandana', [RiwayatpengajuandanaController::class, 'getdata'])->name('admin.riwayatpengajuandana.getdata');

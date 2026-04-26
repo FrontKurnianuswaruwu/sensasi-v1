@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Exports\PengajuandanaAllExport;
+use App\Exports\PengajuandanaApprovedExport;
 use App\Http\Controllers\Controller;
 use App\Models\BiodataMahasiswa;
 use App\Models\NilaiSemester;
 use App\Models\Pengajuandana;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PengajuandanaController extends Controller
 {
@@ -294,5 +297,66 @@ class PengajuandanaController extends Controller
         return response()->json($pengajuandana);
     }
     
+    public function exportAll()
+    {
+        return Excel::download(new PengajuandanaAllExport(), 'pengajuan-dana-all-' . now()->format('d-m-Y') . '.xlsx');
+    }
 
+    public function history()
+    {
+        $userId = auth()->id();
+        $mahasiswa = BiodataMahasiswa::where('user_id', $userId)->first();
+        $nameuser = $this->nameuser;
+        $userstatus = $this->userstatus;
+
+        return view('admin.pengajuandana.history', [
+            'is_mahasiswa' => $mahasiswa ? true : false,
+            'nameuser'     => $nameuser,
+            'userstatus'   => $userstatus,
+        ]);
+    }
+
+    public function getHistory(Request $request)
+    {
+        $search = $request->input('search');
+        $page   = $request->input('page', 1);
+        $limit  = $request->input('limit', 10);
+
+        $userId    = auth()->id();
+        $mahasiswa = BiodataMahasiswa::where('user_id', $userId)->first();
+
+        $query = Pengajuandana::select('id', 'semester', 'ip_semester', 'nominal', 'status', 'total', 'mahasiswa_id', 'catatan', 'nominal_disetujui')
+            ->with(['mahasiswa.user', 'mahasiswa.mitra'])
+            ->where('status', 'approved')
+            ->orderBy('created_at', 'desc');
+
+        // Kalau mahasiswa, hanya lihat punya sendiri
+        if ($mahasiswa) {
+            $query->where('mahasiswa_id', $mahasiswa->id);
+        }
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('semester', 'like', "%{$search}%")
+                ->orWhereHas('mahasiswa.user', function ($subQ) use ($search) {
+                    $subQ->where('name', 'like', "%{$search}%");
+                });
+            });
+        }
+
+        $data = $query->paginate($limit, ['*'], 'page', $page);
+
+        return response()->json([
+            'data'         => $data->items(),
+            'total'        => $data->total(),
+            'current_page' => $data->currentPage(),
+            'last_page'    => $data->lastPage(),
+            'is_mahasiswa' => $mahasiswa ? true : false,
+        ]);
+    }
+
+    public function exportApproved()
+    {
+        return Excel::download(new PengajuandanaApprovedExport(), 'pengajuan-dana-approved-' . now()->format('d-m-Y') . '.xlsx');
+    }
 }

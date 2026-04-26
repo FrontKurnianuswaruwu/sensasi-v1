@@ -1,226 +1,323 @@
 import $ from 'jquery';
+
 $.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
+    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
 });
 
-// initial load
-$(function() {
-   loadData();
-});
-
-let currentPage = 1;
+let currentPage   = 1;
 const rowsPerPage = 10;
+let isEditMode    = false;
+let pilihanCount  = 0; // counter unik ID tiap baris opsi
 
-function renderTable(data) {
-    const tableSoal = $('#tableSoal');
-    tableSoal.empty();
+$(function () {
+    loadData();
+});
+
+function loadData(query = '', page = 1) {
+    const kategoriId = $('#kategori_id').val();
+
+    $.ajax({
+        url: `/admin/getsoal/${kategoriId}`,
+        type: 'GET',
+        data: { search: query, page: page, limit: rowsPerPage },
+        dataType: 'json',
+        success: function (res) {
+            if (!Array.isArray(res.data)) return;
+
+            renderTable(res.data, res.current_page);
+            renderCards(res.data);
+            renderPagination(res.last_page, query);
+            renderPaginationMobile(res.last_page, query);
+
+            const start = (res.current_page - 1) * rowsPerPage + 1;
+            const end   = start + res.data.length - 1;
+            $('#resultCount').html(`
+                <i class="fas fa-info-circle mr-1"></i>
+                Menampilkan ${start}–${end} dari ${res.total} data
+            `);
+        },
+        error: function (xhr) {
+            console.error('Gagal ambil data:', xhr.responseText);
+        }
+    });
+}
+
+function renderTable(data, currentPageNum) {
+    const tbody = $('#tableSoal');
+    tbody.empty();
 
     if (data.length === 0) {
-        tableSoal.append(`
+        tbody.append(`
             <tr>
-                <td colspan="5" class="px-6 py-8 text-center text-gray-500">
-                    <i class="fas fa-info-circle text-gray-400 mr-2"></i>
-                    Tidak ada data ditemukan
+                <td colspan="4" class="px-6 py-8 text-center text-gray-500">
+                    <i class="fas fa-info-circle text-gray-400 mr-2"></i>Tidak ada data ditemukan
                 </td>
             </tr>
         `);
         return;
     }
 
-    data.forEach((pertanyaan, index) => {
-        const row = `
+    data.forEach((soal, index) => {
+        const no = (currentPageNum - 1) * rowsPerPage + index + 1;
+        tbody.append(`
             <tr class="hover:bg-gray-50 transition-colors duration-200">
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0 h-10 w-10">
-                            <div class="h-10 w-10 rounded-full bg-gradient-to-r gradient-bg to-blue-light flex items-center justify-center text-white font-semibold">
-                                ${pertanyaan.pertanyaan.charAt(0)}
-                            </div>
+                <td class="px-6 py-4 text-sm text-gray-900">${no}</td>
+                <td class="px-6 py-4">
+                    <div class="flex items-center gap-3">
+                        <div class="h-9 w-9 rounded-full bg-gradient-to-r gradient-bg to-blue-light
+                                    flex items-center justify-center text-white font-semibold flex-shrink-0">
+                            ${soal.pertanyaan.charAt(0).toUpperCase()}
                         </div>
-                        <div class="ml-4">
-                            <div class="text-sm font-medium text-gray-900">${pertanyaan.pertanyaan}</div>
-                        </div>
+                        <span class="text-sm font-medium text-gray-900">${soal.pertanyaan}</span>
                     </div>
                 </td>
+                <td class="px-6 py-4 text-sm">
+                    <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
+                        ${soal.pilihan_count ?? 0} opsi
+                    </span>
+                </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm">
-                    <button class="edit-btn px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all mr-2" data-id="${pertanyaan.id}">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="delete-btn px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all" data-id="${pertanyaan.id}" data-name="${pertanyaan.pertanyaan}">
-                        <i class="fas fa-trash"></i>
-                    </button>
+                    <div class="flex items-center gap-2">
+                        <button class="edit-btn px-3 py-1.5 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all text-xs"
+                                data-id="${soal.id}">
+                            <i class="fas fa-edit mr-1"></i>Edit
+                        </button>
+                        <button class="delete-btn px-3 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all text-xs"
+                                data-id="${soal.id}">
+                            <i class="fas fa-trash mr-1"></i>Hapus
+                        </button>
+                    </div>
                 </td>
             </tr>
-        `;
-        tableSoal.append(row);
+        `);
     });
 }
 
-// Render mobile cards khusus soal (hanya name + aksi edit/hapus)
 function renderCards(data) {
-    const cardContainer = $('#cardContainer');
-    cardContainer.empty();
+    const container = $('#cardContainer');
+    container.empty();
 
     if (data.length === 0) {
-        cardContainer.append(`
+        container.append(`
             <div class="p-6 text-center text-gray-500">
-                <i class="fas fa-info-circle text-gray-400 mr-2"></i>
-                Tidak ada data ditemukan
+                <i class="fas fa-info-circle text-gray-400 mr-2"></i>Tidak ada data ditemukan
             </div>
         `);
         return;
     }
 
-    data.forEach((soal) => {
-        const card = `
+    data.forEach(soal => {
+        container.append(`
             <div class="p-4 border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
-                <div class="flex items-center space-x-3">
-                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-gradient-to-r gradient-bg to-blue-light flex items-center justify-center text-white font-semibold text-lg">
-                        ${soal.pertanyaan.charAt(0)}
+                <div class="flex items-start gap-3">
+                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gradient-to-r gradient-bg to-blue-light
+                                flex items-center justify-center text-white font-semibold">
+                        ${soal.pertanyaan.charAt(0).toUpperCase()}
                     </div>
                     <div class="flex-1 min-w-0">
-                        <h3 class="text-lg font-semibold text-gray-900 truncate mb-2">${soal.pertanyaan}</h3>
-                        <div class="flex mt-4 space-x-2">
-                            <button class="edit-btn flex-1 px-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all" data-id="${soal.id}">
+                        <p class="text-sm font-semibold text-gray-900 mb-1">${soal.pertanyaan}</p>
+                        <span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
+                            ${soal.pilihan_count ?? 0} opsi
+                        </span>
+                        <div class="flex mt-3 gap-2">
+                            <button class="edit-btn flex-1 px-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all text-sm"
+                                    data-id="${soal.id}">
                                 <i class="fas fa-edit"></i> Edit
                             </button>
-                            <button class="delete-btn flex-1 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all" data-id="${soal.id}" data-name="${soal.name}">
+                            <button class="delete-btn flex-1 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all text-sm"
+                                    data-id="${soal.id}">
                                 <i class="fas fa-trash"></i> Hapus
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-        `;
-        cardContainer.append(card);
+        `);
     });
 }
 
-// render pagination berdasarkan totalPages dari server
 function renderPagination(totalPages, query) {
-    const paginationContainer = $('#pagination');
-    paginationContainer.empty();
-
+    const container = $('#pagination');
+    container.empty();
     if (totalPages <= 1) return;
-
     for (let i = 1; i <= totalPages; i++) {
-        const btn = $(`<button class="page-btn mx-1 px-3 py-1 rounded-lg border ${i === currentPage ? 'bg-orange-primary text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}">${i}</button>`);
-        btn.on('click', function () {
-            currentPage = i;
-            loadData(query, currentPage);
-        });
-        paginationContainer.append(btn);
+        const btn = $(`<button class="page-btn mx-1 px-3 py-1 rounded-lg border
+            ${i === currentPage ? 'bg-orange-primary text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}">${i}</button>`);
+        btn.on('click', () => { currentPage = i; loadData(query, i); });
+        container.append(btn);
     }
 }
 
 function renderPaginationMobile(totalPages, query) {
-    const pagination = $('#paginationMobile');
-    pagination.empty();
-
+    const container = $('#paginationMobile');
+    container.empty();
     if (totalPages <= 1) return;
-
     for (let i = 1; i <= totalPages; i++) {
-        const btn = $(`<button class="px-3 py-1 rounded-lg border ${i === currentPage ? 'bg-orange-primary text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}">${i}</button>`);
-        btn.on('click', function() {
-            currentPage = i;
-            loadData(query, currentPage);
-        });
-        pagination.append(btn);
+        const btn = $(`<button class="px-3 py-1 rounded-lg border
+            ${i === currentPage ? 'bg-orange-primary text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}">${i}</button>`);
+        btn.on('click', () => { currentPage = i; loadData(query, i); });
+        container.append(btn);
     }
 }
 
-// Ambil data dari server dengan pagination & search
-function loadData(query = '', page = 1) {
-    let idkategori = $('#kategori_id').val();
-    $.ajax({
-        url: "/admin/getsoal/" + idkategori,
-        type: "GET",
-        data: { search: query, page: page, limit: rowsPerPage },
-        dataType: "json",
-        success: function(res) {
-            const data = res.data;
-
-            if (!Array.isArray(data)) {
-                console.error("Response data bukan array:", data);
-                return;
-            }
-
-            renderTable(data);
-            renderCards(data);
-            renderPagination(res.last_page, query);
-            renderPaginationMobile(res.last_page, query);
-
-            let start = (res.current_page - 1) * rowsPerPage + 1;
-            let end = start + data.length - 1;
-            $("#resultCount").html(`
-                <i class="fas fa-info-circle mr-1"></i>
-                Menampilkan ${start} - ${end} dari ${res.total} data
-            `);
-        },
-        error: function(xhr, status, error) {
-            console.error("Gagal ambil data:", error, xhr.responseText);
-        }
-    });
-}
-
-// search event
-$('#searchInputsoal').on('input', function() {
-    const query = $(this).val();
+$('#searchInputsoal').on('input', function () {
     currentPage = 1;
-    loadData(query, currentPage);
+    loadData($(this).val(), 1);
 });
 
-// Reset form
+
+/**
+ * Tambah satu baris opsi jawaban ke #pilihanContainer.
+ * @param {string}  teks   - teks opsi
+ * @param {boolean} isTrue - jawaban benar atau tidak
+ */
+function addPilihanRow(teks = '', isTrue = false) {
+    pilihanCount++;
+    const uid      = pilihanCount;
+    const btnClass = isTrue
+        ? 'bg-green-500 border-green-500 text-white'
+        : 'bg-gray-200 border-gray-300 text-gray-400';
+    const iconClass = isTrue ? 'fa-check' : 'fa-times';
+    const title     = isTrue ? 'Jawaban Benar (klik untuk ubah)' : 'Jawaban Salah (klik untuk ubah)';
+
+    $('#pilihanContainer').append(`
+        <div class="pilihan-row flex items-center gap-2" id="pilihan-row-${uid}">
+            <button type="button"
+                    class="toggle-benar flex-shrink-0 w-8 h-8 rounded-lg border-2 flex items-center justify-center
+                           transition-all duration-200 ${btnClass}"
+                    data-uid="${uid}"
+                    data-benar="${isTrue ? '1' : '0'}"
+                    title="${title}">
+                <i class="fas ${iconClass} text-xs"></i>
+            </button>
+
+            <input type="text"
+                   id="pilihan-teks-${uid}"
+                   class="pilihan-teks flex-1 px-3 py-2 border-2 border-gray-200 rounded-xl
+                          focus:border-blue-primary focus:ring-0 transition-all duration-300 text-sm text-gray-900"
+                   placeholder="Masukkan teks opsi jawaban..."
+                   value="${escapeHtml(teks)}">
+
+            <button type="button"
+                    class="remove-pilihan flex-shrink-0 w-8 h-8 rounded-lg bg-red-100 text-red-500
+                           hover:bg-red-500 hover:text-white transition-all duration-200 flex items-center justify-center"
+                    data-uid="${uid}"
+                    title="Hapus opsi ini">
+                <i class="fas fa-trash text-xs"></i>
+            </button>
+        </div>
+    `);
+}
+
+function escapeHtml(str) {
+    return $('<div>').text(str).html();
+}
+
+// Tambah opsi baru
+$('#addPilihanBtn').on('click', function () {
+    addPilihanRow();
+});
+
+// Toggle benar / salah
+$(document).on('click', '.toggle-benar', function () {
+    const isBenar  = $(this).data('benar') === '1' || $(this).data('benar') === 1;
+    const newBenar = !isBenar;
+
+    $(this).data('benar', newBenar ? '1' : '0');
+
+    if (newBenar) {
+        $(this)
+            .removeClass('bg-gray-200 border-gray-300 text-gray-400')
+            .addClass('bg-green-500 border-green-500 text-white')
+            .attr('title', 'Jawaban Benar (klik untuk ubah)')
+            .find('i').removeClass('fa-times').addClass('fa-check');
+    } else {
+        $(this)
+            .removeClass('bg-green-500 border-green-500 text-white')
+            .addClass('bg-gray-200 border-gray-300 text-gray-400')
+            .attr('title', 'Jawaban Salah (klik untuk ubah)')
+            .find('i').removeClass('fa-check').addClass('fa-times');
+    }
+});
+
+// Hapus baris opsi
+$(document).on('click', '.remove-pilihan', function () {
+    if ($('#pilihanContainer .pilihan-row').length <= 2) {
+        showNotification('Minimal harus ada 2 opsi jawaban.', 'error');
+        return;
+    }
+    $(`#pilihan-row-${$(this).data('uid')}`).remove();
+});
+
+function collectPilihan() {
+    const result = [];
+    $('#pilihanContainer .pilihan-row').each(function () {
+        const uid   = $(this).find('.toggle-benar').data('uid');
+        const teks  = $(`#pilihan-teks-${uid}`).val().trim();
+        const benar = $(this).find('.toggle-benar').data('benar');
+        result.push({
+            teks:    teks,
+            is_true: benar === '1' || benar === 1,
+        });
+    });
+    return result;
+}
+
+function validateForm() {
+    let isValid = true;
+
+    if (!$('#teksSoal').val().trim()) {
+        $('#teksSoal').addClass('border-red-300 bg-red-50');
+        isValid = false;
+    } else {
+        $('#teksSoal').removeClass('border-red-300 bg-red-50');
+    }
+
+    const pilihan    = collectPilihan();
+    const emptyTeks  = pilihan.some(p => !p.teks);
+    const benarCount = pilihan.filter(p => p.is_true).length;
+
+    $('#pilihanError').addClass('hidden');
+
+    if (pilihan.length < 2) {
+        showPilihanError('Minimal harus ada 2 opsi jawaban.');
+        isValid = false;
+    } else if (emptyTeks) {
+        showPilihanError('Semua teks opsi jawaban wajib diisi.');
+        isValid = false;
+    } else if (benarCount === 0) {
+        showPilihanError('Minimal satu opsi harus ditandai sebagai jawaban benar.');
+        isValid = false;
+    }
+
+    return isValid;
+}
+
+function showPilihanError(msg) {
+    $('#pilihanErrorMsg').text(msg);
+    $('#pilihanError').removeClass('hidden');
+}
+
 function resetForm() {
     $('#soalForm')[0].reset();
-    $('#soalForm input, #soalForm select, #soalForm textarea').removeClass('border-red-300 bg-red-50');
+    $('#soalId').val('');
+    $('#teksSoal').removeClass('border-red-300 bg-red-50');
+    $('#pilihanContainer').empty();
+    $('#pilihanError').addClass('hidden');
+    pilihanCount = 0;
+
+    // Default 2 baris: pertama benar, kedua salah
+    addPilihanRow('', true);
+    addPilihanRow('', false);
 }
 
-// Enhanced modal show/hide with body scroll prevention
-function showModalEnhanced(modalId) {
-    showModal(modalId);
-    preventBodyScroll();
-}
-
-// Prevent modal body scroll when modal is open
-function preventBodyScroll() {
-    $('body').css({
-        'overflow': 'hidden',
-        'padding-right': '' // Prevent layout shift
-    });
-}
-
-// Show modal with animation
 function showModal(modalId) {
     const modal = $('#' + modalId);
     modal.removeClass('hidden');
-    setTimeout(() => {
-        modal.find('.modal-content').addClass('show');
-    }, 10);
+    setTimeout(() => modal.find('.modal-content').addClass('show'), 10);
     $('body').addClass('overflow-hidden');
 }
 
-function restoreBodyScroll() {
-    $('body').css({
-        'overflow': '',
-        'padding-right': ''
-    });
-}
-
-// Update close handlers
-$('#closeModal, #cancelBtn').on('click', function() {
-    hideModalEnhanced('soalModal');
-});
-
-function hideModalEnhanced(modalId) {
-    hideModal(modalId);
-    restoreBodyScroll();
-}
-
-// Hide modal with animation
 function hideModal(modalId) {
     const modal = $('#' + modalId);
     modal.find('.modal-content').removeClass('show');
@@ -230,231 +327,169 @@ function hideModal(modalId) {
     }, 300);
 }
 
-// Close modal when clicking outside
-$('.modal-overlay').on('click', function(e) {
+$('.modal-overlay').on('click', function (e) {
     if (e.target === this) {
-        if ($(this).closest('#soalModal').length) {
-            hideModalEnhanced('soalModal');
-        } else if ($(this).closest('#deleteModal').length) {
-            hideModalEnhanced('deleteModal');
-        }
+        if ($(this).closest('#soalModal').length)   hideModal('soalModal');
+        if ($(this).closest('#deleteModal').length) hideModal('deleteModal');
     }
 });
 
-$('#cancelDeleteBtn').on('click', function() {
-    hideModalEnhanced('deleteModal');
-});
+$('#closeModal, #cancelBtn').on('click', () => hideModal('soalModal'));
+$('#cancelDeleteBtn').on('click', () => hideModal('deleteModal'));
 
-let currentSoalsoalId = null;
-let isEditMode = false;
-
-// Show add Soalsoal modal
-$('#addSubsoalBtn').on('click', function() {
+$('#addSoalBtn').on('click', function () {
     isEditMode = false;
-    currentSoalsoalId = null;
     resetForm();
-    $('#soalId').val('');
-    
+
     $('#modalTitle').text('Tambah Soal Baru');
-    $('#modalIcon').removeClass('fa-edit').addClass('fa-layer-group');
+    $('#modalIcon').attr('class', 'fas fa-plus-circle text-white text-lg');
     $('#submitText').text('Simpan Data');
-    $('#submitIcon').removeClass('fa-edit').addClass('fa-save');
-    
-    showModalEnhanced('soalModal');
+    $('#submitIcon').attr('class', 'fas fa-save mr-2');
+
+    showModal('soalModal');
 });
 
+$(document).on('click', '.edit-btn', function () {
+    isEditMode = true;
+    const soalId = $(this).data('id');
 
-// Form validation
-function validateForm() {
-    let isValid = true;
-    const requiredFields = ['pertanyaan'];
-    
-    requiredFields.forEach(function(fieldId) {
-        const field = $('#' + fieldId);
-        if (!field.val().trim()) {
-            field.addClass('border-red-300 bg-red-50');
-            isValid = false;
-        } else {
-            field.removeClass('border-red-300 bg-red-50');
+    resetForm();
+    $('#modalTitle').text('Edit Soal');
+    $('#modalIcon').attr('class', 'fas fa-edit text-white text-lg');
+    $('#submitText').text('Update Data');
+    $('#submitIcon').attr('class', 'fas fa-edit mr-2');
+
+    $.ajax({
+        url: `/admin/getpertanyaan/soal/${soalId}`,
+        type: 'GET',
+        success: function (data) {
+            $('#soalId').val(data.id);
+            $('#teksSoal').val(data.pertanyaan);
+
+            $('#pilihanContainer').empty();
+            pilihanCount = 0;
+
+            if (data.pilihan && data.pilihan.length > 0) {
+                data.pilihan.forEach(p => addPilihanRow(p.teks, !!p.is_true));
+            } else {
+                addPilihanRow('', true);
+                addPilihanRow('', false);
+            }
+
+            showModal('soalModal');
+        },
+        error: function (xhr) {
+            console.error('Gagal ambil data:', xhr.responseText);
+            showNotification('Gagal memuat data soal.', 'error');
         }
     });
+});
 
-    return isValid;
-}
-
-// Notifikasi
-function showNotification(message, type = 'info') {
-    const bgColor = type === 'success' 
-        ? 'bg-green-500' 
-        : type === 'error' 
-        ? 'bg-red-500' 
-        : 'bg-blue-500';
-
-    const icon = type === 'success' 
-        ? 'fa-check-circle' 
-        : type === 'error' 
-        ? 'fa-exclamation-circle' 
-        : 'fa-info-circle';
-
-        const notification = $(`
-            <div class="notification flex items-center space-x-3 ${bgColor} text-white px-6 py-4 rounded-xl shadow-lg transform translate-x-full opacity-0 transition-all duration-300 cursor-pointer">
-            <i class="fas ${icon} text-lg"></i>
-            <span class="font-medium">${message}</span>
-            </div>
-            `);
-
-            // Append ke wrapper
-    $('#notificationWrapper').append(notification);
-    
-    // Show notification dengan animasi
-    setTimeout(() => {
-        notification.removeClass('translate-x-full opacity-0');
-    }, 100);
-
-    // Hide otomatis setelah 4 detik
-    const hideTimeout = setTimeout(() => {
-        notification.addClass('translate-x-full opacity-0');
-        setTimeout(() => notification.remove(), 300);
-    }, 4000);
-    
-    // Klik untuk langsung menutup
-    notification.on('click', function() {
-        clearTimeout(hideTimeout); // stop hide otomatis
-        $(this).addClass('translate-x-full opacity-0');
-        setTimeout(() => $(this).remove(), 300);
-    });
-}
-
-// Handle form submission
-$('#soalForm').on('submit', function(e) {
+$('#soalForm').on('submit', function (e) {
     e.preventDefault();
-    
+
     if (!validateForm()) {
         showNotification('Mohon lengkapi semua field yang wajib diisi!', 'error');
         return;
     }
 
-    const submitBtn = $('#submitBtn');
-    const originalText = submitBtn.html();
+    const submitBtn    = $('#submitBtn');
+    const originalHtml = submitBtn.html();
     submitBtn.html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...').prop('disabled', true);
 
-    const soalId = $('#soalId').val();
+    const soalId     = $('#soalId').val();
     const kategoriId = $('#kategori_id').val();
 
-    const formData = {
-        name: $('#pertanyaan').val(),
-        kategori_id: kategoriId
+    const payload = {
+        name:        $('#teksSoal').val().trim(),
+        kategori_id: kategoriId,
+        pilihan:     collectPilihan(),
     };
 
-    // Tentukan URL dan method berdasarkan mode
-    const url = soalId ? `/admin/pertanyaan/soal/${soalId}` : '/admin/pertanyaan/soal';
+    const url    = soalId ? `/admin/pertanyaan/soal/${soalId}` : '/admin/pertanyaan/soal';
     const method = soalId ? 'PUT' : 'POST';
 
     $.ajax({
-        url: url,
-        type: method,
-        data: JSON.stringify(formData),
+        url, type: method,
+        data:        JSON.stringify(payload),
         contentType: 'application/json',
-        success: function(response) {
-            showNotification(response.message, response.status); // response.status = 'success'
-
-            hideModalEnhanced('soalModal');
-            submitBtn.html(originalText).prop('disabled', false);
-
+        success: function (response) {
+            showNotification(response.message, response.status);
+            hideModal('soalModal');
+            submitBtn.html(originalHtml).prop('disabled', false);
             loadData($('#searchInputsoal').val(), currentPage);
         },
-        error: function(xhr) {
-            submitBtn.html(originalText).prop('disabled', false);
+        error: function (xhr) {
+            submitBtn.html(originalHtml).prop('disabled', false);
 
-            if (xhr.status === 422 && xhr.responseJSON.errors) {
-                let errors = xhr.responseJSON.errors;
-                let messages = [];
-
-                for (let field in errors) {
-                    if (errors.hasOwnProperty(field)) {
-                        messages.push(errors[field].join(', '));
-                    }
+            if (xhr.status === 422 && xhr.responseJSON) {
+                const err = xhr.responseJSON;
+                if (err.errors) {
+                    showNotification(Object.values(err.errors).flat().join(' | '), 'error');
+                } else {
+                    showNotification(err.message ?? 'Validasi gagal.', 'error');
                 }
-
-                showNotification(messages.join(' | '), 'error'); // tampilkan notifikasi
             } else {
-                let msg = (xhr.responseJSON && xhr.responseJSON.message) 
-                            ? xhr.responseJSON.message 
-                            : 'Terjadi kesalahan saat menyimpan data!';
-                showNotification(msg, 'error');
+                showNotification(xhr.responseJSON?.message ?? 'Terjadi kesalahan saat menyimpan!', 'error');
             }
         }
     });
 });
 
-// Show edit employee modal
-$(document).on('click', '.edit-btn', function() {
-    isEditMode = true;
-    currentSoalsoalId = $(this).data('id');
-    resetForm();
-
-    $('#modalTitle').text('Edit Data Tahun akademik');
-    $('#modalIcon').removeClass('fa-calendar').addClass('fa-edit');
-    $('#submitText').text('Update Data');
-    $('#submitIcon').removeClass('fa-save').addClass('fa-edit');
-
-    $.ajax({
-        url: '/admin/getpertanyaan/soal/' + currentSoalsoalId,
-        type: 'GET',
-        success: function(soal) {
-            $('#soalId').val(soal.id);
-            $('#pertanyaan').val(soal.pertanyaan);
-            showModal('soalModal');
-        },
-        error: function(xhr) {
-            console.error("Gagal ambil data:", xhr.responseText);
-            alert('Gagal ambil data soal');
-        }
-    });
+$(document).on('click', '.delete-btn', function () {
+    $('#deleteSoalId').val($(this).data('id'));
+    showModal('deleteModal');
 });
 
-$(document).on('click', '.delete-btn', function() {
-    const id = $(this).data('id');  
-    const name = $(this).data('name');
-    console.log(name);
-
-    $('#deletesoalId').val(id); 
-    $('#deleteSoalsoalName').text(name);
-
-    showModalEnhanced('deleteModal');
-});
-
-// Update delete confirmation handler
-$(document).on('click', '#confirmDeleteBtn', function() {
-    const deleteBtn = $(this);
-    const originalText = deleteBtn.html();
-    deleteBtn.html('<i class="fas fa-spinner fa-spin mr-2"></i>Menghapus...')
-             .prop('disabled', true);
-
-    const soalId = $('#deletesoalId').val();
+$(document).on('click', '#confirmDeleteBtn', function () {
+    const btn          = $(this);
+    const originalHtml = btn.html();
+    btn.html('<i class="fas fa-spinner fa-spin mr-2"></i>Menghapus...').prop('disabled', true);
 
     $.ajax({
-        url: `/admin/pertanyaan/soal/${soalId}`, 
+        url:  `/admin/pertanyaan/soal/${$('#deleteSoalId').val()}`,
         type: 'DELETE',
-        success: function(response) {
-            showNotification(response.message , response.status);
-
-            hideModalEnhanced('deleteModal');
-            loadData(); 
+        success: function (response) {
+            showNotification(response.message, response.status);
+            hideModal('deleteModal');
+            loadData();
         },
-        error: function(xhr) {
-            let msg = (xhr.responseJSON && xhr.responseJSON.message) 
-                        ? xhr.responseJSON.message 
-                        : 'Gagal menghapus data!';
-            showNotification(msg, 'error');
+        error: function (xhr) {
+            showNotification(xhr.responseJSON?.message ?? 'Gagal menghapus data!', 'error');
         },
-        complete: function() {
-            deleteBtn.html(originalText).prop('disabled', false);
+        complete: function () {
+            btn.html(originalHtml).prop('disabled', false);
         }
     });
 });
 
-$(document).on("click", ".goto-soal-btn", function() {
-    const id = $(this).data("id");
-    window.location.href = `/admin/pertanyaan/soal/${id}`;
-});
+function showNotification(message, type = 'info') {
+    const bgColor = type === 'success' ? 'bg-green-500'
+                  : type === 'error'   ? 'bg-red-500'
+                  :                      'bg-blue-500';
+    const icon    = type === 'success' ? 'fa-check-circle'
+                  : type === 'error'   ? 'fa-exclamation-circle'
+                  :                      'fa-info-circle';
+
+    const notif = $(`
+        <div class="notification flex items-center space-x-3 ${bgColor} text-white px-6 py-4
+                    rounded-xl shadow-lg transform translate-x-full opacity-0 transition-all duration-300 cursor-pointer">
+            <i class="fas ${icon} text-lg"></i>
+            <span class="font-medium">${message}</span>
+        </div>
+    `);
+
+    $('#notificationWrapper').append(notif);
+    setTimeout(() => notif.removeClass('translate-x-full opacity-0'), 100);
+
+    const timeout = setTimeout(() => {
+        notif.addClass('translate-x-full opacity-0');
+        setTimeout(() => notif.remove(), 300);
+    }, 4000);
+
+    notif.on('click', function () {
+        clearTimeout(timeout);
+        $(this).addClass('translate-x-full opacity-0');
+        setTimeout(() => $(this).remove(), 300);
+    });
+}
