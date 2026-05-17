@@ -80,9 +80,11 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 9,
             'status_user' => 'Biodata',
         ]);
+        $user->role = 9;
+        $user->mitra_id = $request->mitra;
+        $user->save();
 
         BiodataMahasiswa::create([
             'user_id' => $user->id,

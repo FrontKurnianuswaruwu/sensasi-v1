@@ -63,7 +63,7 @@ class HerosectionController extends Controller
 
         if ($request->hasFile('gambar')) {
             foreach ($request->file('gambar') as $file) {
-                $filename = time() . '_' . $file->getClientOriginalName();
+                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
                 $file->move($_SERVER['DOCUMENT_ROOT'].'/uploads/herosection/', $filename);
 
                 Herophoto::create([
@@ -128,7 +128,7 @@ class HerosectionController extends Controller
 
         if ($request->hasFile('gambar')) {
             foreach ($request->file('gambar') as $file) {
-                $filename = time() . '_' . $file->getClientOriginalName();
+                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
                 $file->move($_SERVER['DOCUMENT_ROOT'].'/uploads/herosection/', $filename);
 
                 Herophoto::create([

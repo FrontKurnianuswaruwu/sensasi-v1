@@ -33,7 +33,7 @@ class NilaisemesterController extends Controller
         $search = $request->input('search');
         $page   = $request->input('page', 1);
         $limit  = $request->input('limit', 10);
-        $userId = $request->session()->get('user_id');
+        $userId = auth()->id();
         $mahasiswaid = BiodataMahasiswa::where('user_id', $userId)->value('id');
 
         $query = NilaiSemester::select('id', 'semester', 'ip_semester', 'tahun_akademik_id', 'mahasiswa_id')
@@ -69,7 +69,7 @@ class NilaisemesterController extends Controller
 
     public function store(Request $request)
     {
-        $userid = $request->session()->get('user_id');
+        $userid = auth()->id();
         // Ambil mahasiswa_id dari request, bukan dari AkademikMahasiswa
         $mahasiswaid = $request->mahasiswa_id;
         $nilaisemester = NilaiSemester::where('mahasiswa_id', $mahasiswaid)
@@ -222,7 +222,7 @@ class NilaisemesterController extends Controller
     {
         $semesterInput = $request->query('semester'); // <- gunakan query() untuk GET
 
-        $userId = $request->session()->get('user_id');
+        $userId = auth()->id();
 
         $mahasiswaid = BiodataMahasiswa::where('user_id', $userId)->value('id');
 

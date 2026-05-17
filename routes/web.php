@@ -36,11 +36,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('register', [AuthController::class, 'register'])->name('auth.register')->middleware('check.pendaftaran');
 Route::post('/registerpost', [AuthController::class, 'registerpost'])->name('post.register');
 Route::get('otp', [AuthController::class, 'otp'])->name('auth.otp');
-Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
-Route::post('/resend-otp', [AuthController::class, 'resendOtp'])->name('resend.otp');
+Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->middleware('throttle:5,1');
+Route::post('/resend-otp', [AuthController::class, 'resendOtp'])->name('resend.otp')->middleware('throttle:3,1');
 Route::get('login', [AuthController::class, 'login'])->name('auth.login');
-Route::post('/login/post', [AuthController::class, 'loginpost'])->name('post.login');
-Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+Route::post('/login/post', [AuthController::class, 'loginpost'])->name('post.login')->middleware('throttle:5,1');
+Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 Route::get('/', [DashboardController::class, 'indexuser'])->name('user.dashboard.index');
 Route::get('/profile', [DashboardController::class, 'profile'])->name('user.profile.index');
 Route::get('/mitra', [DashboardController::class, 'mitra'])->name('user.mitra.index');
@@ -51,7 +51,7 @@ Route::get('/kontak', [DashboardController::class, 'kontak'])->name('user.kontak
 Route::get('berita/{id}', [DashboardController::class, 'detailberita'])->name('user.berita.detail');
 Route::get('kreative/{id}', [DashboardController::class, 'detailkreative'])->name('user.kreatif.detail');
 
-Route::middleware(['check.expired', 'check.permission'])->group(function() {
+Route::middleware(['auth', 'check.expired', 'check.permission'])->group(function() {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard.index');
 
     // User Routes
@@ -274,7 +274,7 @@ Route::middleware(['check.expired', 'check.permission'])->group(function() {
     Route::post('/permission-role/store', [PermissionController::class, 'store']);
 
     Route::get('/admin/mahasiswa/detail/{id}', [BiodatamahasiswaController::class, 'detailMahasiswa'])->name('admin.mahasiswa.detail');
-    Route::get('//admin/mahasiswa/pengajuandanadetail/{id}', [PengajuandanaController::class, 'detailPengajuanDana'])->name('admin.mahasiswa.pengajuandana.detail');
+    Route::get('/admin/mahasiswa/pengajuandanadetail/{id}', [PengajuandanaController::class, 'detailPengajuanDana'])->name('admin.mahasiswa.pengajuandana.detail');
     Route::get('/admin/mahasiswa/pdf/{id}', [BiodatamahasiswaController::class, 'downloadPdf'])->name('admin.mahasiswa.pengajuandana.pdf');
 
     Route::get('/user/aktivasi', [UserController::class, 'aktivasi'])->name('admin.user.aktivasi');    

@@ -35,7 +35,7 @@ class BiodatamahasiswaController extends Controller
 
     public function getdata(Request $request)
     {
-        $id = $request->session()->get('user_id');
+        $id = auth()->id();
         if (!$id) {
             return response()->json([
                 'status' => 'error',
@@ -87,7 +87,7 @@ class BiodatamahasiswaController extends Controller
             'foto.max' => 'Ukuran gambar maksimal 500KB.'
         ]);
 
-        $id = $request->session()->get('user_id');
+        $id = auth()->id();
         if (!$id) {
             return response()->json([
                 'status' => 'error',
@@ -155,7 +155,7 @@ class BiodatamahasiswaController extends Controller
                 }
             }
 
-            $filename = time() . '_' . $file->getClientOriginalName();
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
             $file->move($destinationPath, $filename);
 
             $biodata->foto = 'img/mahasiswa/' . $filename;
@@ -172,7 +172,7 @@ class BiodatamahasiswaController extends Controller
     }
     public function updateakademik(Request $request)
     {
-        $id = $request->session()->get('user_id');
+        $id = auth()->id();
         if (!$id) {
             return response()->json([
                 'status' => 'error',
@@ -224,7 +224,7 @@ class BiodatamahasiswaController extends Controller
     }
     public function updateorangtua(Request $request)
     {
-        $id = $request->session()->get('user_id');
+        $id = auth()->id();
         if (!$id) {
             return response()->json([
                 'status' => 'error',
@@ -261,7 +261,7 @@ class BiodatamahasiswaController extends Controller
     }
     public function updatedokumen(Request $request)
     {
-        $id = $request->session()->get('user_id');
+        $id = auth()->id();
         if (!$id) {
             return response()->json([
                 'status' => 'error',

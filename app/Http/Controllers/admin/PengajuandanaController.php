@@ -92,7 +92,7 @@ class PengajuandanaController extends Controller
     public function getIpSebelumnya(Request $request)
     {
         $semester = $request->input('semester');
-        $userid = $request->session()->get('user_id');
+        $userid = auth()->id();
         $idmahasiswa = BiodataMahasiswa::where('user_id', $userid)->value('id');
 
         $pengajuandana = Pengajuandana::where('mahasiswa_id', $idmahasiswa)
@@ -138,7 +138,7 @@ class PengajuandanaController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $mahasiswa_id = BiodataMahasiswa::where('user_id', $request->session()->get('user_id'))->value('id');
+        $mahasiswa_id = BiodataMahasiswa::where('user_id', auth()->id())->value('id');
 
         $pengajuandana = Pengajuandana::create([
             'mahasiswa_id'  => $mahasiswa_id,
@@ -172,6 +172,13 @@ class PengajuandanaController extends Controller
             return response()->json(['message' => 'Pengajuan dana tidak ditemukan'], 404);
         }
 
+        // Cek ownership: mahasiswa hanya bisa lihat data miliknya
+        $user = auth()->user();
+        $mahasiswa = BiodataMahasiswa::where('user_id', $user->id)->first();
+        if ($mahasiswa && $pengajuandana->mahasiswa_id !== $mahasiswa->id) {
+            return response()->json(['message' => 'Akses ditolak'], 403);
+        }
+
         return response()->json($pengajuandana);
     }
 
@@ -186,6 +193,13 @@ class PengajuandanaController extends Controller
         }
 
         $pengajuandana = Pengajuandana::findOrFail($id);
+
+        // Cek ownership: mahasiswa hanya bisa edit data miliknya
+        $user = auth()->user();
+        $mahasiswa = BiodataMahasiswa::where('user_id', $user->id)->first();
+        if ($mahasiswa && $pengajuandana->mahasiswa_id !== $mahasiswa->id) {
+            return response()->json(['message' => 'Akses ditolak'], 403);
+        }
 
 
         $pengajuandana->update([
@@ -221,6 +235,13 @@ class PengajuandanaController extends Controller
                 'status' => 'error',
                 'message' => 'Pengajuan dana tidak ditemukan'
             ], 404);
+        }
+
+        // Cek ownership: mahasiswa hanya bisa hapus data miliknya
+        $user = auth()->user();
+        $mahasiswa = BiodataMahasiswa::where('user_id', $user->id)->first();
+        if ($mahasiswa && $pengajuandana->mahasiswa_id !== $mahasiswa->id) {
+            return response()->json(['message' => 'Akses ditolak'], 403);
         }
 
         $pengajuandana->delete();

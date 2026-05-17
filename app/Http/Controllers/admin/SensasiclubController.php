@@ -79,7 +79,7 @@ class SensasiclubController extends Controller
 
         if ($request->hasFile('pdf')) {
             $pdf     = $request->file('pdf');
-            $pdfName = time() . '_' . $pdf->getClientOriginalName();
+            $pdfName = time() . '_' . uniqid() . '.' . $pdf->getClientOriginalExtension();
             $pdf->move(public_path('uploads/sensasiclub'), $pdfName);
             $sensasiclub->pdf = 'uploads/sensasiclub/' . $pdfName;
         }
@@ -140,7 +140,7 @@ class SensasiclubController extends Controller
             }
 
             $pdfFile = $request->file('pdf');
-            $pdfPath = time() . '_' . $pdfFile->getClientOriginalName();
+            $pdfPath = time() . '_' . uniqid() . '.' . $pdfFile->getClientOriginalExtension();
             $pdfFile->move($_SERVER['DOCUMENT_ROOT'].'/uploads/sensasiclub', $pdfPath);
             $pdfFilename = 'uploads/sensasiclub/' . $pdfPath;
             $sensasiclub->pdf = $pdfFilename;
