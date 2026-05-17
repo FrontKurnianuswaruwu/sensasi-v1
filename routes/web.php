@@ -185,7 +185,7 @@ Route::middleware(['check.expired', 'check.permission'])->group(function() {
     Route::get('/admin/pengajuandana/gettahunakademik', [PengajuandanaController::class, 'getTahunAkademik'])->name('admin.pengajuandana.gettahunakademik');
     Route::get('/admin/pengajuandana', [PengajuandanaController::class, 'index'])->name('admin.pengajuandana.index');
     Route::get('/admin/getpengajuandana', [PengajuandanaController::class, 'getdata'])->name('admin.pengajuandana.getdata');
-    Route::get('/admin/get-ip-sebelumnya', [PengajuanDanaController::class, 'getIpSebelumnya']);
+    Route::get('/admin/get-ip-sebelumnya', [PengajuandanaController::class, 'getIpSebelumnya']);
     Route::post('/admin/pengajuandana', [PengajuandanaController::class, 'store']);
     Route::get('/admin/pengajuandana/{id}', [PengajuandanaController::class, 'show']);
     Route::put('/admin/pengajuandana/{id}', [PengajuandanaController::class, 'update']);
