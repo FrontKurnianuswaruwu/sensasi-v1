@@ -23,6 +23,7 @@ export default defineConfig({
                 'resources/js/admin/biodata.js',
                 'resources/js/admin/artikel.js',
                 'resources/js/admin/pengajuandana.js',
+                'resources/js/admin/historypengajuandana.js',
                 'resources/js/admin/herosection.js',
                 'resources/js/admin/kategorisoal.js',
                 'resources/js/admin/kontak.js',

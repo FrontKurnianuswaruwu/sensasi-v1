@@ -115,6 +115,15 @@
       "_jquery-BvxTx_lq.js"
     ]
   },
+  "resources/js/admin/historypengajuandana.js": {
+    "file": "assets/historypengajuandana-WZNqXAlW.js",
+    "name": "historypengajuandana",
+    "src": "resources/js/admin/historypengajuandana.js",
+    "isEntry": true,
+    "imports": [
+      "_jquery-BvxTx_lq.js"
+    ]
+  },
   "resources/js/admin/kategoripotensiakademik.js": {
     "file": "assets/kategoripotensiakademik-BGJv2r3u.js",
     "name": "kategoripotensiakademik",
