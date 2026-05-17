@@ -48,6 +48,9 @@ function renderTable(data) {
             case 'pending':
                 statusBadge = `<span class="px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-700 border border-yellow-300">Pending</span>`;
                 break;
+            case 'waiting_approval':
+                statusBadge = `<span class="px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-700 border border-blue-300">Menunggu Approval</span>`;
+                break;
             case 'approved':
                 statusBadge = `<span class="px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700 border border-green-300">Approved</span>`;
                 break;
@@ -62,31 +65,64 @@ function renderTable(data) {
         let actionButtons = '';
 
         if (artikel.role === 9) {
-            actionButtons = `
-                <span class="inline-flex items-center px-3 py-1.5 text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed shadow-sm" 
-                    title="Data terkunci untuk role 9">
-                    <i class="fas fa-lock mr-1.5"></i> Terkunci
-                </span>
-            `;
+            // Role 9: hanya bisa confirm, edit, hapus jika status pending atau rejected
+            if (artikel.status === 'pending' || artikel.status === 'rejected') {
+                actionButtons = `
+                    <button class="confirm-btn inline-flex items-center px-3 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all shadow-sm mr-2"
+                            data-id="${artikel.id}" data-name="${artikel.nama}" title="Confirm">
+                        <i class="fas fa-check-circle mr-1.5"></i> Confirm
+                    </button>
+                    <button class="edit-btn inline-flex items-center px-3 py-1.5 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all shadow-sm mr-2"
+                            data-id="${artikel.id}" data-name="${artikel.nama}">
+                        <i class="fas fa-edit mr-1.5"></i> Edit
+                    </button>
+                    <button class="delete-btn inline-flex items-center px-3 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-sm"
+                            data-id="${artikel.id}" data-name="${artikel.nama}">
+                        <i class="fas fa-trash mr-1.5"></i> Hapus
+                    </button>
+                `;
+            } else if (artikel.status === 'waiting_approval') {
+                actionButtons = `
+                    <span class="inline-flex items-center px-3 py-1.5 text-blue-600 bg-blue-50 border border-blue-300 rounded-lg">
+                        <i class="fas fa-clock mr-1.5"></i> Menunggu Approval
+                    </span>
+                `;
+            } else if (artikel.status === 'approved') {
+                actionButtons = `
+                    <span class="inline-flex items-center px-3 py-1.5 text-green-600 bg-green-50 border border-green-300 rounded-lg">
+                        <i class="fas fa-check-circle mr-1.5"></i> Sudah Disetujui
+                    </span>
+                `;
+            }
         } else {
-            const approveButton = !artikel.has_biodata
-                ? `<button class="approve-btn inline-flex items-center px-3 py-1.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all shadow-sm mr-2" 
-                        data-id="${artikel.id}" title="Approve">
+            // Role 1: bisa approve/reject jika status waiting_approval, selalu bisa edit/hapus
+            if (artikel.status === 'waiting_approval') {
+                actionButtons = `
+                    <button class="approve-btn inline-flex items-center px-3 py-1.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all shadow-sm mr-2"
+                            data-id="${artikel.id}" data-name="${artikel.nama}" title="Approve/Reject">
                         <i class="fas fa-check mr-1.5"></i> Approve
-                </button>`
-                : '';
-
-            actionButtons = `
-                ${approveButton}
-                <button class="edit-btn inline-flex items-center px-3 py-1.5 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all shadow-sm mr-2" 
-                        data-id="${artikel.id}" data-name="${artikel.nama}">
-                    <i class="fas fa-edit mr-1.5"></i> Edit
-                </button>
-                <button class="delete-btn inline-flex items-center px-3 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-sm" 
-                        data-id="${artikel.id}" data-name="${artikel.nama}">
-                    <i class="fas fa-trash mr-1.5"></i> Hapus
-                </button>
-            `;
+                    </button>
+                    <button class="edit-btn inline-flex items-center px-3 py-1.5 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all shadow-sm mr-2"
+                            data-id="${artikel.id}" data-name="${artikel.nama}">
+                        <i class="fas fa-edit mr-1.5"></i> Edit
+                    </button>
+                    <button class="delete-btn inline-flex items-center px-3 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-sm"
+                            data-id="${artikel.id}" data-name="${artikel.nama}">
+                        <i class="fas fa-trash mr-1.5"></i> Hapus
+                    </button>
+                `;
+            } else {
+                actionButtons = `
+                    <button class="edit-btn inline-flex items-center px-3 py-1.5 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all shadow-sm mr-2"
+                            data-id="${artikel.id}" data-name="${artikel.nama}">
+                        <i class="fas fa-edit mr-1.5"></i> Edit
+                    </button>
+                    <button class="delete-btn inline-flex items-center px-3 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-sm"
+                            data-id="${artikel.id}" data-name="${artikel.nama}">
+                        <i class="fas fa-trash mr-1.5"></i> Hapus
+                    </button>
+                `;
+            }
         }
 
         const namaArtikel = artikel.nama || '-';
@@ -152,6 +188,9 @@ function renderCards(data) {
             case 'pending':
                 statusBadge = `<span class="px-3 py-1 text-[10px] font-bold rounded-full bg-yellow-100 text-yellow-700 border border-yellow-300 uppercase">Pending</span>`;
                 break;
+            case 'waiting_approval':
+                statusBadge = `<span class="px-3 py-1 text-[10px] font-bold rounded-full bg-blue-100 text-blue-700 border border-blue-300 uppercase">Menunggu Approval</span>`;
+                break;
             case 'approved':
                 statusBadge = `<span class="px-3 py-1 text-[10px] font-bold rounded-full bg-green-100 text-green-700 border border-green-300 uppercase">Approved</span>`;
                 break;
@@ -165,22 +204,64 @@ function renderCards(data) {
         // ===== LOGIKA ACTION BUTTONS (Handle Role 9) =====
         let actionButtons = '';
         if (artikel.role === 9) {
-            actionButtons = `
-                <div class="w-full text-center py-2 bg-gray-100 text-gray-400 rounded-lg text-xs font-bold border border-gray-200">
-                    <i class="fas fa-lock mr-1"></i> DATA TERKUNCI
-                </div>
-            `;
+            // Role 9: hanya bisa confirm, edit, hapus jika status pending atau rejected
+            if (artikel.status === 'pending' || artikel.status === 'rejected') {
+                actionButtons = `
+                    <button class="confirm-btn flex-1 py-2.5 bg-blue-50 text-blue-600 rounded-xl text-xs font-bold hover:bg-blue-100 transition-all active:scale-95"
+                        data-id="${artikel.id}" data-name="${artikel.nama}">
+                        <i class="fas fa-check-circle mr-1"></i> CONFIRM
+                    </button>
+                    <button class="edit-btn flex-1 py-2.5 bg-yellow-50 text-yellow-600 rounded-xl text-xs font-bold hover:bg-yellow-100 transition-all active:scale-95"
+                        data-id="${artikel.id}" data-name="${artikel.nama}">
+                        <i class="fas fa-edit mr-1"></i> EDIT
+                    </button>
+                    <button class="delete-btn flex-1 py-2.5 bg-red-50 text-red-600 rounded-xl text-xs font-bold hover:bg-red-100 transition-all active:scale-95"
+                        data-id="${artikel.id}" data-name="${artikel.nama}">
+                        <i class="fas fa-trash mr-1"></i> HAPUS
+                    </button>
+                `;
+            } else if (artikel.status === 'waiting_approval') {
+                actionButtons = `
+                    <div class="w-full text-center py-2 bg-blue-100 text-blue-600 rounded-lg text-xs font-bold border border-blue-200">
+                        <i class="fas fa-clock mr-1"></i> MENUNGGU APPROVAL
+                    </div>
+                `;
+            } else if (artikel.status === 'approved') {
+                actionButtons = `
+                    <div class="w-full text-center py-2 bg-green-100 text-green-600 rounded-lg text-xs font-bold border border-green-200">
+                        <i class="fas fa-check-circle mr-1"></i> SUDAH DISETUJUI
+                    </div>
+                `;
+            }
         } else {
-            actionButtons = `
-                <button class="edit-btn flex-1 py-2.5 bg-yellow-50 text-yellow-600 rounded-xl text-xs font-bold hover:bg-yellow-100 transition-all active:scale-95" 
-                    data-id="${artikel.id}" data-name="${artikel.nama}">
-                    <i class="fas fa-edit mr-1"></i> EDIT
-                </button>
-                <button class="delete-btn flex-1 py-2.5 bg-red-50 text-red-600 rounded-xl text-xs font-bold hover:bg-red-100 transition-all active:scale-95" 
-                    data-id="${artikel.id}" data-name="${artikel.nama}">
-                    <i class="fas fa-trash mr-1"></i> HAPUS
-                </button>
-            `;
+            // Role 1: bisa approve/reject jika status waiting_approval, selalu bisa edit/hapus
+            if (artikel.status === 'waiting_approval') {
+                actionButtons = `
+                    <button class="approve-btn flex-1 py-2.5 bg-green-50 text-green-600 rounded-xl text-xs font-bold hover:bg-green-100 transition-all active:scale-95"
+                        data-id="${artikel.id}" data-name="${artikel.nama}">
+                        <i class="fas fa-check mr-1"></i> APPROVE
+                    </button>
+                    <button class="edit-btn flex-1 py-2.5 bg-yellow-50 text-yellow-600 rounded-xl text-xs font-bold hover:bg-yellow-100 transition-all active:scale-95"
+                        data-id="${artikel.id}" data-name="${artikel.nama}">
+                        <i class="fas fa-edit mr-1"></i> EDIT
+                    </button>
+                    <button class="delete-btn flex-1 py-2.5 bg-red-50 text-red-600 rounded-xl text-xs font-bold hover:bg-red-100 transition-all active:scale-95"
+                        data-id="${artikel.id}" data-name="${artikel.nama}">
+                        <i class="fas fa-trash mr-1"></i> HAPUS
+                    </button>
+                `;
+            } else {
+                actionButtons = `
+                    <button class="edit-btn flex-1 py-2.5 bg-yellow-50 text-yellow-600 rounded-xl text-xs font-bold hover:bg-yellow-100 transition-all active:scale-95"
+                        data-id="${artikel.id}" data-name="${artikel.nama}">
+                        <i class="fas fa-edit mr-1"></i> EDIT
+                    </button>
+                    <button class="delete-btn flex-1 py-2.5 bg-red-50 text-red-600 rounded-xl text-xs font-bold hover:bg-red-100 transition-all active:scale-95"
+                        data-id="${artikel.id}" data-name="${artikel.nama}">
+                        <i class="fas fa-trash mr-1"></i> HAPUS
+                    </button>
+                `;
+            }
         }
 
         const avatarChar = artikel.nama ? artikel.nama.charAt(0).toUpperCase() : '?';
@@ -756,6 +837,47 @@ $(document).on('click', '.approve-btn', function() {
     showModalEnhanced('approveModal');
 });
 
+// Confirm button handler (untuk role 9) — buka modal confirm
+$(document).on('click', '.confirm-btn', function() {
+    const id = $(this).data('id');
+    const name = $(this).data('name');
+
+    $('#confirmartikelId').val(id);
+    $('#confirmArtikelName').text(name);
+    showModal('confirmModal');
+});
+
+// Cancel confirm modal
+$(document).on('click', '#cancelConfirmBtn', function() {
+    hideModal('confirmModal');
+});
+
+// Submit confirm (dari modal)
+$(document).on('click', '#confirmSubmitBtn', function() {
+    const id = $('#confirmartikelId').val();
+    const confirmBtn = $(this);
+    const originalText = confirmBtn.html();
+    confirmBtn.html('<i class="fas fa-spinner fa-spin mr-2"></i>Confirming...').prop('disabled', true);
+
+    $.ajax({
+        url: `/admin/confirmkreatif/${id}`,
+        type: 'POST',
+        success: function(response) {
+            hideModal('confirmModal');
+            showNotification(response.message, response.status);
+            loadData($('#searchInputartikel').val(), currentPage);
+            confirmBtn.html(originalText).prop('disabled', false);
+        },
+        error: function(xhr) {
+            let msg = (xhr.responseJSON && xhr.responseJSON.message)
+                ? xhr.responseJSON.message
+                : 'Gagal confirm data!';
+            showNotification(msg, 'error');
+            confirmBtn.html(originalText).prop('disabled', false);
+        }
+    });
+});
+
 // Approve confirmation handler
 $(document).on('click', '#confirmApproveBtn', function() {
     const approveBtn = $(this);
@@ -829,6 +951,28 @@ $('#pendaftaranSwitch').click(function() {
         },
         error: function() {
             alert('Gagal mengubah status pendaftaran.');
+        }
+    });
+});
+
+$('#wajibBiodataSwitch').click(function() {
+    $.ajax({
+        url: `/wajib-biodata/toggle`,
+        type: "POST",
+        success: function(res) {
+            const bg = $('#wajibBiodataBg');
+            const knob = $('#wajibBiodataKnob');
+
+            if(res.wajib_biodata == 1) {
+                bg.removeClass('bg-gray-300').addClass('bg-green-500');
+                knob.addClass('translate-x-8');
+            } else {
+                bg.removeClass('bg-green-500').addClass('bg-gray-300');
+                knob.removeClass('translate-x-8');
+            }
+        },
+        error: function() {
+            alert('Gagal mengubah status wajib biodata.');
         }
     });
 });

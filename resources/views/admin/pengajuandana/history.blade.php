@@ -44,11 +44,17 @@
                     Menampilkan semua data
                 </span>
                 @if (!$is_mahasiswa)
-                    <a href="{{ route('admin.pengajuandana.exportapproved') }}" 
-                        class="order-1 sm:order-2 w-full sm:w-auto flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-5 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-md active:scale-95">
-                        <i class="fas fa-file-excel"></i>
-                        <span>Download Excel</span>
-                    </a>
+                    <div class="order-1 sm:order-2 w-full sm:w-auto flex gap-3">
+                        <select id="filterTahunAkademikHistory"
+                            class="px-4 py-2.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-primary/20 focus:border-blue-primary transition-all duration-300 text-sm font-medium">
+                            <option value="">Semua Tahun Akademik</option>
+                        </select>
+                        <button id="downloadExcelHistoryBtn"
+                            class="w-full sm:w-auto flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-5 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-md active:scale-95">
+                            <i class="fas fa-file-excel"></i>
+                            <span>Download Excel</span>
+                        </button>
+                    </div>
                 @endif
             </div>
         </div>        

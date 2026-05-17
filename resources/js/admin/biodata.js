@@ -659,7 +659,10 @@ function checkSequentialValidation() {
 
         $fieldsToCheck.each(function() {
             if ($(this).attr('type') === 'file') {
-                if (this.files.length === 0) {
+                // Cek apakah ada file baru dipilih ATAU sudah ada file yang diupload sebelumnya
+                const hasNewFile = this.files.length > 0;
+                const hasExistingFile = $(this).closest('.relative').find('.lihat-file-btn').length > 0;
+                if (!hasNewFile && !hasExistingFile) {
                     isComplete = false;
                     return false;
                 }
@@ -686,4 +689,37 @@ function checkSequentialValidation() {
         }
     });
 }
+
+// Re-check validation setiap kali user mengisi/mengubah field
+$(document).on('input change', '[data-required="true"]', function() {
+    checkSequentialValidation();
+});
+
+// Restrict input angka saja untuk field dengan class "angka-only"
+$(document).on('input', '.angka-only', function() {
+    let val = $(this).val().replace(/[^0-9]/g, '');
+    $(this).val(val);
+});
+
+// Prevent huruf masuk di input type="number" (block e, E, +, -, dan huruf lainnya)
+$(document).on('keydown', 'input[type="number"]', function(e) {
+    // Allow: backspace, delete, tab, escape, enter, arrows, home, end
+    if ([8, 9, 13, 27, 46, 35, 36, 37, 38, 39, 40].indexOf(e.keyCode) !== -1 ||
+        // Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+        (e.keyCode >= 65 && e.keyCode <= 90 && (e.ctrlKey || e.metaKey)) ||
+        // Allow: numpad 0-9
+        (e.keyCode >= 96 && e.keyCode <= 105)) {
+        return;
+    }
+    // Allow: 0-9 (main keyboard)
+    if ((e.keyCode >= 48 && e.keyCode <= 57) && !e.shiftKey) {
+        return;
+    }
+    // Allow: period/dot for decimal (ip_terakhir)
+    if ((e.keyCode === 190 || e.keyCode === 110) && $(this).attr('step')) {
+        return;
+    }
+    // Block everything else (e, E, +, -, letters, symbols)
+    e.preventDefault();
+});
 

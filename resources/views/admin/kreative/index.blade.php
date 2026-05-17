@@ -306,6 +306,52 @@
         </div>
     </div>
 
+    <!-- Confirm Modal (untuk mahasiswa role 9) -->
+    <div id="confirmModal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-overlay absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+            <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-md">
+                <!-- Header -->
+                <div class="gradient-bg px-6 py-4 rounded-t-2xl">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-paper-plane text-white text-lg"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">Konfirmasi Pengajuan</h3>
+                    </div>
+                </div>
+                <input type="hidden" id="confirmartikelId" name="id">
+
+                <!-- Body -->
+                <div class="p-6">
+                    <div class="text-center mb-6">
+                        <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-check-circle text-3xl text-blue-500"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-2">Apakah Anda yakin?</h4>
+                        <p class="text-gray-600">
+                            Artikel <span id="confirmArtikelName" class="font-semibold text-gray-900"></span> akan di-confirm.
+                            Setelah di-confirm, Anda tidak bisa edit atau hapus lagi sampai admin memberikan keputusan.
+                        </p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-3">
+                        <button type="button"
+                                id="cancelConfirmBtn"
+                                class="w-full sm:w-auto px-6 py-3 text-gray-700 bg-gray-100 border border-gray-300 rounded-xl hover:bg-gray-200 focus:ring-4 focus:ring-gray-200 transition-all duration-300 font-medium">
+                            <i class="fas fa-times mr-2"></i>Batal
+                        </button>
+                        <button type="button"
+                                id="confirmSubmitBtn"
+                                class="w-full sm:w-auto px-6 py-3 text-white bg-blue-primary border border-blue-primary rounded-xl hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition-all duration-300 font-medium">
+                            <i class="fas fa-check mr-2"></i>Ya, Confirm
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @vite(['resources/css/user.css','resources/js/admin/artikel.js'])
 
 @endsection

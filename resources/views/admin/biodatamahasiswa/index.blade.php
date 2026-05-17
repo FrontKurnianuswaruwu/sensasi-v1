@@ -315,8 +315,8 @@
                                 <div class="group space-y-2">
                                     <label for="nim" class="block text-sm font-bold text-gray-700 group-focus-within:text-blue-600 transition-colors">Nomor Induk Mahasiswa (NIM)</label>
                                     <div class="relative">
-                                        <input type="text" id="nim" name="nim"
-                                            class="w-full px-5 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 transition-all text-gray-600 font-medium placeholder:text-gray-300"
+                                        <input type="text" id="nim" name="nim" inputmode="numeric"
+                                            class="w-full px-5 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 transition-all text-gray-600 font-medium placeholder:text-gray-300 angka-only"
                                             placeholder="Contoh: 2010123456" data-required="true">
                                     </div>
                                 </div>
@@ -446,7 +446,7 @@
                                             <label class="block text-xs font-bold text-gray-500 mb-2">PENGHASILAN (RP)</label>
                                             <input type="text" id="penghasilan_ayah" name="penghasilan_ayah"
                                                 class="w-full px-4 py-3.5 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:border-blue-500 transition-all text-gray-700 font-bold rupiah-input"
-                                                placeholder="0" >
+                                                placeholder="0" data-required="true">
                                         </div>
                                     </div>
                                 </div>
@@ -514,8 +514,8 @@
                                 </div>
                                 <div class="group">
                                     <label class="block text-xs font-bold text-gray-500 mb-2"><i class="fab fa-whatsapp mr-2 text-green-500"></i>NO. WA ORANG TUA/WALI</label>
-                                    <input type="text" id="no_wa_ortu" name="no_wa_ortu"
-                                        class="w-full px-5 py-3.5 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 transition-all text-gray-700 font-bold"
+                                    <input type="text" id="no_wa_ortu" name="no_wa_ortu" inputmode="numeric"
+                                        class="w-full px-5 py-3.5 bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 transition-all text-gray-700 font-bold angka-only"
                                         placeholder="08123456789" data-required="true">
                                 </div>
                             </div>

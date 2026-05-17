@@ -152,6 +152,7 @@ Route::middleware(['check.expired', 'check.permission'])->group(function() {
     Route::put('/admin/kreatif/{id}', [KreativeController::class, 'update']);
     Route::delete('/admin/kreatif/{id}', [KreativeController::class, 'delete']);
     Route::post('/kreatif/deletePdf', [KreativeController::class, 'deletePdf']);
+    Route::post('/admin/confirmkreatif/{id}', [KreativeController::class, 'confirm']);
     Route::post('/admin/approvekreatif/{id}', [KreativeController::class, 'approve']);
     Route::post('/admin/rejectkreatif/{id}', [KreativeController::class, 'reject']);
 
@@ -181,6 +182,7 @@ Route::middleware(['check.expired', 'check.permission'])->group(function() {
 
     Route::get('/admin/pengajuandana/exportall', [PengajuandanaController::class, 'exportAll'])->name('admin.pengajuandana.exportall');
     Route::get('/admin/pengajuandana/exportapproved', [PengajuandanaController::class, 'exportApproved'])->name('admin.pengajuandana.exportapproved');
+    Route::get('/admin/pengajuandana/gettahunakademik', [PengajuandanaController::class, 'getTahunAkademik'])->name('admin.pengajuandana.gettahunakademik');
     Route::get('/admin/pengajuandana', [PengajuandanaController::class, 'index'])->name('admin.pengajuandana.index');
     Route::get('/admin/getpengajuandana', [PengajuandanaController::class, 'getdata'])->name('admin.pengajuandana.getdata');
     Route::get('/admin/get-ip-sebelumnya', [PengajuanDanaController::class, 'getIpSebelumnya']);
@@ -197,6 +199,8 @@ Route::middleware(['check.expired', 'check.permission'])->group(function() {
     Route::get('/admin/riwayatpengajuandana', [RiwayatpengajuandanaController::class, 'index'])->name('admin.riwayatpengajuandana.index');
     Route::get('/admin/getriwayatpengajuandana', [RiwayatpengajuandanaController::class, 'getdata'])->name('admin.riwayatpengajuandana.getdata');
     Route::get('/admin/riwayatpengajuandana/{id}', [RiwayatpengajuandanaController::class, 'show']);
+    Route::get('/admin/riwayatpengajuandana-tahun-akademik', [RiwayatpengajuandanaController::class, 'getTahunAkademik']);
+    Route::get('/admin/riwayatpengajuandana-export', [RiwayatpengajuandanaController::class, 'exportRiwayat'])->name('admin.riwayatpengajuandana.export');
 
     Route::get('/admin/approvalpengajuandana', [ApprovalpengajuandanaController::class, 'index'])->name('admin.approvalpengajuandana.index');
     Route::get('/admin/getapprovalpengajuandana', [ApprovalpengajuandanaController::class, 'getdata'])->name('admin.approvalpengajuandana.getdata');
@@ -263,6 +267,7 @@ Route::middleware(['check.expired', 'check.permission'])->group(function() {
     Route::get('/admin/get-semester-sebelumnya', [NilaisemesterController::class, 'getSemesterSebelumnya'])->name('admin.nilaisemester.getSemesterSebelumnya');
 
     Route::post('/pendaftaran/toggle', [DashboardController::class, 'toggle'])->name('admin.pendaftaran.toggle');
+    Route::post('/wajib-biodata/toggle', [DashboardController::class, 'toggleWajibBiodata'])->name('admin.wajib-biodata.toggle');
     
     Route::get('/admin/permission', [PermissionController::class, 'index'])->name('admin.permissions.index');
     Route::get('/admin/getpermission', [PermissionController::class, 'getdata'])->name('admin.permission.getdata');

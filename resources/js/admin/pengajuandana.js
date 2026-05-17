@@ -9,6 +9,42 @@ $.ajaxSetup({
 // initial load
 $(function() {
    loadData();
+   loadTahunAkademik();
+});
+
+// Load tahun akademik untuk filter
+function loadTahunAkademik() {
+    $.ajax({
+        url: '/admin/pengajuandana/gettahunakademik',
+        type: 'GET',
+        success: function(data) {
+            const select = $('#filterTahunAkademik');
+            data.forEach(function(item) {
+                select.append(`<option value="${item.id}">${item.tahun_akademik}</option>`);
+            });
+        },
+        error: function(xhr) {
+            console.error('Gagal load tahun akademik:', xhr);
+        }
+    });
+}
+
+// Handle download excel dengan filter
+$('#downloadExcelBtn').on('click', function() {
+    const tahunAkademikId = $('#filterTahunAkademik').val();
+    let url = '/admin/pengajuandana/exportall';
+
+    if (tahunAkademikId) {
+        url += '?tahun_akademik_id=' + tahunAkademikId;
+    }
+
+    window.location.href = url;
+});
+
+// Handle filter tahun akademik untuk tabel
+$('#filterTahunAkademik').on('change', function() {
+    currentPage = 1;
+    loadData($('#searchInputpengajuandana').val(), currentPage);
 });
 
 function formatTanggal(dateStr) {
@@ -137,6 +173,7 @@ function renderTable(data, isMahasiswa) {
 
         const namaMahasiswa = pengajuandana.mahasiswa?.user?.name ?? '-';
         const avatarChar = namaMahasiswa.charAt(0).toUpperCase();
+        const namaUniversitas = pengajuandana.mahasiswa?.mitra?.nama_mitra ?? '-';
 
         const row = `
             <tr class="hover:bg-gray-50 transition-colors duration-200 border-b border-gray-100">
@@ -157,6 +194,12 @@ function renderTable(data, isMahasiswa) {
                         </div>
                     </div>
                 </td>
+
+                ${!isMahasiswa ? `
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-medium">
+                    ${namaUniversitas}
+                </td>
+                ` : ''}
 
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-medium">
                     ${semesterText}
@@ -234,6 +277,12 @@ function renderCards(data, isMahasiswa) {
                 </div>
 
                 <div class="bg-gray-50 rounded-lg p-3 mb-4 space-y-2">
+                    ${!isMahasiswa ? `
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Universitas:</span>
+                        <span class="font-bold text-gray-800">${pengajuandana.mahasiswa?.mitra?.nama_mitra ?? '-'}</span>
+                    </div>
+                    ` : ''}
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-500">Total Dana:</span>
                         <span class="font-bold text-blue-600">${formatRupiah(pengajuandana.total)}</span>
@@ -298,10 +347,17 @@ function renderPaginationMobile(totalPages, query) {
 }
 
 function loadData(query = '', page = 1) {
+    const tahunAkademikId = $('#filterTahunAkademik').val();
+
     $.ajax({
         url: "/admin/getpengajuandana",
         type: "GET",
-        data: { search: query, page: page, limit: rowsPerPage },
+        data: {
+            search: query,
+            page: page,
+            limit: rowsPerPage,
+            tahun_akademik_id: tahunAkademikId
+        },
         dataType: "json",
         success: function(res) {
             const data = res.data;
@@ -538,21 +594,21 @@ $('#pengajuandanaPengajuandana').on('change', function () {
 // 3️⃣ Hitung Total Paket
 // ======================
 function hitungTotalPaket() {
-    const sppTetap = parseRupiah($('#det_spp_tetap').text());
-    const sppVariabel = parseRupiah($('#det_spp_variabel').text());
-    const praktikum = parseRupiah($('#det_praktikum_paket').text());
-    
+    const sppTetap = parseRupiah($('#sppTetap').val());
+    const sppVariabel = parseRupiah($('#sppVariabel').val());
+    const praktikum = parseRupiah($('#praktikumPaket').val());
+
     const total = sppTetap + sppVariabel + praktikum;
-    $('#det_total_paket').text(formatRupiah(total));
+    $('#totalPaket').val(formatRupiah(total));
 }
 
 function hitungTotalSks() {
-    const jumlahSks = parseInt($('#det_jml_sks').text()) || 0;
-    const nominal = parseRupiah($('#det_nominal').text());
-    const praktikum = parseRupiah($('#det_praktikum_sks').text());
-    
+    const jumlahSks = parseInt($('#jumlahSks').val()) || 0;
+    const nominal = parseRupiah($('#nominal').val());
+    const praktikum = parseRupiah($('#praktikumSks').val());
+
     const total = (jumlahSks * nominal) + praktikum;
-    $('#det_total_sks').text(formatRupiah(total));
+    $('#totalSks').val(formatRupiah(total));
 }
 
 // ==========================================
@@ -802,10 +858,21 @@ $(document).on('input', '#approveDanaDisetujui', function () {
 });
 
 $(document).on('click', '.approve-btn', function() {
-    const id = $(this).data('id');  
+    const id = $(this).data('id');
 
     resetApproveModal();
-    $('#approvepengajuandanaId').val(id); 
+    $('#approvepengajuandanaId').val(id);
+
+    // Ambil data detail untuk isi otomatis dana disetujui dengan total
+    $.ajax({
+        url: `/admin/mahasiswa/pengajuandanadetail/${id}`,
+        type: 'GET',
+        success: function(res) {
+            if (res.total) {
+                $('#approveDanaDisetujui').val(formatRupiah(res.total));
+            }
+        }
+    });
 
     showModalEnhanced('approveModal');
 });
@@ -920,6 +987,11 @@ $(document).on('click', '.detail-btn', function() {
             $('#det_ip').text(res.ip_semester);
             $('#det_tipe').text(tipe === 1 ? 'Paket' : 'SKS');
 
+            // Isi universitas jika elemen ada (hanya untuk admin)
+            if ($('#det_universitas').length) {
+                $('#det_universitas').text(res.mahasiswa?.mitra?.nama_mitra ?? '-');
+            }
+
             $('#detailPaket').addClass('hidden');
             $('#detailSks').addClass('hidden');
 
@@ -928,13 +1000,13 @@ $(document).on('click', '.detail-btn', function() {
                 $('#det_spp_tetap').text(formatRupiah(res.spp_tetap));
                 $('#det_spp_variabel').text(formatRupiah(res.spp_variabel));
                 $('#det_praktikum_paket').text(formatRupiah(res.praktikum));
-                hitungTotalPaket();
+                $('#det_total_paket').text(formatRupiah(res.total));
             } else if (tipe === 2) {
                 $('#detailSks').removeClass('hidden');
-                $('#det_jml_sks').text(formatRupiah(res.jml_sks));
+                $('#det_jml_sks').text(res.jml_sks);
                 $('#det_nominal').text(formatRupiah(res.nominal));
                 $('#det_praktikum_sks').text(formatRupiah(res.praktikum));
-                hitungTotalSks();
+                $('#det_total_sks').text(formatRupiah(res.total));
             }
             
         },

@@ -12,6 +12,20 @@
             <h2 class="text-2xl lg:text-3xl font-bold mb-2">Selamat Datang {{ $rolename }} SENSASI</h2>
             <p class="text-white/90">Kelola semua konten dan informasi organisasi Anda dengan mudah</p>
         </div>
+        @if ($userrole == 9 && $wajibBiodata == 1 && !$biodataLengkap)
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 rounded-xl p-5 mb-6 flex items-start gap-4 shadow-sm fade-in">
+                <div class="flex-shrink-0 w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle text-yellow-600 text-lg"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-sm font-bold text-yellow-800 mb-1">Biodata Belum Lengkap!</h4>
+                    <p class="text-sm text-yellow-700">Saat ini pengisian biodata diwajibkan oleh admin. Silakan lengkapi semua data biodata Anda (Data Pribadi, Akademik, Orang Tua, dan Dokumen) agar tidak menghambat proses berikutnya.</p>
+                    <a href="{{ route('admin.biodatamahasiswa.index') }}" class="inline-flex items-center mt-3 px-4 py-2 bg-yellow-500 text-white text-sm font-bold rounded-lg hover:bg-yellow-600 transition-all shadow-sm">
+                        <i class="fas fa-edit mr-2"></i> Lengkapi Biodata Sekarang
+                    </a>
+                </div>
+            </div>
+        @endif
         @if ($userrole == 2)
             <div class="bg-white rounded-xl p-6 shadow-lg flex items-center justify-between">
                 <div>
@@ -28,6 +42,25 @@
                     <!-- Knob -->
                     <span id="pendaftaranKnob" class="absolute top-1 left-1 h-6 w-6 bg-white rounded-full shadow-md transition-transform duration-300
                         {{ \App\Models\Pengaturan::getValue() ? 'translate-x-8' : '' }}">
+                    </span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 shadow-lg flex items-center justify-between mt-4">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800">Wajib Isi Biodata</h3>
+                    <p class="text-sm text-gray-500">Aktifkan untuk mewajibkan mahasiswa mengisi biodata lengkap</p>
+                </div>
+
+                <!-- Switch Button -->
+                <div id="wajibBiodataSwitch" class="relative inline-block h-8 w-16 cursor-pointer">
+                    <!-- Background -->
+                    <span id="wajibBiodataBg" class="absolute top-0 left-0 h-8 w-16 rounded-full transition-colors duration-300
+                        {{ \App\Models\Pengaturan::getWajibBiodata() ? 'bg-green-500' : 'bg-gray-300' }}">
+                    </span>
+                    <!-- Knob -->
+                    <span id="wajibBiodataKnob" class="absolute top-1 left-1 h-6 w-6 bg-white rounded-full shadow-md transition-transform duration-300
+                        {{ \App\Models\Pengaturan::getWajibBiodata() ? 'translate-x-8' : '' }}">
                     </span>
                 </div>
             </div>

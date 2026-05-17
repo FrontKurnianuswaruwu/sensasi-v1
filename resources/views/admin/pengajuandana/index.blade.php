@@ -44,11 +44,17 @@
                     Menampilkan semua data
                 </span>
                 @if (!$is_mahasiswa)
-                    <a href="{{ route('admin.pengajuandana.exportall') }}" 
-                        class="order-1 sm:order-2 w-full sm:w-auto flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-5 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-md active:scale-95">
-                        <i class="fas fa-file-excel"></i>
-                        <span>Download Excel</span>
-                    </a>
+                    <div class="order-1 sm:order-2 w-full sm:w-auto flex gap-3">
+                        <select id="filterTahunAkademik"
+                            class="px-4 py-2.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-primary/20 focus:border-blue-primary transition-all duration-300 text-sm font-medium">
+                            <option value="">Semua Tahun Akademik</option>
+                        </select>
+                        <button id="downloadExcelBtn"
+                            class="w-full sm:w-auto flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-5 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-md active:scale-95">
+                            <i class="fas fa-file-excel"></i>
+                            <span>Download Excel</span>
+                        </button>
+                    </div>
                 @endif
             </div>
         </div>
@@ -82,6 +88,13 @@
                                         Nama
                                     </div>
                                 </th>
+                                @if (!$is_mahasiswa)
+                                <th class="px-6 py-5 text-left text-sm font-semibold uppercase tracking-wider whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        Universitas
+                                    </div>
+                                </th>
+                                @endif
                                 <th class="px-6 py-5 text-left text-sm font-semibold uppercase tracking-wider whitespace-nowrap">
                                     <div class="flex items-center">
                                         Semester
@@ -462,6 +475,13 @@
 
                 <!-- INFORMASI UMUM -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                    @if (!$is_mahasiswa)
+                    <div class="p-4 rounded-xl bg-gray-50 border hover:bg-white hover:shadow-md transition md:col-span-3">
+                        <p class="text-[10px] text-gray-400 uppercase font-black mb-1">Universitas</p>
+                        <p id="det_universitas" class="font-bold text-gray-900">-</p>
+                    </div>
+                    @endif
 
                     <div class="p-4 rounded-xl bg-gray-50 border hover:bg-white hover:shadow-md transition">
                         <p class="text-[10px] text-gray-400 uppercase font-black mb-1">Semester</p>

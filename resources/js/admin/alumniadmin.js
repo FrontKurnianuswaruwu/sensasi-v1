@@ -98,12 +98,11 @@ function renderTable(data) {
                 </td>
                 <td class="px-6 py-4 text-sm font-medium">
                     <div class="flex space-x-2">
-                        <button class="detail-btn p-2 bg-white border border-gray-200 text-blue-600 rounded-md hover:shadow-md transition-all" 
-                            data-id="${item.id}" data-type="${item.sumber_data}" title="Lihat Profil">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        
                         ${!isResmi ? `
+                            <button class="detail-btn p-2 bg-white border border-gray-200 text-blue-600 rounded-md hover:shadow-md transition-all"
+                                data-id="${item.id}" data-type="${item.sumber_data}" title="Lihat Profil">
+                                <i class="fas fa-eye"></i>
+                            </button>
                             <button class="aktif-btn p-2 bg-white border border-gray-200 text-green-600 rounded-md hover:bg-green-50 transition-all"
                                 data-id="${item.user?.id}" data-name="${name}">
                                 <i class="fas fa-undo-alt"></i>
@@ -137,58 +136,62 @@ function renderCards(data) {
     }
 
     data.forEach((employee) => {
-        // Sesuai logika Desktop: Ambil status dan ubah 'Tidak Aktif' menjadi 'Alumni'
-        let status = employee.user?.status_user;
-        if (status === 'Tidak Aktif') {
-            status = 'Alumni';
-        }
+        const isResmi = employee.sumber_data === 'resmi';
 
-        // Penyesuaian warna label status
-        const statusClass = status === 'Aktif'
-            ? 'bg-green-100 text-green-800'
-            : 'bg-blue-100 text-blue-800';
+        // Identitas Data
+        const name  = isResmi ? employee.nama_lengkap : employee.user?.name;
+        const mitra = isResmi ? employee.mitra?.nama_mitra : employee.user?.akademik?.mitra?.nama_mitra;
+        const info  = isResmi ? (employee.program_studi || '-') : (employee.user?.email || '-');
+        const subId = isResmi ? `Lulus: ${employee.tahun_lulus}` : `NIM: ${employee.nim}`;
+
+        // Styling Badge
+        const badgeClass = isResmi
+            ? 'bg-purple-100 text-purple-700 border-purple-200'
+            : 'bg-blue-100 text-blue-700 border-blue-200';
+        const badgeLabel = isResmi ? 'Alumni Resmi' : 'Alumni (Transisi)';
+        const iconLabel  = isResmi ? 'fa-graduation-cap' : 'fa-user-clock';
 
         const card = `
             <div class="p-4 border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
                 <div class="flex items-start space-x-3">
-                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-gradient-to-r gradient-bg to-blue-light flex items-center justify-center text-white font-semibold text-lg">
-                        ${employee.user?.name ? employee.user.name.charAt(0) : '?'}
+                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-gradient-to-r ${isResmi ? 'from-purple-600 to-indigo-600' : 'gradient-bg to-blue-light'} flex items-center justify-center text-white font-semibold text-lg">
+                        ${name ? name.charAt(0).toUpperCase() : '?'}
                     </div>
 
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center justify-between mb-2">
                             <h3 class="text-base font-bold text-gray-900 truncate">
-                                ${employee.user?.name || '-'}
+                                ${name || '-'}
                             </h3>
-                            <span class="px-2 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">
-                                ${status ?? '-'}
+                            <span class="px-2 py-0.5 inline-flex items-center text-xs leading-5 font-semibold rounded-full border ${badgeClass}">
+                                <i class="fas ${iconLabel} mr-1"></i> ${badgeLabel}
                             </span>
                         </div>
 
                         <div class="space-y-1 text-sm text-gray-600">
                             <div class="flex items-center">
                                 <i class="fas fa-university w-4 mr-2 text-blue-500"></i>
-                                <span class="truncate">${employee.user?.akademik?.mitra?.nama_mitra || '-'}</span>
+                                <span class="truncate">${mitra || '-'}</span>
                             </div>
                             <div class="flex items-center">
-                                <i class="fas fa-envelope w-4 mr-2 text-orange-primary"></i>
-                                <span class="truncate">${employee.user?.email || '-'}</span>
+                                <i class="fas fa-id-card w-4 mr-2 text-orange-primary"></i>
+                                <span class="truncate">${subId}</span>
                             </div>
                         </div>
 
                         <div class="flex mt-4 space-x-2">
-                            ${employee.user?.status_user !== 'Aktif' ? `
-                                <button class="detail-btn flex-1 flex items-center justify-center px-3 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-all" 
+                            ${!isResmi ? `
+                                <button class="detail-btn flex-1 flex items-center justify-center px-3 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-all"
                                     data-id="${employee.id}">
                                     <i class="fas fa-eye mr-2"></i> Detail
                                 </button>
                                 <button class="aktif-btn flex-1 flex items-center justify-center px-3 py-2 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-600 transition-all"
-                                    data-id="${employee.user?.id}" data-name="${employee.user?.name}">
+                                    data-id="${employee.user?.id}" data-name="${name}">
                                     <i class="fa-solid fa-circle-check mr-2"></i> Aktifkan
                                 </button>
                             ` : `
                                 <div class="flex-1 flex items-center justify-center px-3 py-2 bg-gray-100 text-gray-400 text-sm rounded-lg italic border border-dashed border-gray-300">
-                                    <i class="fas fa-lock mr-2"></i> Aksi Terkunci (User Aktif)
+                                    <i class="fas fa-check-double mr-2"></i> Arsip Permanen
                                 </div>
                             `}
                         </div>

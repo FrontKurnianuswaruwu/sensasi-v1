@@ -19,6 +19,9 @@ use App\Models\Alumni;
 use App\Models\BiodataMahasiswa;
 use App\Models\Program;
 use App\Models\Pengaturan;
+use App\Models\AkademikMahasiswa;
+use App\Models\OrangtuaMahasiswa;
+use App\Models\DokumenMahasiswa;
 
 class DashboardController extends Controller
 {
@@ -49,14 +52,18 @@ class DashboardController extends Controller
         if ($userrole == 19) {
             $countalumni = Alumni::where('mitra_id', $mitraId)->count();
 
-            $countpbsaktif = BiodataMahasiswa::whereHas('user', function($query) use ($mitraId) {
+            $countpbsaktif = BiodataMahasiswa::whereHas('user', function($query) {
                 $query->where('status_user', 'Aktif')
-                      ->where('mitra_id', $mitraId);
+                      ->where('role', 9);
+            })->whereHas('user.akademik', function($query) use ($mitraId) {
+                $query->where('mitra_id', $mitraId);
             })->count();
 
-            $countbiodata = BiodataMahasiswa::whereHas('user', function($query) use ($mitraId) {
+            $countbiodata = BiodataMahasiswa::whereHas('user', function($query) {
                 $query->where('status_user', 'Tidak Aktif')
-                      ->where('mitra_id', $mitraId);
+                      ->where('role', 9);
+            })->whereHas('user.akademik', function($query) use ($mitraId) {
+                $query->where('mitra_id', $mitraId);
             })->count();
             
         } else {
@@ -71,9 +78,6 @@ class DashboardController extends Controller
             
         $countpendaftarpbs = BiodataMahasiswa::whereHas('user', function($query) {
             $query->where('status_user', 'Verifikasi');
-        })->count();
-        $countbiodata = BiodataMahasiswa::whereHas('user', function($query) {
-            $query->where('status_user', 'Tidak Aktif');
         })->count();
 
         $countalumniall = $countalumni + $countbiodata;
@@ -114,6 +118,37 @@ class DashboardController extends Controller
             })
             ->count();
 
+        // Wajib biodata setting
+        $wajibBiodata = Pengaturan::getWajibBiodata();
+        $biodataLengkap = true;
+
+        if ($userrole == 9 && $wajibBiodata == 1) {
+            $biodata = BiodataMahasiswa::where('user_id', $userid)->first();
+            $akademik = AkademikMahasiswa::where('user_id', $userid)->first();
+            $orangtua = OrangtuaMahasiswa::where('user_id', $userid)->first();
+            $dokumen = DokumenMahasiswa::where('user_id', $userid)->first();
+
+            // Cek biodata pribadi
+            if (!$biodata || !$biodata->nik || !$biodata->tempat_lahir || !$biodata->tanggal_lahir || !$biodata->jenis_kelamin || !$biodata->alamat_ktp || !$biodata->no_wa || !$biodata->agama) {
+                $biodataLengkap = false;
+            }
+
+            // Cek akademik
+            if (!$akademik || !$akademik->tahun_akademik_id || !$akademik->mitra_id || !$akademik->fakultas || !$akademik->program_studi || !$akademik->semester) {
+                $biodataLengkap = false;
+            }
+
+            // Cek orangtua
+            if (!$orangtua || !$orangtua->nama_ayah || !$orangtua->nama_ibu) {
+                $biodataLengkap = false;
+            }
+
+            // Cek dokumen
+            if (!$dokumen || !$dokumen->scan_ktp || !$dokumen->scan_kartu_mahasiswa || !$dokumen->scan_kk || !$dokumen->transkrip_nilai || !$dokumen->surat_keterangan_aktif || !$dokumen->foto_profil || !$dokumen->essay_motivasi) {
+                $biodataLengkap = false;
+            }
+        }
+
         return view('admin.dashboard.index', compact(
             'rolename',
             'countkreative',
@@ -128,7 +163,9 @@ class DashboardController extends Controller
             'countprogram',
             'countpbsaktif',
             'countpendaftarpbs',
-            'fotomahasiswa'
+            'fotomahasiswa',
+            'wajibBiodata',
+            'biodataLengkap'
         ));
     }
 
@@ -333,6 +370,22 @@ class DashboardController extends Controller
         $pengaturan->save();
 
         return response()->json(['value' => $pengaturan->value]);
+    }
+
+    public function toggleWajibBiodata()
+    {
+        $pengaturan = Pengaturan::first();
+
+        if (!$pengaturan) {
+            $pengaturan = new Pengaturan();
+            $pengaturan->value = 0;
+            $pengaturan->wajib_biodata = 0;
+        }
+
+        $pengaturan->wajib_biodata = $pengaturan->wajib_biodata ? 0 : 1;
+        $pengaturan->save();
+
+        return response()->json(['wajib_biodata' => $pengaturan->wajib_biodata]);
     }
 
 }

@@ -53,7 +53,7 @@
     ]
   },
   "resources/js/admin/alumniadmin.js": {
-    "file": "assets/alumniadmin-DCPqnKMI.js",
+    "file": "assets/alumniadmin-CHGlAwgZ.js",
     "name": "alumniadmin",
     "src": "resources/js/admin/alumniadmin.js",
     "isEntry": true,
@@ -71,7 +71,7 @@
     ]
   },
   "resources/js/admin/artikel.js": {
-    "file": "assets/artikel-DrCJ1Tn_.js",
+    "file": "assets/artikel-B92MgBFJ.js",
     "name": "artikel",
     "src": "resources/js/admin/artikel.js",
     "isEntry": true,
@@ -89,7 +89,7 @@
     ]
   },
   "resources/js/admin/biodata.js": {
-    "file": "assets/biodata-mFMA1L7Q.js",
+    "file": "assets/biodata-Bd_aI6Q5.js",
     "name": "biodata",
     "src": "resources/js/admin/biodata.js",
     "isEntry": true,
@@ -197,7 +197,7 @@
     ]
   },
   "resources/js/admin/pengajuandana.js": {
-    "file": "assets/pengajuandana-Ba_flw8u.js",
+    "file": "assets/pengajuandana-BrTRoShh.js",
     "name": "pengajuandana",
     "src": "resources/js/admin/pengajuandana.js",
     "isEntry": true,
@@ -242,7 +242,7 @@
     ]
   },
   "resources/js/admin/potensiakademiksoal.js": {
-    "file": "assets/potensiakademiksoal-HpMQFr-R.js",
+    "file": "assets/potensiakademiksoal-CPFSUcdK.js",
     "name": "potensiakademiksoal",
     "src": "resources/js/admin/potensiakademiksoal.js",
     "isEntry": true,
@@ -260,7 +260,7 @@
     ]
   },
   "resources/js/admin/riwayatpengajuandana.js": {
-    "file": "assets/riwayatpengajuandana-DQcT_8NV.js",
+    "file": "assets/riwayatpengajuandana-B-sXhi0v.js",
     "name": "riwayatpengajuandana",
     "src": "resources/js/admin/riwayatpengajuandana.js",
     "isEntry": true,

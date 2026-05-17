@@ -16,12 +16,27 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class PengajuandanaApprovedExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize, WithStyles, WithTitle
 {
+    protected $tahunAkademikId;
+
+    public function __construct($tahunAkademikId = null)
+    {
+        $this->tahunAkademikId = $tahunAkademikId;
+    }
+
     public function collection()
     {
-        return Pengajuandana::with(['mahasiswa.user'])
+        $query = Pengajuandana::with(['mahasiswa.user.akademik.tahunAkademik'])
             ->where('status', 'approved')
-            ->orderBy('created_at', 'desc')
-            ->get();
+            ->orderBy('created_at', 'desc');
+
+        // Filter berdasarkan tahun akademik jika dipilih
+        if ($this->tahunAkademikId) {
+            $query->whereHas('mahasiswa.user.akademik', function ($q) {
+                $q->where('tahun_akademik_id', $this->tahunAkademikId);
+            });
+        }
+
+        return $query->get();
     }
 
     public function styles(Worksheet $sheet)

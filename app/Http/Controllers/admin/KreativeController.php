@@ -30,7 +30,7 @@ class KreativeController extends Controller
         $page   = $request->input('page', 1);
         $limit  = $request->input('limit', 10);
 
-        $user = auth()->user(); 
+        $user = auth()->user();
 
         $query = Kreative::select('id', 'nama', 'deskripsi', 'status', 'user_id')
             ->withExists([
@@ -41,8 +41,10 @@ class KreativeController extends Controller
 
         if ($user->role === 9) {
             $query->where('user_id', $user->id);
+            // Role 9 hanya lihat data yang belum approved
+            $query->where('status', '!=', 'approved');
         }
-    
+
         // Fitur pencarian
         if (!empty($search)) {
             $query->where(function ($q) use ($search) {
@@ -142,6 +144,24 @@ class KreativeController extends Controller
         }
 
         $artikel = Kreative::findOrFail($id);
+        $user = auth()->user();
+
+        // Role 9 hanya bisa edit miliknya sendiri dan hanya jika status pending atau rejected
+        if ($user->role === 9) {
+            if ($artikel->user_id !== $user->id) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Anda tidak memiliki akses untuk mengedit data ini'
+                ], 403);
+            }
+
+            if (!in_array($artikel->status, ['pending', 'rejected'])) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Data yang sudah di-confirm tidak dapat diedit'
+                ], 403);
+            }
+        }
 
         $pdfPath = $artikel->pdf;
 
@@ -215,6 +235,25 @@ class KreativeController extends Controller
             ], 404);
         }
 
+        $user = auth()->user();
+
+        // Role 9 hanya bisa hapus miliknya sendiri dan hanya jika status pending atau rejected
+        if ($user->role === 9) {
+            if ($artikel->user_id !== $user->id) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Anda tidak memiliki akses untuk menghapus data ini'
+                ], 403);
+            }
+
+            if (!in_array($artikel->status, ['pending', 'rejected'])) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Data yang sudah di-confirm tidak dapat dihapus'
+                ], 403);
+            }
+        }
+
         if ($artikel->pdf) {
             $pdfPath = $_SERVER['DOCUMENT_ROOT'].'/'.$artikel->pdf;
             if (file_exists($pdfPath)) {
@@ -259,6 +298,16 @@ class KreativeController extends Controller
 
     public function approve($id)
     {
+        $user = auth()->user();
+
+        // Hanya role 1 yang bisa approve
+        if ($user->role !== 1) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Anda tidak memiliki akses untuk approve'
+            ], 403);
+        }
+
         $artikel = Kreative::find($id);
         if (!$artikel) {
             return response()->json(['message' => 'Artikel tidak ditemukan'], 404);
@@ -276,6 +325,16 @@ class KreativeController extends Controller
 
     public function reject($id)
     {
+        $user = auth()->user();
+
+        // Hanya role 1 yang bisa reject
+        if ($user->role !== 1) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Anda tidak memiliki akses untuk reject'
+            ], 403);
+        }
+
         $artikel = Kreative::find($id);
         if (!$artikel) {
             return response()->json(['message' => 'Artikel tidak ditemukan'], 404);
@@ -287,6 +346,44 @@ class KreativeController extends Controller
         return response()->json([
             'status'  => 'success',
             'message' => 'Artikel berhasil ditolak',
+            'artikel' => $artikel
+        ], 200);
+    }
+
+    public function confirm($id)
+    {
+        $user = auth()->user();
+        $artikel = Kreative::find($id);
+
+        if (!$artikel) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Artikel tidak ditemukan'
+            ], 404);
+        }
+
+        // Role 9 hanya bisa confirm miliknya sendiri
+        if ($user->role === 9 && $artikel->user_id !== $user->id) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Anda tidak memiliki akses untuk confirm data ini'
+            ], 403);
+        }
+
+        // Hanya bisa confirm jika status pending atau rejected
+        if (!in_array($artikel->status, ['pending', 'rejected'])) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Data ini tidak dapat di-confirm'
+            ], 403);
+        }
+
+        $artikel->status = 'waiting_approval';
+        $artikel->save();
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Artikel berhasil di-confirm, menunggu approval',
             'artikel' => $artikel
         ], 200);
     }

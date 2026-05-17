@@ -8,7 +8,39 @@ $.ajaxSetup({
 
 // initial load
 $(function() {
+   loadTahunAkademik();
    loadData();
+});
+
+// Load tahun akademik dropdown
+function loadTahunAkademik() {
+    $.ajax({
+        url: '/admin/riwayatpengajuandana-tahun-akademik',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            const select = $('#filterTahunAkademikRiwayat');
+            if (select.length === 0) return;
+            data.forEach(function(item) {
+                select.append(`<option value="${item.id}">${item.tahun_akademik}</option>`);
+            });
+        },
+        error: function(xhr) {
+            console.error('Gagal load tahun akademik:', xhr.responseText);
+        }
+    });
+}
+
+// Filter tahun akademik change
+$(document).on('change', '#filterTahunAkademikRiwayat', function() {
+    currentPage = 1;
+    loadData($('#searchInputriwayatpengajuandana').val(), currentPage);
+});
+
+// Download Excel
+$(document).on('click', '#downloadExcelRiwayatBtn', function() {
+    const tahunAkademikId = $('#filterTahunAkademikRiwayat').val() || '';
+    window.location.href = `/admin/riwayatpengajuandana-export?tahun_akademik_id=${tahunAkademikId}`;
 });
 
 function formatTanggal(dateStr) {
@@ -219,10 +251,11 @@ function renderPaginationMobile(totalPages, query) {
 
 // Ambil data dari server dengan pagination & search
 function loadData(query = '', page = 1) {
+    const tahunAkademikId = $('#filterTahunAkademikRiwayat').val() || '';
     $.ajax({
         url: "/admin/getriwayatpengajuandana",
         type: "GET",
-        data: { search: query, page: page, limit: rowsPerPage },
+        data: { search: query, page: page, limit: rowsPerPage, tahun_akademik_id: tahunAkademikId },
         dataType: "json",
         success: function(res) {
             const data = res.data;

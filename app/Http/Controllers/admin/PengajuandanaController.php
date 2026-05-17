@@ -47,17 +47,26 @@ class PengajuandanaController extends Controller
         $search = $request->input('search');
         $page   = $request->input('page', 1);
         $limit  = $request->input('limit', 10);
+        $tahunAkademikId = $request->input('tahun_akademik_id');
 
         $userId = auth()->id();
 
         $mahasiswa = BiodataMahasiswa::where('user_id', $userId)->first();
 
         $query = Pengajuandana::select('id', 'semester', 'ip_semester', 'nominal', 'status','total', 'mahasiswa_id', 'catatan')
-            ->with(['mahasiswa.user'])->orderBy('created_at', 'desc');
+            ->with(['mahasiswa.user.akademik.tahunAkademik', 'mahasiswa.mitra'])
+            ->where('status', '!=', 'approved')
+            ->orderBy('created_at', 'desc');
 
         if ($mahasiswa) {
             $query->where('mahasiswa_id', $mahasiswa->id);
-            $query->where('status', '!=', 'approved');
+        }
+
+        // Filter berdasarkan tahun akademik jika dipilih
+        if ($tahunAkademikId) {
+            $query->whereHas('mahasiswa.user.akademik', function ($q) use ($tahunAkademikId) {
+                $q->where('tahun_akademik_id', $tahunAkademikId);
+            });
         }
 
         if (!empty($search)) {
@@ -289,7 +298,7 @@ class PengajuandanaController extends Controller
 
     public function detailPengajuanDana($id)
     {
-        $pengajuandana = Pengajuandana::find($id);
+        $pengajuandana = Pengajuandana::with(['mahasiswa.mitra'])->find($id);
         if (!$pengajuandana) {
             return response()->json(['message' => 'Pengajuan dana tidak ditemukan'], 404);
         }
@@ -297,9 +306,16 @@ class PengajuandanaController extends Controller
         return response()->json($pengajuandana);
     }
     
-    public function exportAll()
+    public function exportAll(Request $request)
     {
-        return Excel::download(new PengajuandanaAllExport(), 'pengajuan-dana-all-' . now()->format('d-m-Y') . '.xlsx');
+        $tahunAkademikId = $request->input('tahun_akademik_id');
+        return Excel::download(new PengajuandanaAllExport($tahunAkademikId), 'pengajuan-dana-all-' . now()->format('d-m-Y') . '.xlsx');
+    }
+
+    public function getTahunAkademik()
+    {
+        $tahunAkademik = \App\Models\TahunAkademik::orderBy('tahun_akademik', 'desc')->get();
+        return response()->json($tahunAkademik);
     }
 
     public function history()
@@ -321,18 +337,26 @@ class PengajuandanaController extends Controller
         $search = $request->input('search');
         $page   = $request->input('page', 1);
         $limit  = $request->input('limit', 10);
+        $tahunAkademikId = $request->input('tahun_akademik_id');
 
         $userId    = auth()->id();
         $mahasiswa = BiodataMahasiswa::where('user_id', $userId)->first();
 
         $query = Pengajuandana::select('id', 'semester', 'ip_semester', 'nominal', 'status', 'total', 'mahasiswa_id', 'catatan', 'nominal_disetujui')
-            ->with(['mahasiswa.user', 'mahasiswa.mitra'])
+            ->with(['mahasiswa.user.akademik.tahunAkademik', 'mahasiswa.mitra'])
             ->where('status', 'approved')
             ->orderBy('created_at', 'desc');
 
         // Kalau mahasiswa, hanya lihat punya sendiri
         if ($mahasiswa) {
             $query->where('mahasiswa_id', $mahasiswa->id);
+        }
+
+        // Filter berdasarkan tahun akademik jika dipilih
+        if ($tahunAkademikId) {
+            $query->whereHas('mahasiswa.user.akademik', function ($q) use ($tahunAkademikId) {
+                $q->where('tahun_akademik_id', $tahunAkademikId);
+            });
         }
 
         if (!empty($search)) {
@@ -355,8 +379,9 @@ class PengajuandanaController extends Controller
         ]);
     }
 
-    public function exportApproved()
+    public function exportApproved(Request $request)
     {
-        return Excel::download(new PengajuandanaApprovedExport(), 'pengajuan-dana-approved-' . now()->format('d-m-Y') . '.xlsx');
+        $tahunAkademikId = $request->input('tahun_akademik_id');
+        return Excel::download(new PengajuandanaApprovedExport($tahunAkademikId), 'pengajuan-dana-approved-' . now()->format('d-m-Y') . '.xlsx');
     }
 }

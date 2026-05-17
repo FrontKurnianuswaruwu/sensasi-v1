@@ -6,6 +6,7 @@ $(document).ready(function () {
     let currentIndex  = 0;
     let submitted     = false;
     const jawaban     = {};
+    const lockedSoals = {};  // Track soal yang sudah dijawab & di-next-kan (terkunci)
 
     const KATEGORI_ID = $('input[name="kategori_id"]').val();
     const START_KEY   = `potensi_start_${KATEGORI_ID}`; 
@@ -63,12 +64,16 @@ $(document).ready(function () {
         $('#progressPercent').text(persen + '% terjawab');
 
         $('.soal-nav-btn').each(function (i) {
-            $(this).removeClass('bg-orange-500 border-orange-500 bg-green-500 border-green-500 bg-white border-gray-200 text-gray-500 text-white');
+            $(this).removeClass('bg-orange-500 border-orange-500 bg-green-500 border-green-500 bg-white border-gray-200 text-gray-500 text-white opacity-50 cursor-not-allowed');
 
-            const soalId = $(`.soal-card[data-index="${i}"]`).data('soal-id');
+            const soalId = String($(`.soal-card[data-index="${i}"]`).data('soal-id'));
+            const isLocked = lockedSoals[soalId];
 
             if (i === currentIndex) {
                 $(this).addClass('bg-orange-500 border-orange-500 text-white');
+            } else if (isLocked) {
+                // Soal sudah terkunci (dijawab & sudah next)
+                $(this).addClass('bg-green-500 border-green-500 text-white opacity-50 cursor-not-allowed');
             } else if (soalId && jawaban[soalId]) {
                 $(this).addClass('bg-green-500 border-green-500 text-white');
             } else {
@@ -76,7 +81,16 @@ $(document).ready(function () {
             }
         });
 
-        $('#btnBack').prop('disabled', currentIndex === 0);
+        // Back button: disabled jika index 0 ATAU semua soal sebelumnya sudah terkunci
+        let canGoBack = false;
+        for (let i = currentIndex - 1; i >= 0; i--) {
+            const prevSoalId = String($(`.soal-card[data-index="${i}"]`).data('soal-id'));
+            if (!lockedSoals[prevSoalId]) {
+                canGoBack = true;
+                break;
+            }
+        }
+        $('#btnBack').prop('disabled', currentIndex === 0 || !canGoBack);
 
         const isLast = currentIndex === TOTAL_SOAL - 1;
         $('#btnNextText').text(isLast ? 'Kumpulkan' : 'Berikutnya');
@@ -107,12 +121,36 @@ $(document).ready(function () {
         updateUI();
     });
 
+    // Fungsi untuk mengunci soal saat ini jika sudah dijawab
+    function lockCurrentSoalIfAnswered() {
+        const currentSoalId = String($(`.soal-card[data-index="${currentIndex}"]`).data('soal-id'));
+        if (jawaban[currentSoalId] && !lockedSoals[currentSoalId]) {
+            lockedSoals[currentSoalId] = true;
+            // Disable radio buttons di soal yang terkunci
+            $(`.soal-card[data-index="${currentIndex}"] input[type="radio"]`).prop('disabled', true);
+            $(`.soal-card[data-index="${currentIndex}"] .pilihan-label`)
+                .addClass('cursor-default')
+                .removeClass('cursor-pointer hover:border-orange-300 hover:bg-orange-50');
+        }
+    }
+
     $(document).on('click', '.soal-nav-btn', function () {
-        showSoal(parseInt($(this).data('index')));
+        const targetIndex = parseInt($(this).data('index'));
+        const targetSoalId = String($(`.soal-card[data-index="${targetIndex}"]`).data('soal-id'));
+
+        // Jangan bisa klik soal yang sudah terkunci
+        if (lockedSoals[targetSoalId]) return;
+
+        // Kunci soal saat ini sebelum pindah (jika sudah dijawab)
+        lockCurrentSoalIfAnswered();
+
+        showSoal(targetIndex);
     });
 
     $('#btnNext').on('click', function () {
         if (currentIndex < TOTAL_SOAL - 1) {
+            // Kunci soal saat ini sebelum pindah (jika sudah dijawab)
+            lockCurrentSoalIfAnswered();
             showSoal(currentIndex + 1);
         } else {
             openConfirmModal();
@@ -120,8 +158,13 @@ $(document).ready(function () {
     });
 
     $('#btnBack').on('click', function () {
-        if (currentIndex > 0) {
-            showSoal(currentIndex - 1);
+        // Cari soal sebelumnya yang belum terkunci
+        for (let i = currentIndex - 1; i >= 0; i--) {
+            const prevSoalId = String($(`.soal-card[data-index="${i}"]`).data('soal-id'));
+            if (!lockedSoals[prevSoalId]) {
+                showSoal(i);
+                return;
+            }
         }
     });
 
@@ -160,6 +203,9 @@ $(document).ready(function () {
 
         clearInterval(timerInterval);
         sessionStorage.removeItem(START_KEY);
+
+        // Re-enable semua radio yang di-disable (locked) agar value ikut terkirim
+        $('#testForm input[type="radio"]').prop('disabled', false);
 
         $('#btnNext').prop('disabled', true)
                      .html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...');
