@@ -75,11 +75,14 @@
                             
                             <!-- Logout Section -->
                             <div class="py-1">
-                                <a href="{{ route('auth.logout') }}"
-                                class="menu-item w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-700">
-                                    <svg class="w-4 h-4 mr-3" ...></svg>
-                                    Logout
-                                </a>    
+                                <form method="POST" action="{{ route('auth.logout') }}">
+                                    @csrf
+                                    <button type="submit"
+                                    class="menu-item w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-700">
+                                        <svg class="w-4 h-4 mr-3" ...></svg>
+                                        Logout
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
