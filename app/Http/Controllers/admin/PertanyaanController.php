@@ -243,6 +243,20 @@ class PertanyaanController extends Controller
     }
 
     // -------------------------------------------------------
+    // API: get all soal IDs untuk kategori tertentu
+    // -------------------------------------------------------
+    public function getAllSoalIds($kategoriId)
+    {
+        $ids = Soal::where('kategori_id', $kategoriId)->pluck('id');
+
+        return response()->json([
+            'status' => 'success',
+            'ids' => $ids,
+            'total' => $ids->count()
+        ]);
+    }
+
+    // -------------------------------------------------------
     // API: bulk delete soal + pilihan
     // -------------------------------------------------------
     public function bulkDeleteSoal(Request $request)

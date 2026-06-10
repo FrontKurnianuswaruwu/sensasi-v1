@@ -9,10 +9,29 @@ const rowsPerPage = 10;
 let isEditMode    = false;
 let pilihanCount  = 0; // counter unik ID tiap baris opsi
 let selectedSoalIds = []; // array untuk menyimpan ID soal yang dipilih
+let allSoalIds = []; // array untuk menyimpan semua ID soal di kategori ini
 
 $(function () {
     loadData();
+    fetchAllSoalIds(); // Fetch semua ID soal saat halaman load
 });
+
+// Fetch semua ID soal untuk kategori ini
+function fetchAllSoalIds() {
+    const kategoriId = $('#kategori_id').val();
+
+    $.ajax({
+        url: `/admin/getallsoalids/${kategoriId}`,
+        type: 'GET',
+        dataType: 'json',
+        success: function (res) {
+            allSoalIds = res.ids || [];
+        },
+        error: function (xhr) {
+            console.error('Gagal ambil semua ID soal:', xhr.responseText);
+        }
+    });
+}
 
 function loadData(query = '', page = 1) {
     const kategoriId = $('#kategori_id').val();
@@ -183,36 +202,32 @@ function updateSelectedCount() {
     }
 
     // Update check all checkbox state
-    const totalCheckboxes = $('.soal-checkbox').length;
-    const checkedCheckboxes = $('.soal-checkbox:checked').length;
-
-    if (checkedCheckboxes === 0) {
-        $('#checkAll').prop('checked', false).prop('indeterminate', false);
-    } else if (checkedCheckboxes === totalCheckboxes) {
+    // Jika semua ID soal (di semua halaman) sudah dipilih
+    if (allSoalIds.length > 0 && selectedSoalIds.length === allSoalIds.length) {
         $('#checkAll').prop('checked', true).prop('indeterminate', false);
+    } else if (selectedSoalIds.length === 0) {
+        $('#checkAll').prop('checked', false).prop('indeterminate', false);
     } else {
         $('#checkAll').prop('checked', false).prop('indeterminate', true);
     }
 }
 
-// Check All checkbox
+// Check All checkbox - pilih semua soal di semua halaman
 $(document).on('change', '#checkAll', function() {
     const isChecked = $(this).prop('checked');
 
+    if (isChecked) {
+        // Pilih semua ID soal di kategori ini (semua halaman)
+        selectedSoalIds = [...allSoalIds];
+    } else {
+        // Hapus semua pilihan
+        selectedSoalIds = [];
+    }
+
+    // Update tampilan checkbox di halaman current
     $('.soal-checkbox').each(function() {
         const soalId = parseInt($(this).data('id'));
-        $(this).prop('checked', isChecked);
-
-        if (isChecked) {
-            if (!selectedSoalIds.includes(soalId)) {
-                selectedSoalIds.push(soalId);
-            }
-        } else {
-            const index = selectedSoalIds.indexOf(soalId);
-            if (index > -1) {
-                selectedSoalIds.splice(index, 1);
-            }
-        }
+        $(this).prop('checked', selectedSoalIds.includes(soalId));
     });
 
     updateSelectedCount();
@@ -266,6 +281,7 @@ $('#confirmBulkDeleteBtn').on('click', function() {
             hideModal('bulkDeleteModal');
             selectedSoalIds = [];
             updateSelectedCount();
+            fetchAllSoalIds(); // Refresh semua ID soal setelah hapus
             loadData($('#searchInputsoal').val(), currentPage);
         },
         error: function(xhr) {
@@ -538,6 +554,7 @@ $('#soalForm').on('submit', function (e) {
             showNotification(response.message, response.status);
             hideModal('soalModal');
             submitBtn.html(originalHtml).prop('disabled', false);
+            fetchAllSoalIds(); // Refresh semua ID soal setelah tambah/edit
             loadData($('#searchInputsoal').val(), currentPage);
         },
         error: function (xhr) {
@@ -573,6 +590,7 @@ $(document).on('click', '#confirmDeleteBtn', function () {
         success: function (response) {
             showNotification(response.message, response.status);
             hideModal('deleteModal');
+            fetchAllSoalIds(); // Refresh semua ID soal setelah hapus
             loadData();
         },
         error: function (xhr) {

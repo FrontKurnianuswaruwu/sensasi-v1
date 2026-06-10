@@ -227,6 +227,7 @@ Route::middleware(['auth', 'check.expired', 'check.permission'])->group(function
     Route::get('/admin/getpertanyaan', [PertanyaanController::class, 'getdata'])->name('admin.pertanyaan.getdata');
     Route::get('/admin/pertanyaan/soal/{id}', [PertanyaanController::class, 'indexpertanyaan'])->name('admin.pertanyaan.soal.index');
     Route::get('/admin/getsoal/{id}', [PertanyaanController::class, 'getdatapertanyaan'])->name('admin.pertanyaan.soal.getdata');
+    Route::get('/admin/getallsoalids/{kategoriId}', [PertanyaanController::class, 'getAllSoalIds'])->name('admin.pertanyaan.soal.getallids');
     Route::post('/admin/pertanyaan/soal', [PertanyaanController::class, 'storesoal']);
     Route::get('/admin/getpertanyaan/soal/{id}', [PertanyaanController::class, 'showsoal']);
     Route::put('/admin/pertanyaan/soal/{id}', [PertanyaanController::class, 'updatesoal']);
