@@ -79,12 +79,17 @@
                     Sensasi Club
                     </a>
 
-                    <a href="{{ route('user.kreatif.index') }}" 
+                    <a href="{{ route('user.kreatif.index') }}"
                     class="nav-link font-medium {{ Route::is('user.kreatif.index') ? 'text-sky-600' : 'text-gray-700 hover:text-sky-600' }}">
                     Kreativitas
                     </a>
 
-                    <a href="{{ route('user.kontak.index') }}" 
+                    <a href="{{ route('twibbon.index') }}"
+                    class="nav-link font-medium {{ Route::is('twibbon.*') ? 'text-sky-600' : 'text-gray-700 hover:text-sky-600' }}">
+                    Twibbon
+                    </a>
+
+                    <a href="{{ route('user.kontak.index') }}"
                     class="nav-link font-medium {{ Route::is('user.kontak.index') ? 'text-sky-600' : 'text-gray-700 hover:text-sky-600' }}">
                     Kontak
                     </a>
@@ -110,6 +115,7 @@
                     <a href="{{ route('user.berita.index') }}" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Berita</a>
                     <a href="{{ route('user.sensasiclub.index') }}" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Sensasi Club</a>
                     <a href="{{ route('user.kreatif.index') }}" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Kreativitas</a>
+                    <a href="{{ route('twibbon.index') }}" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Twibbon</a>
                     <a href="{{ route('user.kontak.index') }}" class="block text-gray-700 hover:text-sky-600 font-medium py-2">Kontak</a>
                 </div>
             </div>

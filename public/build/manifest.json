@@ -356,6 +356,15 @@
       "_jquery-CEr4rF5i.js"
     ]
   },
+  "resources/js/admin/twibbon.js": {
+    "file": "assets/twibbon-Du3sY5Jl.js",
+    "name": "twibbon",
+    "src": "resources/js/admin/twibbon.js",
+    "isEntry": true,
+    "imports": [
+      "_jquery-CEr4rF5i.js"
+    ]
+  },
   "resources/js/admin/user.js": {
     "file": "assets/user-4TIQjxXt.js",
     "name": "user",

@@ -10,6 +10,7 @@ use App\Models\Kreative;
 use App\Models\Mitra;
 use App\Models\Pengurus;
 use App\Models\Sejarah;
+use App\Models\PesanFounder;
 use App\Models\Sensasiclub;
 use App\Models\Visimisi;
 use Illuminate\Http\Request;
@@ -173,6 +174,7 @@ class DashboardController extends Controller
     {
         $countMitra = Mitra::count();
         $dataherosection = Herosection::with('herophotos')->first();
+        $datapesanfounder = PesanFounder::first();
         $datasejarah = Sejarah::first();
         $datavisimisi = Visimisi::first();
         $datapengurus = Pengurus::take(4)->get();
@@ -218,6 +220,7 @@ class DashboardController extends Controller
         return view('website.dashboard.index',[
             'dataherosection' => $dataherosection,
             'countMitra' => $countMitra,
+            'datapesanfounder' => $datapesanfounder,
             'datasejarah' => $datasejarah,
             'datavisimisi' => $datavisimisi,
             'datapengurus' => $datapengurus,
@@ -242,10 +245,12 @@ class DashboardController extends Controller
 
     public function profile()
     {
+        $datapesanfounder = PesanFounder::first();
         $datasejarah = Sejarah::first();
         $datavisimisi = Visimisi::first();
         $datapengurus = Pengurus::get();
         return view('website.profile.index', [
+            'datapesanfounder' => $datapesanfounder,
             'datasejarah' => $datasejarah,
             'datavisimisi' => $datavisimisi,
             'datapengurus' => $datapengurus,

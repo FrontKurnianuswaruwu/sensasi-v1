@@ -4,6 +4,56 @@
 
 <!-- Profile Section -->
 <section id="profile" class="py-20 px-4 bg-white">
+    <style>
+        .profile-rich-content {
+            overflow: hidden;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+        }
+
+        .profile-rich-content::after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
+        .profile-rich-content img,
+        .profile-rich-content img[style],
+        .profile-rich-content img[width],
+        .profile-rich-content img[height] {
+            display: inline-block !important;
+            float: left !important;
+            clear: none !important;
+            max-width: min(100%, 420px) !important;
+            width: auto !important;
+            height: auto !important;
+            max-height: 520px;
+            object-fit: contain;
+            margin: 0.35rem 1rem 1rem 0 !important;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .profile-rich-content p,
+        .profile-rich-content div,
+        .profile-rich-content span {
+            max-width: 100%;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+        }
+
+        @media (max-width: 768px) {
+            .profile-rich-content img,
+            .profile-rich-content img[style],
+            .profile-rich-content img[width],
+            .profile-rich-content img[height] {
+                float: none !important;
+                display: block !important;
+                max-width: 100% !important;
+                margin: 1rem 0 !important;
+            }
+        }
+    </style>
     <div class="max-w-7xl mx-auto mt-5">
         <div class="text-center mb-12">
             <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Profile Sensasi</h2>
@@ -14,26 +64,83 @@
             </div>
         </div>
 
+        <!-- Pesan Founder -->
+        @if($datapesanfounder)
+        <div class="mb-24 animate-fade-in">
+            <div class="mb-8">
+                <h3 class="text-2xl md:text-3xl font-semibold text-gray-900">Pesan Founder</h3>
+                <p class="text-sm text-gray-500 mt-1">Insight dan motivasi dari pendiri SENSASI</p>
+            </div>
+
+            <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg border border-slate-200 p-6 md:p-8 overflow-hidden">
+                <div class="profile-rich-content prose prose-sm md:prose-base max-w-none prose-p:text-gray-700 prose-p:leading-relaxed">
+                    <style>
+                        .prose {
+                            --tw-prose-body: rgb(55 65 81);
+                            --tw-prose-headings: rgb(17 24 39);
+                        }
+                        .prose img,
+                        .prose img[style],
+                        .prose img[width],
+                        .prose img[height] {
+                            max-width: min(100%, 420px) !important;
+                            width: auto !important;
+                            height: auto !important;
+                            border-radius: 0.5rem;
+                            margin: 0.35rem 1rem 1rem 0 !important;
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                            display: inline-block !important;
+                            float: left !important;
+                        }
+                        .prose p {
+                            margin-bottom: 1rem;
+                        }
+                        .prose ul, .prose ol {
+                            margin: 1rem 0;
+                        }
+                    </style>
+                    {!! $datapesanfounder->deskripsi !!}
+                </div>
+            </div>
+        </div>
+        @endif
+
         <!-- Sejarah -->
-        <div class="mb-20 animate-fade-in">
-            <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">Sejarah</h3>
-            <div class="prose prose-lg max-w-none" style="overflow-x: hidden;">
-                <style>
-                    .prose img {
-                        margin: 1rem auto;
-                        border-radius: 0.5rem;
-                        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-                        max-width: 100%;
-                        width: 100%;
-                        height: auto;
-                        display: block;
-                        object-fit: contain;
-                    }
-                    .prose p {
-                        overflow: hidden;
-                    }
-                </style>
-                {!! $datasejarah->deskripsi !!}
+        <div class="mb-24 animate-fade-in">
+            <div class="mb-8">
+                <h3 class="text-2xl md:text-3xl font-semibold text-gray-900">Sejarah</h3>
+                <p class="text-sm text-gray-500 mt-1">Perjalanan dan latar belakang organisasi</p>
+            </div>
+
+            <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg border border-slate-200 p-6 md:p-8 overflow-hidden">
+                <div class="profile-rich-content prose prose-sm md:prose-base max-w-none prose-p:text-gray-700 prose-p:leading-relaxed">
+                    <style>
+                        .prose {
+                            --tw-prose-body: rgb(55 65 81);
+                            --tw-prose-headings: rgb(17 24 39);
+                        }
+                        .prose img,
+                        .prose img[style],
+                        .prose img[width],
+                        .prose img[height] {
+                            max-width: min(100%, 420px) !important;
+                            width: auto !important;
+                            height: auto !important;
+                            border-radius: 0.5rem;
+                            margin: 0.35rem 1rem 1rem 0 !important;
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                            display: inline-block !important;
+                            float: left !important;
+                        }
+                        .prose p {
+                            margin-bottom: 1rem;
+                        }
+                        .prose ul, .prose ol {
+                            margin: 1rem 0;
+                        }
+                    </style>
+                    {!! $datasejarah->deskripsi !!}
+                </div>
             </div>
         </div>
 

@@ -75,31 +75,126 @@
 
 <!-- Profile Section -->
 <section id="profile" class="py-20 px-4 bg-white">
+    <style>
+        .profile-preview-content {
+            overflow: hidden;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+        }
+
+        .profile-preview-content img,
+        .profile-preview-content img[style],
+        .profile-preview-content img[width],
+        .profile-preview-content img[height] {
+            display: block !important;
+            float: none !important;
+            clear: both !important;
+            max-width: 100% !important;
+            width: auto !important;
+            height: auto !important;
+            max-height: 420px;
+            object-fit: contain;
+            margin: 1rem auto !important;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+    </style>
     <div class="max-w-7xl mx-auto">
         <div class="text-center mb-12">
             <h2 class="section-title text-4xl md:text-5xl font-bold text-gray-800 mb-4">Profile Sensasi</h2>
         </div>
 
+        <!-- Pesan Founder -->
+        @if($datapesanfounder)
+        <div class="mb-24">
+            <div class="mb-8">
+                <h3 class="text-2xl md:text-3xl font-semibold text-gray-900">Pesan Founder</h3>
+                <p class="text-sm text-gray-500 mt-1">Insight dan motivasi dari pendiri SENSASI</p>
+            </div>
+
+            <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg border border-slate-200 p-6 md:p-8 overflow-hidden">
+                <div class="profile-preview-content prose prose-sm max-w-none prose-p:text-gray-700 prose-p:leading-relaxed founder-preview">
+                    <style>
+                        .prose {
+                            --tw-prose-body: rgb(55 65 81);
+                            --tw-prose-headings: rgb(17 24 39);
+                        }
+                        .founder-preview {
+                            display: -webkit-box;
+                            -webkit-line-clamp: 3;
+                            -webkit-box-orient: vertical;
+                            overflow: hidden;
+                        }
+                        .founder-preview img,
+                        .founder-preview img[style],
+                        .founder-preview img[width],
+                        .founder-preview img[height] {
+                            max-width: 100% !important;
+                            width: 100% !important;
+                            height: auto !important;
+                            border-radius: 0.5rem;
+                            margin: 1rem 0 !important;
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                            display: block !important;
+                            float: none !important;
+                        }
+                        .founder-preview p {
+                            margin: 0 0 0.75rem 0;
+                        }
+                    </style>
+                    {!! \App\Helpers\TextHelper::truncateHtml($datapesanfounder->deskripsi, 250) !!}
+                </div>
+                <a href="{{ route('user.profile.index') }}" class="inline-block mt-6 text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors">
+                    Lihat selengkapnya →
+                </a>
+            </div>
+        </div>
+        @endif
+
         <!-- Sejarah -->
-        <div class="mb-20">
-            <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">Sejarah</h3>
-            <div class="prose prose-lg max-w-none" style="overflow-x: hidden;">
-                <style>
-                    .prose img {
-                        margin: 0.5rem 1rem 0.5rem 0;
-                        border-radius: 0.5rem;
-                        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-                        max-width: 100%;
-                        width: 100%;
-                        height: auto;
-                        display: block;
-                        object-fit: contain;
-                    }
-                    .prose p {
-                        overflow: hidden;
-                    }
-                </style>
-                {!! $datasejarah->deskripsi !!}
+        <div class="mb-24">
+            <div class="mb-8">
+                <h3 class="text-2xl md:text-3xl font-semibold text-gray-900">Sejarah</h3>
+                <p class="text-sm text-gray-500 mt-1">Perjalanan dan latar belakang organisasi</p>
+            </div>
+
+            <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg border border-slate-200 p-6 md:p-8 overflow-hidden">
+                <div class="profile-preview-content prose prose-sm max-w-none prose-p:text-gray-700 prose-p:leading-relaxed history-preview">
+                    <style>
+                        .prose {
+                            --tw-prose-body: rgb(55 65 81);
+                            --tw-prose-headings: rgb(17 24 39);
+                        }
+                        .history-preview {
+                            display: -webkit-box;
+                            -webkit-line-clamp: 3;
+                            -webkit-box-orient: vertical;
+                            overflow: hidden;
+                        }
+                        .history-preview img,
+                        .history-preview img[style],
+                        .history-preview img[width],
+                        .history-preview img[height] {
+                            max-width: 100% !important;
+                            width: 100% !important;
+                            height: auto !important;
+                            border-radius: 0.5rem;
+                            margin: 1rem 0 !important;
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                            display: block !important;
+                            float: none !important;
+                        }
+                        .history-preview p {
+                            margin: 0 0 0.75rem 0;
+                        }
+                    </style>
+                    @if($datasejarah)
+                        {!! \App\Helpers\TextHelper::truncateHtml($datasejarah->deskripsi, 250) !!}
+                    @endif
+                </div>
+                <a href="{{ route('user.profile.index') }}" class="inline-block mt-6 text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors">
+                    Lihat selengkapnya →
+                </a>
             </div>
         </div>
 
@@ -130,7 +225,7 @@
             <div class="flex flex-wrap justify-center gap-8">
                 @foreach ($datapengurus->take(4) as $pengurus)
                     <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden w-full sm:w-[calc(50%-2rem)] lg:w-[calc(25%-2rem)] min-w-[250px]">
-                        
+
                         <div class="bg-gray-200 h-64 flex items-center justify-center">
                             <img src="{{ $pengurus->foto }}" loading="lazy"
                                 alt="Pengurus"

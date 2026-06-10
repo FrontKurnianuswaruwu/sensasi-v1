@@ -24,14 +24,17 @@ use App\Http\Controllers\admin\ProgramController;
 use App\Http\Controllers\admin\RiwayatpengajuandanaController;
 use App\Http\Controllers\admin\RoleController;
 use App\Http\Controllers\admin\SejarahController;
+use App\Http\Controllers\admin\PesanFounderController;
 use App\Http\Controllers\admin\CkeditorImageUploadController;
 use App\Http\Controllers\admin\SensasiclubController;
 use App\Http\Controllers\admin\SubmenuController;
 use App\Http\Controllers\admin\TahunakademikController;
+use App\Http\Controllers\admin\TwibbonController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\VisimisiController;
 use App\Http\Controllers\admin\PendaftaranpbsController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PublicTwibbonController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('register', [AuthController::class, 'register'])->name('auth.register')->middleware('check.pendaftaran');
@@ -49,6 +52,11 @@ Route::get('/berita', [DashboardController::class, 'berita'])->name('user.berita
 Route::get('/sensasiclub', [DashboardController::class, 'sensasiclub'])->name('user.sensasiclub.index');
 Route::get('/kreatif', [DashboardController::class, 'kreatif'])->name('user.kreatif.index');
 Route::get('/kontak', [DashboardController::class, 'kontak'])->name('user.kontak.index');
+Route::get('/twibbon', [PublicTwibbonController::class, 'index'])->name('twibbon.index');
+Route::get('/twibbon/create', [PublicTwibbonController::class, 'create'])->name('twibbon.create');
+Route::post('/twibbon', [PublicTwibbonController::class, 'store'])->name('twibbon.store');
+Route::get('/twibbon/{slug}', [PublicTwibbonController::class, 'show'])->name('twibbon.show');
+Route::post('/twibbon/{slug}/download', [PublicTwibbonController::class, 'incrementDownload'])->name('twibbon.download');
 Route::get('berita/{id}', [DashboardController::class, 'detailberita'])->name('user.berita.detail');
 Route::get('kreative/{id}', [DashboardController::class, 'detailkreative'])->name('user.kreatif.detail');
 
@@ -124,6 +132,14 @@ Route::middleware(['auth', 'check.expired', 'check.permission'])->group(function
     Route::get('/admin/getsejarah', [SejarahController::class, 'getdata'])->name('admin.sejarah.getdata');
     Route::get('/admin/sejarah/{id}', [SejarahController::class, 'show']);
     Route::put('/admin/sejarah/{id}', [SejarahController::class, 'update']);
+
+    Route::get('/admin/pesanfounder', [PesanFounderController::class, 'index'])->name('admin.pesanfounder.index');
+    Route::get('/admin/getpesanfounder', [PesanFounderController::class, 'getdata'])->name('admin.pesanfounder.getdata');
+    Route::post('/admin/pesanfounder', [PesanFounderController::class, 'store']);
+    Route::get('/admin/pesanfounder/{id}', [PesanFounderController::class, 'show']);
+    Route::put('/admin/pesanfounder/{id}', [PesanFounderController::class, 'update']);
+    Route::delete('/admin/pesanfounder/{id}', [PesanFounderController::class, 'destroy']);
+
     Route::post('/admin/ckeditor/upload', [CkeditorImageUploadController::class, 'upload'])->name('admin.ckeditor.upload');
 
     Route::get('/admin/visimisi', [VisimisiController::class, 'index'])->name('admin.visimisi.index');
@@ -146,6 +162,14 @@ Route::middleware(['auth', 'check.expired', 'check.permission'])->group(function
     Route::put('/admin/berita/{id}', [BeritaController::class, 'update']);
     Route::delete('/admin/berita/{id}', [BeritaController::class, 'delete']);
     Route::post('/berita/deleteFoto', [BeritaController::class, 'deleteFoto']);
+
+    Route::get('/admin/twibbon', [TwibbonController::class, 'index'])->name('admin.twibbon.index');
+    Route::get('/admin/gettwibbon', [TwibbonController::class, 'getdata'])->name('admin.twibbon.getdata');
+    Route::post('/admin/twibbon', [TwibbonController::class, 'store']);
+    Route::get('/admin/twibbon/{id}', [TwibbonController::class, 'show']);
+    Route::put('/admin/twibbon/{id}', [TwibbonController::class, 'update']);
+    Route::delete('/admin/twibbon/{id}', [TwibbonController::class, 'delete']);
+    Route::post('/twibbon/deleteTemplate', [TwibbonController::class, 'deleteTemplate']);
 
     Route::get('/admin/kreatif', [KreativeController::class, 'index'])->name('admin.kreatif.index');
     Route::get('/admin/getkreatif', [KreativeController::class, 'getdata'])->name('admin.kreatif.getdata');

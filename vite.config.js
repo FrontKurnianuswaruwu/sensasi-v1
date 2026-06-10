@@ -47,6 +47,7 @@ export default defineConfig({
                 'resources/js/admin/sensasiclub.js',
                 'resources/js/admin/submenu.js',
                 'resources/js/admin/tahunakademik.js',
+                'resources/js/admin/twibbon.js',
                 'resources/js/admin/user.js',
                 'resources/js/admin/visimisi.js',
             ],
