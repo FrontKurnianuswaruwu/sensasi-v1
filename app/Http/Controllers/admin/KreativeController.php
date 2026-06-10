@@ -148,7 +148,7 @@ class KreativeController extends Controller
 
         // Role 9 hanya bisa edit miliknya sendiri dan hanya jika status pending atau rejected
         if ($user->role == 9) {
-            if ($artikel->user_id !== $user->id) {
+            if ($artikel->user_id != $user->id) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Anda tidak memiliki akses untuk mengedit data ini'
@@ -239,7 +239,7 @@ class KreativeController extends Controller
 
         // Role 9 hanya bisa hapus miliknya sendiri dan hanya jika status pending atau rejected
         if ($user->role == 9) {
-            if ($artikel->user_id !== $user->id) {
+            if ($artikel->user_id != $user->id) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Anda tidak memiliki akses untuk menghapus data ini'
@@ -363,7 +363,7 @@ class KreativeController extends Controller
         }
 
         // Role 9 hanya bisa confirm miliknya sendiri
-        if ($user->role == 9 && $artikel->user_id !== $user->id) {
+        if ($user->role == 9 && $artikel->user_id != $user->id) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Anda tidak memiliki akses untuk confirm data ini'

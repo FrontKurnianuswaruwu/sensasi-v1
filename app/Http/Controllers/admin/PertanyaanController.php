@@ -241,4 +241,40 @@ class PertanyaanController extends Controller
             'message' => 'Soal berhasil dihapus.',
         ]);
     }
+
+    // -------------------------------------------------------
+    // API: bulk delete soal + pilihan
+    // -------------------------------------------------------
+    public function bulkDeleteSoal(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'required|integer|exists:soal,id',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $ids = $request->input('ids');
+
+            // Hapus semua pilihan dari soal-soal yang dipilih
+            Pilihan::whereIn('soal_id', $ids)->delete();
+
+            // Hapus soal-soal yang dipilih
+            Soal::whereIn('id', $ids)->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'status'  => 'success',
+                'message' => count($ids) . ' soal berhasil dihapus.',
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
 }

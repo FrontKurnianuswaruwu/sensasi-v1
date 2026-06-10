@@ -231,6 +231,7 @@ Route::middleware(['auth', 'check.expired', 'check.permission'])->group(function
     Route::get('/admin/getpertanyaan/soal/{id}', [PertanyaanController::class, 'showsoal']);
     Route::put('/admin/pertanyaan/soal/{id}', [PertanyaanController::class, 'updatesoal']);
     Route::delete('/admin/pertanyaan/soal/{id}', [PertanyaanController::class, 'deletesoal']);
+    Route::post('/admin/pertanyaan/soal/bulk-delete', [PertanyaanController::class, 'bulkDeleteSoal']);
 
     Route::get('/admin/pilihan', [PilihanController::class, 'index'])->name('admin.pilihan.index');
     Route::get('/admin/getsoal', [PilihanController::class, 'getdata'])->name('admin.pilihan.getdata');

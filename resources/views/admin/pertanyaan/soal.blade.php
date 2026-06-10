@@ -34,6 +34,10 @@
                            class="w-full pl-12 pr-4 py-4 bg-white border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-primary/20 focus:border-blue-primary transition-all duration-300 text-base placeholder-gray-500"
                            placeholder="Cari soal...">
                 </div>
+                <button id="bulkDeleteBtn"
+                        class="px-6 py-4 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all duration-300 font-semibold flex items-center gap-2 whitespace-nowrap hidden">
+                    <i class="fas fa-trash"></i> Hapus Terpilih (<span id="selectedCount">0</span>)
+                </button>
                 <button id="addSoalBtn"
                         class="px-6 py-4 bg-orange-primary text-white rounded-xl hover:bg-orange-light transition-all duration-300 font-semibold flex items-center gap-2 whitespace-nowrap">
                     <i class="fas fa-plus"></i> Tambah Soal
@@ -56,8 +60,11 @@
                     <table class="w-full">
                         <thead class="bg-gradient-to-r gradient-bg to-blue-light text-white">
                             <tr>
+                                <th class="px-6 py-5 text-left text-sm font-semibold uppercase tracking-wider w-[5%]">
+                                    <input type="checkbox" id="checkAll" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
+                                </th>
                                 <th class="px-6 py-5 text-left text-sm font-semibold uppercase tracking-wider w-[5%]">No</th>
-                                <th class="px-6 py-5 text-left text-sm font-semibold uppercase tracking-wider w-[65%]">Pertanyaan</th>
+                                <th class="px-6 py-5 text-left text-sm font-semibold uppercase tracking-wider w-[60%]">Pertanyaan</th>
                                 <th class="px-6 py-5 text-left text-sm font-semibold uppercase tracking-wider w-[10%]">Opsi</th>
                                 <th class="px-6 py-5 text-left text-sm font-semibold uppercase tracking-wider w-[20%]">Aksi</th>
                             </tr>
@@ -198,6 +205,43 @@
                     <button type="button" id="confirmDeleteBtn"
                             class="w-full sm:w-auto px-6 py-3 text-white bg-red-500 border border-red-500 rounded-xl hover:bg-red-600 transition-all duration-300 font-medium">
                         <i class="fas fa-trash mr-2"></i>Ya, Hapus
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Konfirmasi Bulk Delete -->
+<div id="bulkDeleteModal" class="fixed inset-0 z-50 hidden">
+    <div class="modal-overlay absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-md">
+            <div class="bg-red-500 px-6 py-4 rounded-t-2xl">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-exclamation-triangle text-white text-lg"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Konfirmasi Hapus Massal</h3>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="text-center mb-6">
+                    <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-trash-alt text-3xl text-red-500"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-gray-900 mb-2">Apakah Anda yakin?</h4>
+                    <p class="text-gray-600">
+                        <span id="bulkDeleteCount"></span> soal beserta semua opsi jawabannya akan dihapus permanen.
+                    </p>
+                </div>
+                <div class="flex flex-col sm:flex-row justify-center gap-3">
+                    <button type="button" id="cancelBulkDeleteBtn"
+                            class="w-full sm:w-auto px-6 py-3 text-gray-700 bg-gray-100 border border-gray-300 rounded-xl hover:bg-gray-200 transition-all duration-300 font-medium">
+                        <i class="fas fa-times mr-2"></i>Batal
+                    </button>
+                    <button type="button" id="confirmBulkDeleteBtn"
+                            class="w-full sm:w-auto px-6 py-3 text-white bg-red-500 border border-red-500 rounded-xl hover:bg-red-600 transition-all duration-300 font-medium">
+                        <i class="fas fa-trash mr-2"></i>Ya, Hapus Semua
                     </button>
                 </div>
             </div>

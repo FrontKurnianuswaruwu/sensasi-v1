@@ -8,6 +8,7 @@ let currentPage   = 1;
 const rowsPerPage = 10;
 let isEditMode    = false;
 let pilihanCount  = 0; // counter unik ID tiap baris opsi
+let selectedSoalIds = []; // array untuk menyimpan ID soal yang dipilih
 
 $(function () {
     loadData();
@@ -49,7 +50,7 @@ function renderTable(data, currentPageNum) {
     if (data.length === 0) {
         tbody.append(`
             <tr>
-                <td colspan="4" class="px-6 py-8 text-center text-gray-500">
+                <td colspan="5" class="px-6 py-8 text-center text-gray-500">
                     <i class="fas fa-info-circle text-gray-400 mr-2"></i>Tidak ada data ditemukan
                 </td>
             </tr>
@@ -59,8 +60,13 @@ function renderTable(data, currentPageNum) {
 
     data.forEach((soal, index) => {
         const no = (currentPageNum - 1) * rowsPerPage + index + 1;
+        const isChecked = selectedSoalIds.includes(soal.id) ? 'checked' : '';
         tbody.append(`
             <tr class="hover:bg-gray-50 transition-colors duration-200">
+                <td class="px-6 py-4">
+                    <input type="checkbox" class="soal-checkbox w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                           data-id="${soal.id}" ${isChecked}>
+                </td>
                 <td class="px-6 py-4 text-sm text-gray-900">${no}</td>
                 <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
@@ -163,6 +169,121 @@ function renderPaginationMobile(totalPages, query) {
 $('#searchInputsoal').on('input', function () {
     currentPage = 1;
     loadData($(this).val(), 1);
+});
+
+// Update selected count display
+function updateSelectedCount() {
+    const count = selectedSoalIds.length;
+    $('#selectedCount').text(count);
+
+    if (count > 0) {
+        $('#bulkDeleteBtn').removeClass('hidden');
+    } else {
+        $('#bulkDeleteBtn').addClass('hidden');
+    }
+
+    // Update check all checkbox state
+    const totalCheckboxes = $('.soal-checkbox').length;
+    const checkedCheckboxes = $('.soal-checkbox:checked').length;
+
+    if (checkedCheckboxes === 0) {
+        $('#checkAll').prop('checked', false).prop('indeterminate', false);
+    } else if (checkedCheckboxes === totalCheckboxes) {
+        $('#checkAll').prop('checked', true).prop('indeterminate', false);
+    } else {
+        $('#checkAll').prop('checked', false).prop('indeterminate', true);
+    }
+}
+
+// Check All checkbox
+$(document).on('change', '#checkAll', function() {
+    const isChecked = $(this).prop('checked');
+
+    $('.soal-checkbox').each(function() {
+        const soalId = parseInt($(this).data('id'));
+        $(this).prop('checked', isChecked);
+
+        if (isChecked) {
+            if (!selectedSoalIds.includes(soalId)) {
+                selectedSoalIds.push(soalId);
+            }
+        } else {
+            const index = selectedSoalIds.indexOf(soalId);
+            if (index > -1) {
+                selectedSoalIds.splice(index, 1);
+            }
+        }
+    });
+
+    updateSelectedCount();
+});
+
+// Individual checkbox
+$(document).on('change', '.soal-checkbox', function() {
+    const soalId = parseInt($(this).data('id'));
+
+    if ($(this).prop('checked')) {
+        if (!selectedSoalIds.includes(soalId)) {
+            selectedSoalIds.push(soalId);
+        }
+    } else {
+        const index = selectedSoalIds.indexOf(soalId);
+        if (index > -1) {
+            selectedSoalIds.splice(index, 1);
+        }
+    }
+
+    updateSelectedCount();
+});
+
+// Bulk delete button
+$('#bulkDeleteBtn').on('click', function() {
+    if (selectedSoalIds.length === 0) {
+        showNotification('Pilih minimal satu soal untuk dihapus', 'error');
+        return;
+    }
+
+    $('#bulkDeleteCount').text(selectedSoalIds.length);
+    showModal('bulkDeleteModal');
+});
+
+// Cancel bulk delete
+$('#cancelBulkDeleteBtn').on('click', () => hideModal('bulkDeleteModal'));
+
+// Confirm bulk delete
+$('#confirmBulkDeleteBtn').on('click', function() {
+    const btn = $(this);
+    const originalHtml = btn.html();
+    btn.html('<i class="fas fa-spinner fa-spin mr-2"></i>Menghapus...').prop('disabled', true);
+
+    $.ajax({
+        url: '/admin/pertanyaan/soal/bulk-delete',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ ids: selectedSoalIds }),
+        success: function(response) {
+            showNotification(response.message, response.status);
+            hideModal('bulkDeleteModal');
+            selectedSoalIds = [];
+            updateSelectedCount();
+            loadData($('#searchInputsoal').val(), currentPage);
+        },
+        error: function(xhr) {
+            showNotification(xhr.responseJSON?.message ?? 'Gagal menghapus data!', 'error');
+        },
+        complete: function() {
+            btn.html(originalHtml).prop('disabled', false);
+        }
+    });
+});
+
+// Update modal overlay click handler
+$('.modal-overlay').on('click', function (e) {
+    if (e.target === this) {
+        if ($(this).closest('#soalModal').length) hideModal('soalModal');
+        if ($(this).closest('#deleteModal').length) hideModal('deleteModal');
+        if ($(this).closest('#bulkDeleteModal').length) hideModal('bulkDeleteModal');
+    }
 });
 
 
