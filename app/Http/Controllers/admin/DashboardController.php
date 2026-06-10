@@ -173,9 +173,7 @@ class DashboardController extends Controller
     {
         $countMitra = Mitra::count();
         $dataherosection = Herosection::with('herophotos')->first();
-        $datasejarah = Sejarah::with('fotos')->first();
-        // data sejarahfoto masukin kecuali yang pertama
-        $sejarahfotos = $datasejarah->fotos->slice(1,4)->values();
+        $datasejarah = Sejarah::first();
         $datavisimisi = Visimisi::first();
         $datapengurus = Pengurus::take(4)->get();
         $countpengurus = Pengurus::count();
@@ -238,15 +236,13 @@ class DashboardController extends Controller
             'countkreative' => $countkreative,
             'countalumni' => $countalumniall,
             'countberita' => $countberita,
-            'sejarahfotos' => $sejarahfotos,
             'pendaftaran' => $pendaftaran,
         ]);
     }
 
     public function profile()
     {
-        $datasejarah = Sejarah::with('fotos')->first();
-        $sejarahfotos = $datasejarah->fotos->slice(1,4)->values();
+        $datasejarah = Sejarah::first();
         $datavisimisi = Visimisi::first();
         $datapengurus = Pengurus::get();
         return view('website.profile.index', [
@@ -255,7 +251,6 @@ class DashboardController extends Controller
             'datapengurus' => $datapengurus,
             'datakontak' => $this->datakontak,
             'dataherosection' => $this->herosection,
-            'sejarahfotos' => $sejarahfotos,
         ]);
     }
 

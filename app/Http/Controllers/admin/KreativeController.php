@@ -39,7 +39,7 @@ class KreativeController extends Controller
                 }
             ]);
 
-        if ($user->role === 9) {
+        if ($user->role == 9) {
             $query->where('user_id', $user->id);
             // Role 9 hanya lihat data yang belum approved
             $query->where('status', '!=', 'approved');
@@ -147,7 +147,7 @@ class KreativeController extends Controller
         $user = auth()->user();
 
         // Role 9 hanya bisa edit miliknya sendiri dan hanya jika status pending atau rejected
-        if ($user->role === 9) {
+        if ($user->role == 9) {
             if ($artikel->user_id !== $user->id) {
                 return response()->json([
                     'status' => 'error',
@@ -238,7 +238,7 @@ class KreativeController extends Controller
         $user = auth()->user();
 
         // Role 9 hanya bisa hapus miliknya sendiri dan hanya jika status pending atau rejected
-        if ($user->role === 9) {
+        if ($user->role == 9) {
             if ($artikel->user_id !== $user->id) {
                 return response()->json([
                     'status' => 'error',
@@ -301,7 +301,7 @@ class KreativeController extends Controller
         $user = auth()->user();
 
         // Hanya role 1 yang bisa approve
-        if ($user->role !== 1) {
+        if ($user->role != 1) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Anda tidak memiliki akses untuk approve'
@@ -328,7 +328,7 @@ class KreativeController extends Controller
         $user = auth()->user();
 
         // Hanya role 1 yang bisa reject
-        if ($user->role !== 1) {
+        if ($user->role != 1) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Anda tidak memiliki akses untuk reject'
@@ -363,7 +363,7 @@ class KreativeController extends Controller
         }
 
         // Role 9 hanya bisa confirm miliknya sendiri
-        if ($user->role === 9 && $artikel->user_id !== $user->id) {
+        if ($user->role == 9 && $artikel->user_id !== $user->id) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Anda tidak memiliki akses untuk confirm data ini'

@@ -53,7 +53,7 @@ class SejarahController extends Controller
 
     public function show($id)
     {
-        $sejarah = Sejarah::with('fotos')->findOrFail($id);
+        $sejarah = Sejarah::findOrFail($id);
         if (!$sejarah) {
             return response()->json(['message' => 'Sejarah tidak ditemukan'], 404);
         }
@@ -64,8 +64,7 @@ class SejarahController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'deskripsi' => 'nullable|string',
-            'foto.*'    => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'deskripsi' => 'nullable|string'
         ]);
 
         if ($validator->fails()) {
@@ -78,36 +77,10 @@ class SejarahController extends Controller
             'deskripsi' => $request->deskripsi,
         ]);
 
-        if ($request->hasFile('foto')) {
-
-            foreach ($sejarah->fotos as $oldFoto) {
-                $oldPath = $_SERVER['DOCUMENT_ROOT'].'/'.$oldFoto->foto;
-                if (file_exists($oldPath)) {
-                    unlink($oldPath);
-                }
-                $oldFoto->delete();
-            }
-
-            $destinationPath = $_SERVER['DOCUMENT_ROOT'].'/img/sejarah';
-            if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0755, true);
-            }
-
-            foreach ($request->file('foto') as $file) {
-                $fotoName = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
-                $file->move($destinationPath, $fotoName);
-
-                SejarahFoto::create([
-                    'sejarah_id' => $sejarah->id,
-                    'foto'       => 'img/sejarah/'.$fotoName,
-                ]);
-            }
-        }
-
         return response()->json([
             'status'  => 'success',
             'message' => 'Sejarah berhasil diperbarui',
-            'sejarah' => $sejarah->load('fotos')
+            'sejarah' => $sejarah
         ], 200);
     }
 }

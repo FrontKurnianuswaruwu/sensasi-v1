@@ -1,4 +1,6 @@
 import $ from 'jquery';
+import 'summernote/dist/summernote-lite.min.css';
+import 'summernote/dist/summernote-lite.min.js';
 
 $.ajaxSetup({
     headers: {
@@ -199,8 +201,7 @@ function resetForm() {
         hideFieldError(this);
     });
 
-    $('#preview').attr('src', '');
-    $('#previewContainer').addClass('hidden');
+    $('#sejarahDeskripsi').summernote('code', '');
 }
 
 
@@ -321,110 +322,62 @@ function showNotification(message, type = 'info') {
 function validateForm() {
     let isValid = true;
 
-    // Ambil isi CKEditor
-    const deskripsi = sejarahEditor.getData().trim();
+    // Ambil isi Summernote
+    const deskripsi = $('#sejarahDeskripsi').summernote('code').trim();
 
-    if (!deskripsi) {
-        // tambahin kelas error ke editor container
-        $('#sejarahDeskripsi').next('.ck-editor').addClass('border border-red-300 bg-red-50 rounded');
+    if (!deskripsi || deskripsi === '<p><br></p>') {
+        showNotification('Deskripsi tidak boleh kosong!', 'error');
         isValid = false;
-    } else {
-        $('#sejarahDeskripsi').next('.ck-editor').removeClass('border border-red-300 bg-red-50');
     }
 
     return isValid;
 }
 
-
-$("#sejarahFoto").on("change", function () {
-    const input = this;
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            $("#preview").attr("src", e.target.result);
-            $("#previewContainer").removeClass("hidden");
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-});
-
-// Preview multiple images
-$("#sejarahFoto").on("change", function () {
-    const files = this.files;
-    const previewList = $("#previewList");
-    previewList.empty();
-
-    if (files.length > 0) {
-        $("#previewContainer").removeClass("hidden");
-
-        Array.from(files).forEach((file, index) => {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const previewItem = $(`
-                    <div class="relative">
-                        <img src="${e.target.result}" class="w-32 h-32 object-cover rounded-lg shadow-md border" />
-                        <button type="button" data-index="${index}" class="removeBtn absolute top-1 right-1 bg-red-500 text-white text-xs px-1 rounded hover:bg-red-600">X</button>
-                    </div>
-                `);
-                previewList.append(previewItem);
-            };
-            reader.readAsDataURL(file);
-        });
-    } else {
-        $("#previewContainer").addClass("hidden");
-    }
-});
-
-// Hapus foto individual
-$(document).on("click", ".removeBtn", function () {
-    const index = $(this).data("index");
-    const input = document.getElementById("sejarahFoto");
-    const dt = new DataTransfer();
-
-    Array.from(input.files).forEach((file, i) => {
-        if (i !== index) {
-            dt.items.add(file);
-        }
-    });
-
-    input.files = dt.files;
-    $(this).parent().remove();
-
-    if (input.files.length === 0) {
-        $("#previewContainer").addClass("hidden");
-    }
-});
-
-// Drag & drop functionality
-$("#dropzone").on("drop", function (e) {
-    e.preventDefault();
-    const files = e.originalEvent.dataTransfer.files;
-    $("#sejarahFoto")[0].files = files;
-    $("#sejarahFoto").trigger("change");
-}).on("dragleave", function () {
-    $(this).removeClass("border-blue-primary bg-blue-50");
-}).on("dragover", function (e) {
-    e.preventDefault();
-    $(this).addClass("border-blue-primary bg-blue-50");
-});
-
-
-
-let sejarahEditor;
 let currentSejarahId = null;
 let isEditMode = false;
 // Show add Sejarah modal
 
 
 $(function () {
-    ClassicEditor
-    .create(document.querySelector('#sejarahDeskripsi'))
-    .then(editor => {
-        sejarahEditor = editor;
-        console.log('CKEditor siap dipakai!');
-    })
-    .catch(error => {
-        console.error(error);
+    function uploadImage(file) {
+        const formData = new FormData();
+        formData.append('upload', file);
+
+        return $.ajax({
+            url: '/admin/ckeditor/upload',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    }
+
+    $('#sejarahDeskripsi').summernote({
+        height: 300,
+        placeholder: 'Masukkan deskripsi sejarah...',
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'italic', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+        ],
+        callbacks: {
+            onImageUpload: function(files) {
+                for (let i = 0; i < files.length; i++) {
+                    uploadImage(files[i]).done(function(response) {
+                        $('#sejarahDeskripsi').summernote('insertImage', response.url);
+                    }).fail(function() {
+                        showNotification('Upload gambar gagal!', 'error');
+                    });
+                }
+            }
+        }
     });
     $('#sejarahForm').on('submit', function (e) {
         e.preventDefault();
@@ -441,16 +394,7 @@ $(function () {
         const sejarahId = $('#sejarahId').val();
 
         const formData = new FormData();
-        formData.append('deskripsi', sejarahEditor.getData());
-
-        const fileInput = $('#sejarahFoto')[0];
-        if (fileInput.files.length > 0) {
-            Array.from(fileInput.files).forEach((file, index) => {
-                formData.append('foto[]', file);
-            });
-        } else {
-            formData.append('oldFoto', $('#oldFoto').val());
-        }
+        formData.append('deskripsi', $('#sejarahDeskripsi').summernote('code'));
 
         const url = sejarahId ? `/admin/sejarah/${sejarahId}` : '/admin/sejarah';
         const method = 'POST';
@@ -512,31 +456,7 @@ $(document).on('click', '.edit-btn', function() {
         type: 'GET',
         success: function(sejarah) {
             $('#sejarahId').val(sejarah.id);
-            if (sejarahEditor) {
-                sejarahEditor.setData(sejarah.deskripsi || '');
-            } else {
-                $('#sejarahDeskripsi').val(sejarah.deskripsi);
-            }
-
-            // Reset preview
-            const previewList = $("#previewList");
-            previewList.empty();
-
-            if (sejarah.fotos && sejarah.fotos.length > 0) {
-                $("#previewContainer").removeClass("hidden");
-
-                sejarah.fotos.forEach(function(foto) {
-                    const previewItem = $(`
-                        <div class="relative">
-                            <img src="/${foto.foto}"
-                                class="w-32 h-32 object-cover rounded-lg shadow-md border" />
-                        </div>
-                    `);
-                    previewList.append(previewItem);
-                });
-            } else {
-                $("#previewContainer").addClass("hidden");
-            }
+            $('#sejarahDeskripsi').summernote('code', sejarah.deskripsi || '');
 
             showModal('sejarahModal');
         },

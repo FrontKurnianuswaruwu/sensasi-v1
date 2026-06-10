@@ -1,7 +1,23 @@
 {
-  "_jquery-BvxTx_lq.js": {
-    "file": "assets/jquery-BvxTx_lq.js",
+  "_jquery-CEr4rF5i.js": {
+    "file": "assets/jquery-CEr4rF5i.js",
     "name": "jquery"
+  },
+  "node_modules/summernote/dist/font/summernote.eot": {
+    "file": "assets/summernote-jt9apK1s.eot",
+    "src": "node_modules/summernote/dist/font/summernote.eot"
+  },
+  "node_modules/summernote/dist/font/summernote.ttf": {
+    "file": "assets/summernote-BDPkqvsB.ttf",
+    "src": "node_modules/summernote/dist/font/summernote.ttf"
+  },
+  "node_modules/summernote/dist/font/summernote.woff": {
+    "file": "assets/summernote-MGhHcnpK.woff",
+    "src": "node_modules/summernote/dist/font/summernote.woff"
+  },
+  "node_modules/summernote/dist/font/summernote.woff2": {
+    "file": "assets/summernote-tk6LuLER.woff2",
+    "src": "node_modules/summernote/dist/font/summernote.woff2"
   },
   "resources/css/admin.css": {
     "file": "assets/admin-B0G6gn76.css",
@@ -44,309 +60,318 @@
     ]
   },
   "resources/js/admin/alumni.js": {
-    "file": "assets/alumni-BHl6Ki03.js",
+    "file": "assets/alumni-AjJgIUog.js",
     "name": "alumni",
     "src": "resources/js/admin/alumni.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/alumniadmin.js": {
-    "file": "assets/alumniadmin-CHGlAwgZ.js",
+    "file": "assets/alumniadmin-C80iE-5R.js",
     "name": "alumniadmin",
     "src": "resources/js/admin/alumniadmin.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/approvalpengajuandana.js": {
-    "file": "assets/approvalpengajuandana-C_4n5UKt.js",
+    "file": "assets/approvalpengajuandana-njL3WPgm.js",
     "name": "approvalpengajuandana",
     "src": "resources/js/admin/approvalpengajuandana.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/artikel.js": {
-    "file": "assets/artikel-B92MgBFJ.js",
+    "file": "assets/artikel-B4tNZxSg.js",
     "name": "artikel",
     "src": "resources/js/admin/artikel.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/berita.js": {
-    "file": "assets/berita-C4lFahxr.js",
+    "file": "assets/berita-CfSRP-8h.js",
     "name": "berita",
     "src": "resources/js/admin/berita.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/biodata.js": {
-    "file": "assets/biodata-Bd_aI6Q5.js",
+    "file": "assets/biodata-BkZuwUyU.js",
     "name": "biodata",
     "src": "resources/js/admin/biodata.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/dashboard.js": {
-    "file": "assets/dashboard-BPPOEfzr.js",
+    "file": "assets/dashboard-DUs2rye1.js",
     "name": "dashboard",
     "src": "resources/js/admin/dashboard.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/herosection.js": {
-    "file": "assets/herosection-CF6yEArz.js",
+    "file": "assets/herosection-FFGo8uDL.js",
     "name": "herosection",
     "src": "resources/js/admin/herosection.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/historypengajuandana.js": {
-    "file": "assets/historypengajuandana-WZNqXAlW.js",
+    "file": "assets/historypengajuandana-BOkJv54r.js",
     "name": "historypengajuandana",
     "src": "resources/js/admin/historypengajuandana.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/kategoripotensiakademik.js": {
-    "file": "assets/kategoripotensiakademik-BGJv2r3u.js",
+    "file": "assets/kategoripotensiakademik-CnmFy_NM.js",
     "name": "kategoripotensiakademik",
     "src": "resources/js/admin/kategoripotensiakademik.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/kategorisoal.js": {
-    "file": "assets/kategorisoal-CA_LmcZ7.js",
+    "file": "assets/kategorisoal-Dy7RZZz4.js",
     "name": "kategorisoal",
     "src": "resources/js/admin/kategorisoal.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/kontak.js": {
-    "file": "assets/kontak-B2y_xrwM.js",
+    "file": "assets/kontak-fkgxffBU.js",
     "name": "kontak",
     "src": "resources/js/admin/kontak.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/menu.js": {
-    "file": "assets/menu-D5LiDccx.js",
+    "file": "assets/menu-P4xq64VH.js",
     "name": "menu",
     "src": "resources/js/admin/menu.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/mitra.js": {
-    "file": "assets/mitra-Bh9PYUOm.js",
+    "file": "assets/mitra-937Ltvaf.js",
     "name": "mitra",
     "src": "resources/js/admin/mitra.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/nilai.js": {
-    "file": "assets/nilai-DrL7Euwe.js",
+    "file": "assets/nilai-BdfOzw9D.js",
     "name": "nilai",
     "src": "resources/js/admin/nilai.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/opsi.js": {
-    "file": "assets/opsi-DA9G8ltP.js",
+    "file": "assets/opsi-DAs2wyrE.js",
     "name": "opsi",
     "src": "resources/js/admin/opsi.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/pbsaktif.js": {
-    "file": "assets/pbsaktif-BCR0m1VO.js",
+    "file": "assets/pbsaktif-CL2t0q85.js",
     "name": "pbsaktif",
     "src": "resources/js/admin/pbsaktif.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/pendaftaranpbs.js": {
-    "file": "assets/pendaftaranpbs-V0v9t5gg.js",
+    "file": "assets/pendaftaranpbs-CcePYmbm.js",
     "name": "pendaftaranpbs",
     "src": "resources/js/admin/pendaftaranpbs.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/pengajuandana.js": {
-    "file": "assets/pengajuandana-BrTRoShh.js",
+    "file": "assets/pengajuandana-kspuDsUo.js",
     "name": "pengajuandana",
     "src": "resources/js/admin/pengajuandana.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/pengurus.js": {
-    "file": "assets/pengurus-BEAuv_fh.js",
+    "file": "assets/pengurus-BbZtZV5s.js",
     "name": "pengurus",
     "src": "resources/js/admin/pengurus.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/permission.js": {
-    "file": "assets/permission-BivbtdJw.js",
+    "file": "assets/permission-WOev7p3g.js",
     "name": "permission",
     "src": "resources/js/admin/permission.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/pertanyaan.js": {
-    "file": "assets/pertanyaan-DlQhcAoW.js",
+    "file": "assets/pertanyaan-3rGjiqty.js",
     "name": "pertanyaan",
     "src": "resources/js/admin/pertanyaan.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/pilihan.js": {
-    "file": "assets/pilihan-B8VnkJOv.js",
+    "file": "assets/pilihan-CqVT2xhv.js",
     "name": "pilihan",
     "src": "resources/js/admin/pilihan.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/potensiakademiksoal.js": {
-    "file": "assets/potensiakademiksoal-CPFSUcdK.js",
+    "file": "assets/potensiakademiksoal-CKjBwOQ2.js",
     "name": "potensiakademiksoal",
     "src": "resources/js/admin/potensiakademiksoal.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/program.js": {
-    "file": "assets/program-CdS1yP0L.js",
+    "file": "assets/program-L74jel9b.js",
     "name": "program",
     "src": "resources/js/admin/program.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/riwayatpengajuandana.js": {
-    "file": "assets/riwayatpengajuandana-B-sXhi0v.js",
+    "file": "assets/riwayatpengajuandana-Bt5zChMm.js",
     "name": "riwayatpengajuandana",
     "src": "resources/js/admin/riwayatpengajuandana.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/roles.js": {
-    "file": "assets/roles-DCxNzNML.js",
+    "file": "assets/roles-rrqs3Xhj.js",
     "name": "roles",
     "src": "resources/js/admin/roles.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/sejarah.js": {
-    "file": "assets/sejarah-BvMR3Mdf.js",
+    "file": "assets/sejarah-B0a-4BzC.js",
     "name": "sejarah",
     "src": "resources/js/admin/sejarah.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
+    ],
+    "css": [
+      "assets/sejarah-D3eLgMsa.css"
+    ],
+    "assets": [
+      "assets/summernote-jt9apK1s.eot",
+      "assets/summernote-tk6LuLER.woff2",
+      "assets/summernote-MGhHcnpK.woff",
+      "assets/summernote-BDPkqvsB.ttf"
     ]
   },
   "resources/js/admin/sensasiclub.js": {
-    "file": "assets/sensasiclub-Ca4LfxVw.js",
+    "file": "assets/sensasiclub-BGVpvWe8.js",
     "name": "sensasiclub",
     "src": "resources/js/admin/sensasiclub.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/soal.js": {
-    "file": "assets/soal-CYvy7mfF.js",
+    "file": "assets/soal-CoCKl4lU.js",
     "name": "soal",
     "src": "resources/js/admin/soal.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/submenu.js": {
-    "file": "assets/submenu-CMTXsALR.js",
+    "file": "assets/submenu-DZvc9V_g.js",
     "name": "submenu",
     "src": "resources/js/admin/submenu.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/tahunakademik.js": {
-    "file": "assets/tahunakademik-0-YxhD4c.js",
+    "file": "assets/tahunakademik-h4z9gyuE.js",
     "name": "tahunakademik",
     "src": "resources/js/admin/tahunakademik.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/user.js": {
-    "file": "assets/user-zNfKuqtw.js",
+    "file": "assets/user-4TIQjxXt.js",
     "name": "user",
     "src": "resources/js/admin/user.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/admin/visimisi.js": {
-    "file": "assets/visimisi-CIPo_8E1.js",
+    "file": "assets/visimisi-CdavI4mh.js",
     "name": "visimisi",
     "src": "resources/js/admin/visimisi.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/app.js": {
@@ -356,39 +381,39 @@
     "isEntry": true
   },
   "resources/js/auth/login.js": {
-    "file": "assets/login-DIqVeS3O.js",
+    "file": "assets/login-BoTQY0rX.js",
     "name": "login",
     "src": "resources/js/auth/login.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/auth/otp.js": {
-    "file": "assets/otp-CaYQ7SWi.js",
+    "file": "assets/otp-BkQPVdhu.js",
     "name": "otp",
     "src": "resources/js/auth/otp.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/auth/register.js": {
-    "file": "assets/register-BCSlbrMq.js",
+    "file": "assets/register-BhjEfC4Z.js",
     "name": "register",
     "src": "resources/js/auth/register.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   },
   "resources/js/website/website.js": {
-    "file": "assets/website-H9GqNM1P.js",
+    "file": "assets/website-DgkWDRx6.js",
     "name": "website",
     "src": "resources/js/website/website.js",
     "isEntry": true,
     "imports": [
-      "_jquery-BvxTx_lq.js"
+      "_jquery-CEr4rF5i.js"
     ]
   }
 }

@@ -15,37 +15,25 @@
         </div>
 
         <!-- Sejarah -->
-        @php
-            $fotoPertama = $datasejarah->fotos->first();
-        @endphp
         <div class="mb-20 animate-fade-in">
             <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">Sejarah</h3>
-            <div class="grid md:grid-cols-2 gap-8 items-center mb-8">
-                <div>
-                    <p class="text-gray-600 leading-relaxed mb-4">
-                        {{ strip_tags($datasejarah->deskripsi) }}
-                    </p>
-                </div>
-                <div class="bg-gray-200 rounded-xl h-64 flex items-center justify-center">
-                    @if($fotoPertama)
-                        <img 
-                            src="{{ asset($fotoPertama->foto) }}" 
-                            class="w-full h-full object-cover"
-                        >
-                    @endif
-                </div>
-            </div>
-            <div class="flex flex-wrap justify-center gap-4">
-                @foreach ($sejarahfotos as $foto)
-                    <div class="bg-gray-200 rounded-lg h-40 flex items-center justify-center overflow-hidden w-[calc(50%-1rem)] md:w-[calc(25%-1rem)]">
-                        <img 
-                            src="{{ asset($foto->foto) }}" 
-                            class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                            loading="lazy"
-                            alt="Foto Sejarah"
-                        >
-                    </div>
-                @endforeach
+            <div class="prose prose-lg max-w-none" style="overflow-x: hidden;">
+                <style>
+                    .prose img {
+                        margin: 1rem auto;
+                        border-radius: 0.5rem;
+                        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+                        max-width: 100%;
+                        width: 100%;
+                        height: auto;
+                        display: block;
+                        object-fit: contain;
+                    }
+                    .prose p {
+                        overflow: hidden;
+                    }
+                </style>
+                {!! $datasejarah->deskripsi !!}
             </div>
         </div>
 

@@ -113,37 +113,14 @@
             <!-- Body -->
             <form id="sejarahForm" class="p-6 space-y-6">
                 <input type="hidden" id="sejarahId" name="id">
-                
+
                 <div class="space-y-2">
                     <label for="sejarahDeskripsi" class="block text-sm font-semibold text-gray-700">
                         <i class="fas fa-tag mr-2 text-blue-primary"></i>Deskripsi
                     </label>
-                    <input type="text" id="sejarahDeskripsi" name="sejarahDeskripsi" class="input-focus w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-primary focus:ring-0 transition-all duration-300 text-gray-900" placeholder="Masukkan nama sejarah">
+                    <textarea id="sejarahDeskripsi" name="sejarahDeskripsi" rows="10" class="input-focus w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-primary focus:ring-0 transition-all duration-300 text-gray-900" placeholder="Masukkan deskripsi sejarah"></textarea>
                 </div>
-                {{-- inputan foto multiple --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <input type="hidden" id="oldFoto" name="oldFoto">
-                        <label for="sejarahFoto" class="block text-sm font-semibold text-gray-700">
-                            <i class="fas fa-image mr-2 text-blue-primary"></i>Foto Program
-                        </label>
 
-                        <!-- Dropzone -->
-                        <div id="dropzone" class="flex flex-col items-center justify-center w-full p-6 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-blue-primary transition" onclick="document.getElementById('sejarahFoto').click()" ondragover="event.preventDefault(); this.classList.add('border-blue-primary', 'bg-blue-50')" ondragleave="this.classList.remove('border-blue-primary', 'bg-blue-50')" >
-                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
-                            <p class="text-gray-600 text-sm">Klik untuk pilih gambar atau drag & drop di sini</p>
-                            <input type="file" id="sejarahFoto" name="sejarahFoto[]" accept="image/*" class="hidden" multiple>
-                        </div>
-                    </div>
-                    <div class="space-y-2">
-                    <!-- Live preview -->
-                        <div id="previewContainer" class="mt-3 hidden">
-                            <p class="text-gray-600 text-sm mb-2">Preview:</p>
-                            <div id="previewList" class="flex flex-wrap gap-3"></div>
-                        </div>
-                    </div>
-                    
-                </div>
                 <!-- Footer Buttons -->
                 <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3 pt-6 border-t border-gray-200">
                     <button type="button" id="cancelBtn" class="w-full sm:w-auto px-6 py-3 text-gray-700 bg-gray-100 border border-gray-300 rounded-xl hover:bg-gray-200 focus:ring-4 focus:ring-gray-200 transition-all duration-300 font-medium">

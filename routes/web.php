@@ -24,6 +24,7 @@ use App\Http\Controllers\admin\ProgramController;
 use App\Http\Controllers\admin\RiwayatpengajuandanaController;
 use App\Http\Controllers\admin\RoleController;
 use App\Http\Controllers\admin\SejarahController;
+use App\Http\Controllers\admin\CkeditorImageUploadController;
 use App\Http\Controllers\admin\SensasiclubController;
 use App\Http\Controllers\admin\SubmenuController;
 use App\Http\Controllers\admin\TahunakademikController;
@@ -123,6 +124,7 @@ Route::middleware(['auth', 'check.expired', 'check.permission'])->group(function
     Route::get('/admin/getsejarah', [SejarahController::class, 'getdata'])->name('admin.sejarah.getdata');
     Route::get('/admin/sejarah/{id}', [SejarahController::class, 'show']);
     Route::put('/admin/sejarah/{id}', [SejarahController::class, 'update']);
+    Route::post('/admin/ckeditor/upload', [CkeditorImageUploadController::class, 'upload'])->name('admin.ckeditor.upload');
 
     Route::get('/admin/visimisi', [VisimisiController::class, 'index'])->name('admin.visimisi.index');
     Route::get('/admin/getvisimisi', [VisimisiController::class, 'getdata'])->name('admin.visimisi.getdata');
