@@ -87,22 +87,31 @@ class KreativeController extends Controller
             $pdf      = $request->file('pdf');
             $pdfName  = time() . '.' . $pdf->getClientOriginalExtension();
             $destinationPath = $_SERVER['DOCUMENT_ROOT'].'/'.'pdf/artikel';
+
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+
             $pdf->move($destinationPath, $pdfName);
             $pdfPath = 'pdf/artikel/' . $pdfName;
-        } else {
+        } elseif ($request->oldPdf) {
             $pdfPath = $request->oldPdf;
         }
 
         $fotoPath = null;
         // simpan foto
-        if (!empty($request->foto)) {
+        if ($request->hasFile('foto')) {
             $foto      = $request->file('foto');
             $fotoName  = time() . '.' . $foto->getClientOriginalExtension();
-            $destinationPath = public_path('img/kreative');
             $destinationPath = $_SERVER['DOCUMENT_ROOT'].'/'.'img/kreative';
+
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+
             $foto->move($destinationPath, $fotoName);
             $fotoPath = 'img/kreative/' . $fotoName;
-        } else {
+        } elseif ($request->oldFoto) {
             $fotoPath = $request->oldFoto;
         }
 

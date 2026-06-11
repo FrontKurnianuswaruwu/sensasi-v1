@@ -3,6 +3,26 @@
     "file": "assets/jquery-CEr4rF5i.js",
     "name": "jquery"
   },
+  "_summernote-lite-D3eLgMsa.css": {
+    "file": "assets/summernote-lite-D3eLgMsa.css",
+    "src": "_summernote-lite-D3eLgMsa.css"
+  },
+  "_summernote-lite.min-Dso9tUEj.js": {
+    "file": "assets/summernote-lite.min-Dso9tUEj.js",
+    "name": "summernote-lite.min",
+    "imports": [
+      "_jquery-CEr4rF5i.js"
+    ],
+    "css": [
+      "assets/summernote-lite-D3eLgMsa.css"
+    ],
+    "assets": [
+      "assets/summernote-jt9apK1s.eot",
+      "assets/summernote-tk6LuLER.woff2",
+      "assets/summernote-MGhHcnpK.woff",
+      "assets/summernote-BDPkqvsB.ttf"
+    ]
+  },
   "node_modules/summernote/dist/font/summernote.eot": {
     "file": "assets/summernote-jt9apK1s.eot",
     "src": "node_modules/summernote/dist/font/summernote.eot"
@@ -87,12 +107,13 @@
     ]
   },
   "resources/js/admin/artikel.js": {
-    "file": "assets/artikel-B4tNZxSg.js",
+    "file": "assets/artikel-CHWPaoeT.js",
     "name": "artikel",
     "src": "resources/js/admin/artikel.js",
     "isEntry": true,
     "imports": [
-      "_jquery-CEr4rF5i.js"
+      "_jquery-CEr4rF5i.js",
+      "_summernote-lite.min-Dso9tUEj.js"
     ]
   },
   "resources/js/admin/berita.js": {
@@ -303,21 +324,13 @@
     ]
   },
   "resources/js/admin/sejarah.js": {
-    "file": "assets/sejarah-B0a-4BzC.js",
+    "file": "assets/sejarah-D1srd7I9.js",
     "name": "sejarah",
     "src": "resources/js/admin/sejarah.js",
     "isEntry": true,
     "imports": [
-      "_jquery-CEr4rF5i.js"
-    ],
-    "css": [
-      "assets/sejarah-D3eLgMsa.css"
-    ],
-    "assets": [
-      "assets/summernote-jt9apK1s.eot",
-      "assets/summernote-tk6LuLER.woff2",
-      "assets/summernote-MGhHcnpK.woff",
-      "assets/summernote-BDPkqvsB.ttf"
+      "_jquery-CEr4rF5i.js",
+      "_summernote-lite.min-Dso9tUEj.js"
     ]
   },
   "resources/js/admin/sensasiclub.js": {

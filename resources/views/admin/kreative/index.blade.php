@@ -142,7 +142,7 @@
                     <label for="artikelDeskripsi" class="block text-sm font-semibold text-gray-700">
                         <i class="fas fa-align-left mr-2 text-blue-primary"></i>Deskripsi
                     </label>
-                    <input type="text" id="artikelDeskripsi" name="artikelDeskripsi" class="input-focus w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-primary focus:ring-0 transition-all duration-300 text-gray-900" placeholder="Masukkan biodata" >
+                    <textarea id="artikelDeskripsi" name="artikelDeskripsi" rows="6" class="input-focus w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-primary focus:ring-0 transition-all duration-300 text-gray-900" placeholder="Masukkan deskripsi artikel"></textarea>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-2">

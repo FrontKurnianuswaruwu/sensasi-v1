@@ -1,4 +1,6 @@
 import $ from 'jquery';
+import 'summernote/dist/summernote-lite.min.css';
+import 'summernote/dist/summernote-lite.min.js';
 
 $.ajaxSetup({
     headers: {
@@ -520,9 +522,9 @@ function validateForm() {
         }
     });
 
-    // Validate CKEditor (artikelDeskripsi)
-    const deskripsi = artikelEditor.getData().replace(/<[^>]*>/g, '').trim();
-    const deskripsiField = $('#artikelDeskripsi').closest('.ck-editor');
+    // Validate deskripsi
+    const deskripsi = $('#artikelDeskripsi').summernote('code').replace(/<[^>]*>/g, '').trim();
+    const deskripsiField = $('#artikelDeskripsi');
     if (!deskripsi) {
         deskripsiField.addClass('border-red-300 bg-red-50');
         isValid = false;
@@ -603,7 +605,6 @@ $("#removeFoto").on("click", function () {
     $("#oldFoto").val("");
 });
 
-let artikelEditor;
 let currentArtikelId = null;
 let isEditMode = false;
 // Show add Artikel modal
@@ -619,22 +620,26 @@ $('#addSubartikelBtn').on('click', function() {
     $('#submitIcon').removeClass('fa-edit').addClass('fa-save');
 
     showModalEnhanced('artikelModal');
-    
+
     $('#artikelIsparent').val('');
 });
 
-$(function () {
-    ClassicEditor
-    .create(document.querySelector('#artikelDeskripsi'))
-    .then(editor => {
-        artikelEditor = editor;
-        console.log('CKEditor siap dipakai!');
-    })
-    .catch(error => {
-        console.error(error);
-    });
+// Initialize Summernote
+$('#artikelDeskripsi').summernote({
+    height: 300,
+    placeholder: 'Masukkan deskripsi artikel...',
+    toolbar: [
+        ['style', ['style']],
+        ['font', ['bold', 'italic', 'underline', 'clear']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['table', ['table']],
+        ['insert', ['link', 'picture']],
+        ['view', ['fullscreen', 'codeview', 'help']]
+    ]
+});
 
-    $('#artikelForm').on('submit', function (e) {
+$('#artikelForm').on('submit', function (e) {
         e.preventDefault();
 
         if (!validateForm()) {
@@ -650,7 +655,7 @@ $(function () {
 
         const formData = new FormData();
         formData.append('nama', $('#artikelNama').val());
-        formData.append('deskripsi', artikelEditor.getData());
+        formData.append('deskripsi', $('#artikelDeskripsi').summernote('code'));
 
         // Tambahkan file PDF jika ada
         const pdfInput = $('#artikelPdf')[0];
@@ -660,9 +665,7 @@ $(function () {
 
         const fileInput = $('#artikelFoto')[0];
         if (fileInput.files.length > 0) {
-            formData.append('foto', fileInput.files[0]); 
-        } else {
-            formData.append('oldFoto', $('#oldFoto').val());
+            formData.append('foto', fileInput.files[0]);
         }
 
         const url = artikelId ? `/admin/kreatif/${artikelId}` : '/admin/kreatif';
@@ -708,7 +711,7 @@ $(function () {
             }
         });
     });
-});
+
 
 $(document).on('click', '.edit-btn', function() {
     isEditMode = true;
@@ -726,11 +729,7 @@ $(document).on('click', '.edit-btn', function() {
         success: function(artikel) {
             $('#artikelId').val(artikel.id);
             $('#artikelNama').val(artikel.nama);
-            if (artikelEditor) {
-                artikelEditor.setData(artikel.deskripsi || '');
-            } else {
-                $('#artikelDeskripsi').val(artikel.deskripsi);
-            }
+            $('#artikelDeskripsi').summernote('code', artikel.deskripsi || '');
             if (artikel.pdf) {
                 $('#pdfPreview').attr('src', '/' + artikel.pdf);
                 $('#pdfPreviewContainer').removeClass('hidden');

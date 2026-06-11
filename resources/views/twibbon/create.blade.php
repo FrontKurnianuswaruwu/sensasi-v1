@@ -71,7 +71,7 @@
 
             <div class="bg-gray-900 rounded-2xl sm:rounded-3xl shadow-lg p-4 sm:p-6 md:p-8 text-white">
                 <h2 class="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Preview Template</h2>
-                <div class="aspect-[4/5] sm:aspect-square rounded-xl sm:rounded-3xl bg-gray-800 border border-gray-700 overflow-hidden flex items-center justify-center">
+                <div class="aspect-[4/5] bg-gray-800 border border-gray-700 overflow-hidden flex items-center justify-center rounded-2xl sm:rounded-3xl shadow-lg">
                     <img id="previewTemplate" src="" class="hidden w-full h-full object-contain" alt="Preview">
                     <div id="emptyPreview" class="text-center text-gray-400">
                         <i class="fas fa-image text-4xl sm:text-6xl mb-2 sm:mb-4"></i>
@@ -83,7 +83,7 @@
                     <ul class="list-disc list-inside space-y-1 text-[10px] sm:text-sm">
                         <li>Gunakan PNG transparan agar foto user terlihat.</li>
                         <li>Area kosong/transparan adalah tempat foto user.</li>
-                        <li>Ukuran square 1080x1080 akan terlihat paling rapi.</li>
+                        <li>Ukuran yang direkomendasikan adalah 1080x1350 px (ratio 4:5).</li>
                     </ul>
                 </div>
             </div>

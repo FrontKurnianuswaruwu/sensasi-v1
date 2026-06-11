@@ -33,8 +33,8 @@
 
         <div class="grid lg:grid-cols-[1fr_420px] gap-8 items-start">
             <section class="bg-[#182235] rounded-3xl shadow-2xl p-4 md:p-8">
-                <div class="max-w-[560px] mx-auto">
-                    <div id="canvasWrap" class="relative aspect-square bg-black/30 rounded-3xl overflow-hidden border border-white/10 shadow-inner">
+                <div class="max-w-[540px] mx-auto">
+                    <div id="canvasWrap" class="relative aspect-[4/5] bg-black/30 rounded-3xl overflow-hidden border border-white/10 shadow-inner">
                         <canvas id="twibbonCanvas" class="w-full h-full block"></canvas>
                         <div id="uploadHint" class="absolute inset-0 flex items-center justify-center pointer-events-none">
                             <div class="text-center bg-black/50 backdrop-blur px-6 py-5 rounded-2xl">
@@ -112,6 +112,9 @@
         templateImg.crossOrigin = 'anonymous';
         templateImg.src = templateUrl;
 
+        const OUTPUT_W = 1080;
+        const OUTPUT_H = 1350;
+
         let userImg = null;
         let imgX = 0;
         let imgY = 0;
@@ -124,20 +127,14 @@
         let emptyArea = null; // {x, y, width, height} area kosong di template
 
         function setupCanvas() {
-            const rect = wrap.getBoundingClientRect();
-            const dpr = window.devicePixelRatio || 1;
-            canvas.width = Math.round(rect.width * dpr);
-            canvas.height = Math.round(rect.height * dpr);
-            canvas.style.width = rect.width + 'px';
-            canvas.style.height = rect.height + 'px';
-            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            canvas.width = OUTPUT_W;
+            canvas.height = OUTPUT_H;
             detectEmptyArea();
             draw();
         }
 
         function canvasSize() {
-            const rect = wrap.getBoundingClientRect();
-            return { width: rect.width, height: rect.height };
+            return { width: OUTPUT_W, height: OUTPUT_H };
         }
 
         // Detect area kosong (transparan) di template
@@ -298,7 +295,12 @@
         function pointerPos(e) {
             const rect = canvas.getBoundingClientRect();
             const p = e.touches ? e.touches[0] : e;
-            return { x: p.clientX - rect.left, y: p.clientY - rect.top };
+            const scaleX = OUTPUT_W / rect.width;
+            const scaleY = OUTPUT_H / rect.height;
+            return {
+                x: (p.clientX - rect.left) * scaleX,
+                y: (p.clientY - rect.top) * scaleY
+            };
         }
 
         function startDrag(e) {

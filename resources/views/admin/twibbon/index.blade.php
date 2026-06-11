@@ -109,7 +109,7 @@
                     </div>
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Preview</label>
-                        <div class="w-full aspect-square bg-gray-100 rounded-xl overflow-hidden flex items-center justify-center border">
+                        <div class="w-full aspect-[4/5] bg-gray-100 rounded-xl overflow-hidden flex items-center justify-center border">
                             <img id="previewTemplate" src="" class="hidden w-full h-full object-contain" alt="Preview template">
                             <span id="emptyPreview" class="text-gray-400 text-sm">Belum ada template</span>
                         </div>
