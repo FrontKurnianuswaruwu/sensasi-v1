@@ -39,7 +39,7 @@ class DashboardController extends Controller
     {
         $user = auth()->user();
         $userrole = $user->role;
-        $rolename = Role::where('id', $userrole)->first()->name;
+        $rolename = Role::where('id', $userrole)->value('name') ?? 'Unknown';
         $nameuser = $user->name;
         $userid = $user->id;
         $userstatus = $user->status_user;

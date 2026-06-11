@@ -214,7 +214,7 @@
                 </nav>
                 <!-- Sidebar Footer -->
                 <div class="px-4 py-4 border-t border-gray-200 bg-white mt-auto">
-                    <a href="{{ route('auth.login') }}" 
+                    <a href="{{ route('login') }}" 
                         class="w-full flex items-center px-4 py-2 text-red-600 rounded-lg hover:bg-red-50 transition-colors">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 

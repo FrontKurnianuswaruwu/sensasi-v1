@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Middleware;
 
 use Closure;
@@ -15,7 +16,7 @@ class CheckPermission
         if (!Auth::check()) {
             return $this->deny($request, 'Silakan login terlebih dahulu.', true);
         }
-        
+
         $user = Auth::user();
         $roleId = $user->role;
         $routeName = $request->route()->getName();
@@ -64,7 +65,7 @@ class CheckPermission
         }
 
         if ($forceRedirectLogin) {
-            return redirect()->route('login')->with('message', $message);
+            return redirect(url('/login'))->with('message', $message);
         }
 
         return redirect()->back()->with('message', $message);
