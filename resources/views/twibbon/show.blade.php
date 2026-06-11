@@ -122,9 +122,58 @@
         let zoom = 1;
         let rotation = 0;
         let dragging = false;
+        let draggingPinch = false;
         let lastX = 0;
         let lastY = 0;
+        let zoomBeforePinch = 1;
+        let lastPinchDist = 0;
         let emptyArea = null; // {x, y, width, height} area kosong di template
+
+        canvas.addEventListener('wheel', function(e) {
+            if (!userImg) return;
+            e.preventDefault();
+            const oldZoom = zoom;
+            zoom = Math.max(0.5, Math.min(3, zoom - e.deltaY * 0.001));
+
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = OUTPUT_W / rect.width;
+            const scaleY = OUTPUT_H / rect.height;
+            const mx = (e.clientX - rect.left) * scaleX;
+            const my = (e.clientY - rect.top) * scaleY;
+
+            imgX = mx - (mx - imgX) * (zoom / oldZoom);
+            imgY = my - (my - imgY) * (zoom / oldZoom);
+
+            document.getElementById('zoomSlider').value = zoom;
+            document.getElementById('zoomValue').textContent = Math.round(zoom * 100) + '%';
+            draw();
+        }, { passive: false });
+
+        canvas.addEventListener('wheel', function(e) {
+            if (!userImg) return;
+            e.preventDefault();
+            const oldZoom = zoom;
+            zoom = Math.max(0.5, Math.min(3, zoom - e.deltaY * 0.001));
+
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = OUTPUT_W / rect.width;
+            const scaleY = OUTPUT_H / rect.height;
+            const mx = (e.clientX - rect.left) * scaleX;
+            const my = (e.clientY - rect.top) * scaleY;
+
+            imgX = mx - (mx - imgX) * (zoom / oldZoom);
+            imgY = my - (my - imgY) * (zoom / oldZoom);
+
+            document.getElementById('zoomSlider').value = zoom;
+            document.getElementById('zoomValue').textContent = Math.round(zoom * 100) + '%';
+            draw();
+        }, { passive: false });
+
+        function getPinchDistance(touches) {
+            const dx = touches[0].clientX - touches[1].clientX;
+            const dy = touches[0].clientY - touches[1].clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
 
         function setupCanvas() {
             canvas.width = OUTPUT_W;
@@ -201,14 +250,16 @@
                 const drawW = userImg.width * scale;
                 const drawH = userImg.height * scale;
 
-                // Constrain posisi dalam batas emptyArea
-                const minX = emptyArea.x;
-                const maxX = emptyArea.x + emptyArea.width - drawW;
-                const minY = emptyArea.y;
-                const maxY = emptyArea.y + emptyArea.height - drawH;
-
-                imgX = Math.max(minX, Math.min(imgX, maxX));
-                imgY = Math.max(minY, Math.min(imgY, maxY));
+                // Hanya constrain kalau gambar lebih kecil dari emptyArea
+                // Kalau sudah zoom dan lebih besar, allow free drag
+                if (drawW <= emptyArea.width && drawH <= emptyArea.height) {
+                    const minX = emptyArea.x;
+                    const maxX = emptyArea.x + emptyArea.width - drawW;
+                    const minY = emptyArea.y;
+                    const maxY = emptyArea.y + emptyArea.height - drawH;
+                    imgX = Math.max(minX, Math.min(imgX, maxX));
+                    imgY = Math.max(minY, Math.min(imgY, maxY));
+                }
 
                 ctx.save();
                 ctx.beginPath();
@@ -305,16 +356,12 @@
 
         function startDrag(e) {
             if (!userImg || !emptyArea) return;
-            const pos = pointerPos(e);
 
-            // Check jika drag di dalam empty area
-            if (pos.x >= emptyArea.x && pos.x <= emptyArea.x + emptyArea.width &&
-                pos.y >= emptyArea.y && pos.y <= emptyArea.y + emptyArea.height) {
-                e.preventDefault();
-                dragging = true;
-                lastX = pos.x;
-                lastY = pos.y;
-            }
+            e.preventDefault();
+            dragging = true;
+            const pos = pointerPos(e);
+            lastX = pos.x;
+            lastY = pos.y;
         }
 
         function moveDrag(e) {
@@ -333,9 +380,62 @@
         canvas.addEventListener('mousedown', startDrag);
         window.addEventListener('mousemove', moveDrag);
         window.addEventListener('mouseup', endDrag);
-        canvas.addEventListener('touchstart', startDrag, { passive: false });
-        window.addEventListener('touchmove', moveDrag, { passive: false });
-        window.addEventListener('touchend', endDrag);
+
+        canvas.addEventListener('touchstart', function (e) {
+            if (!userImg || !emptyArea) return;
+
+            if (e.touches.length === 2) {
+                // Pinch start
+                e.preventDefault();
+                draggingPinch = true;
+                dragging = false;
+                lastPinchDist = getPinchDistance(e.touches);
+                zoomBeforePinch = zoom;
+            } else if (e.touches.length === 1) {
+                draggingPinch = false;
+                startDrag(e);
+            }
+        }, { passive: false });
+
+        canvas.addEventListener('touchmove', function (e) {
+            if (!userImg) return;
+
+            if (draggingPinch && e.touches.length === 2) {
+                e.preventDefault();
+                const dist = getPinchDistance(e.touches);
+                const scale = dist / lastPinchDist;
+                const newZoom = Math.max(0.5, Math.min(3, zoomBeforePinch * scale));
+
+                // Zoom from midpoint between two fingers
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = OUTPUT_W / rect.width;
+                const scaleY = OUTPUT_H / rect.height;
+                const midX = ((e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left) * scaleX;
+                const midY = ((e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top) * scaleY;
+
+                const oldZoom = zoom;
+                zoom = newZoom;
+                imgX = midX - (midX - imgX) * (zoom / oldZoom);
+                imgY = midY - (midY - imgY) * (zoom / oldZoom);
+
+                document.getElementById('zoomSlider').value = zoom;
+                document.getElementById('zoomValue').textContent = Math.round(zoom * 100) + '%';
+                draw();
+            } else if (dragging && e.touches.length === 1) {
+                moveDrag(e);
+            }
+        }, { passive: false });
+
+        canvas.addEventListener('touchend', function (e) {
+            if (draggingPinch) {
+                if (e.touches.length < 2) {
+                    draggingPinch = false;
+                }
+            }
+            if (e.touches.length === 0) {
+                dragging = false;
+            }
+        });
 
         document.getElementById('resetBtn').addEventListener('click', function () {
             if (!userImg) return;
