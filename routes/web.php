@@ -42,7 +42,7 @@ Route::post('/registerpost', [AuthController::class, 'registerpost'])->name('pos
 Route::get('otp', [AuthController::class, 'otp'])->name('auth.otp');
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->middleware('throttle:5,1');
 Route::post('/resend-otp', [AuthController::class, 'resendOtp'])->name('resend.otp')->middleware('throttle:3,1');
-Route::get('login', [AuthController::class, 'login'])->name('auth.login');
+Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('/login/post', [AuthController::class, 'loginpost'])->name('post.login')->middleware('throttle:5,1');
 Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 Route::get('/', [DashboardController::class, 'indexuser'])->name('user.dashboard.index');
