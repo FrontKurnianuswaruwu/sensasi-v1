@@ -64,7 +64,7 @@ class CheckPermission
         }
 
         if ($forceRedirectLogin) {
-            return redirect()->route('auth.login')->with('message', $message);
+            return redirect()->route('login')->with('message', $message);
         }
 
         return redirect()->back()->with('message', $message);
