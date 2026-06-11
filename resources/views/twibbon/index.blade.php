@@ -21,24 +21,6 @@
             </div>
         </div>
     </nav>
-
-    <section class="bg-gradient-to-br from-sky-600 to-blue-700 text-white py-16 px-4">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 items-center">
-            <div>
-                <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Twibbon SENSASI</h1>
-                <p class="text-lg text-sky-100 mb-8">Buat frame kampanye, bagikan link, lalu siapa saja bisa upload foto dan download hasilnya langsung tanpa menyimpan foto di database.</p>
-                <a href="{{ route('twibbon.create') }}" class="inline-flex items-center px-6 py-4 rounded-2xl bg-white text-sky-700 font-bold shadow-lg hover:shadow-xl transition">
-                    <i class="fas fa-magic mr-2"></i> Buat Frame Twibbon
-                </a>
-            </div>
-            <div class="bg-white/10 backdrop-blur rounded-3xl p-6 shadow-2xl">
-                <div class="aspect-square rounded-2xl bg-white/20 border border-white/30 flex items-center justify-center">
-                    <i class="fas fa-images text-8xl text-white/70"></i>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8 md:mb-10">
             <div>
